@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apple Silicon Mac – Geekbench 6 Comparison</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #000000;
+      --surface: #1a1a1f;
+      --surface2: #22222a;
+      --surface3: #2a2a35;
+      --border: #2e2e3a;
+      --accent: #3b82f6;
+      --text: #f0f0f5;
+      --muted: #8888a0;
+      --win: #4ade80;
+      --lose: #f87171;
+      --category-color: #ff9999;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      background: #000000;
+      border-bottom: 1px solid var(--border);
+      padding: 36px 24px 28px;
+      text-align: center;
+    }
+    header .eyebrow {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 10px;
+    }
+    header h1 {
+      font-size: clamp(22px, 4vw, 38px); font-weight: 700;
+      background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 8px;
+    }
+    header p { color: var(--muted); font-size: 14px; }
+    .selector-bar {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      gap: 0;
+      max-width: 900px;
+      margin: 32px auto 0;
+      padding: 0 24px;
+      align-items: start;
+    }
+    .selector-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      transition: border-color 0.2s;
+      position: relative;
+    }
+    .selector-card.has-selection { border-color: #3b82f644; }
+    .selector-card:first-child { border-radius: 16px 0 0 16px; }
+    .selector-card:last-child  { border-radius: 0 16px 16px 0; }
+    .selector-label {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--muted); margin-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .selector-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    /* ── Custom Dropdown ──────────────────────────────────────────────── */
+    .custom-select {
+      position: relative;
+      width: 100%;
+    }
+    .custom-select-trigger {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 36px 10px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.2s;
+      position: relative;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .custom-select-trigger:hover,
+    .custom-select.open .custom-select-trigger {
+      border-color: var(--accent);
+    }
+    .custom-select-trigger::after {
+      content: '';
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid var(--muted);
+      transition: transform 0.2s;
+    }
+    .custom-select.open .custom-select-trigger::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+    .custom-select-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-height: 340px;
+      overflow-y: auto;
+      z-index: 100;
+      display: none;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+    }
+    .custom-select.open .custom-select-dropdown {
+      display: block;
+    }
+    .custom-select-category {
+      padding: 8px 14px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--category-color);
+      background: rgba(255,255,255,0.03);
+    }
+    .custom-select-option {
+      padding: 9px 14px;
+      font-size: 13.5px;
+      cursor: pointer;
+      color: var(--text);
+      transition: background 0.15s;
+    }
+    .custom-select-option:hover,
+    .custom-select-option.highlighted {
+      background: rgba(59,130,246,0.18);
+    }
+    .custom-select-option.selected {
+      background: rgba(59,130,246,0.28);
+      color: #93c5fd;
+      font-weight: 600;
+    }
+    .selector-preview {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: var(--surface2);
+      border-radius: 10px;
+      display: none;
+    }
+    .selector-preview.visible { display: block; }
+    .preview-model { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .preview-chip { font-size: 12px; color: var(--muted); }
+    .preview-scores {
+      display: flex; gap: 16px; margin-top: 8px;
+      font-size: 12px; color: var(--muted);
+    }
+    .preview-score-val { font-weight: 700; color: var(--text); margin-right: 2px; }
+    .vs-divider {
+      display: flex; align-items: center; justify-content: center;
+      height: 100%; min-height: 80px;
+      font-size: 12px; font-weight: 800; color: var(--muted);
+      letter-spacing: 2px; text-transform: uppercase;
+      background: var(--surface3);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .compare-btn-wrap {
+      max-width: 900px; margin: 16px auto 0; padding: 0 24px;
+      text-align: center;
+    }
+    .btn-compare {
+      padding: 12px 36px;
+      background: var(--accent); border: none; border-radius: 12px;
+      color: #fff; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: opacity 0.2s;
+    }
+    .btn-compare:disabled { opacity: 0.3; cursor: not-allowed; }
+    .btn-compare:not(:disabled):hover { opacity: 0.85; }
+    .hint {
+      max-width: 900px; margin: 48px auto; padding: 0 24px;
+      text-align: center; color: var(--muted); font-size: 14px;
+    }
+    .hint-icon { font-size: 40px; margin-bottom: 12px; }
+    .hint-title { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .compare-panel {
+      max-width: 900px; margin: 32px auto 48px; padding: 0 24px;
+      display: none;
+    }
+    .compare-panel.visible { display: block; }
+    .compare-inner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .mac-headers {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .mac-header {
+      padding: 24px 28px 20px;
+      position: relative;
+    }
+    .mac-header:first-child { border-right: 1px solid var(--border); }
+    .mac-header:last-child  { border-left: 1px solid var(--border); }
+    .mac-header-accent {
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .mac-name { font-size: 20px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+    .mac-badges { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip-badge {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .chip-M1  { background: rgba(99,102,241,.2);  color: #a5b4fc; border: 1px solid rgba(99,102,241,.3); }
+    .chip-M2  { background: rgba(59,130,246,.2);  color: #93c5fd; border: 1px solid rgba(59,130,246,.3); }
+    .chip-M3  { background: rgba(14,165,233,.2);  color: #7dd3fc; border: 1px solid rgba(14,165,233,.3); }
+    .chip-M4  { background: rgba(16,185,129,.2);  color: #6ee7b7; border: 1px solid rgba(16,185,129,.3); }
+    .chip-M5  { background: rgba(245,158,11,.2);  color: #fde68a; border: 1px solid rgba(245,158,11,.3); }
+    .chip-A18 { background: rgba(236,72,153,.2);  color: #f9a8d4; border: 1px solid rgba(236,72,153,.3); }
+    .type-badge {
+      display: inline-block; padding: 3px 9px; border-radius: 6px;
+      font-size: 11px; font-weight: 600;
+    }
+    .type-Laptop  { background: rgba(59,130,246,.15); color: #93c5fd; }
+    .type-Desktop { background: rgba(139,92,246,.15); color: #c4b5fd; }
+    .type-iPad    { background: rgba(236,72,153,.15); color: #f9a8d4; }
+    .year-badge {
+      display: inline-block; padding: 3px 9px; border-radius: 6px;
+      font-size: 11px; background: rgba(255,255,255,.06); color: var(--muted);
+    }
+    .new-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 20px;
+      background: rgba(236,72,153,.2); color: #f9a8d4;
+      border: 1px solid rgba(236,72,153,.3);
+      font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+    }
+    .vs-mid {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; color: var(--muted);
+      letter-spacing: 2px; background: var(--surface2);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+    .metric-row {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      border-top: 1px solid var(--border);
+    }
+    .metric-cell {
+      padding: 18px 28px;
+      position: relative;
+    }
+    .metric-cell:first-child { border-right: 1px solid var(--border); }
+    .metric-cell:last-child  { border-left: 1px solid var(--border); text-align: right; }
+    .metric-label {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--muted); margin-bottom: 8px;
+    }
+    .metric-score {
+      font-size: 32px; font-weight: 800; font-variant-numeric: tabular-nums;
+      line-height: 1; margin-bottom: 8px;
+    }
+    .metric-score.winner { color: var(--win); }
+    .metric-score.loser  { color: var(--muted); }
+    .metric-score.tied   { color: var(--text); }
+    .metric-bar-wrap {
+      height: 5px; background: var(--border); border-radius: 3px;
+      overflow: hidden; margin-bottom: 6px;
+    }
+    .metric-bar { height: 100%; border-radius: 3px; transition: width .5s ease; }
+    .metric-diff {
+      display: inline-block; padding: 2px 8px; border-radius: 20px;
+      font-size: 11px; font-weight: 700;
+    }
+    .metric-diff.faster { background: rgba(74,222,128,.15); color: var(--win); }
+    .metric-diff.slower { background: rgba(248,113,113,.15); color: var(--lose); }
+    .metric-diff.tied   { background: rgba(148,163,184,.1);  color: var(--muted); }
+    .metric-mid {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--muted); background: var(--surface2);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      padding: 4px;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .chart-section {
+      padding: 24px 28px;
+      border-top: 1px solid var(--border);
+      background: var(--surface2);
+    }
+    .chart-title { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 16px; }
+    .chart-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .chart-col-title { font-size: 12px; font-weight: 600; color: var(--muted); text-align: center; margin-bottom: 8px; }
+    .chart-col canvas { max-height: 180px; }
+    footer {
+      text-align: center; padding: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted); font-size: 12.5px; line-height: 1.8;
+    }
+    footer a { color: #7878c0; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    @media (max-width: 640px) {
+      .selector-bar { grid-template-columns: 1fr; gap: 0; }
+      .selector-card:first-child { border-radius: 16px 16px 0 0; }
+      .selector-card:last-child  { border-radius: 0 0 16px 16px; }
+      .vs-divider { min-height: 36px; border-top: none; border-bottom: none;
+                    border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+      .mac-headers  { grid-template-columns: 1fr; }
+      .metric-row   { grid-template-columns: 1fr; }
+      .mac-header:first-child  { border-right: none; border-bottom: 1px solid var(--border); }
+      .mac-header:last-child   { border-left: none; }
+      .metric-cell:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+      .metric-cell:last-child  { border-left: none; text-align: left; }
+      .vs-mid, .metric-mid { display: none; }
+      .chart-columns { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Apple Silicon</div>
+  <h1>iPad & Mac Geekbench 6 Comparison</h1>
+  <p>Pick two devices to compare side by side — performance, battery, and more.</p>
+</header>
+<div class="selector-bar">
+  <div class="selector-card" id="card-a">
+    <div class="selector-label">
+      <div class="selector-dot" style="background:#3b82f6"></div>
+      Device 1
+    </div>
+    <div class="custom-select" id="select-a">
+      <button type="button" class="custom-select-trigger" id="trigger-a">Choose a Mac or iPad</button>
+      <div class="custom-select-dropdown" id="dropdown-a"></div>
+    </div>
+    <div class="selector-preview" id="preview-a"></div>
+  </div>
+  <div class="vs-divider">VS</div>
+  <div class="selector-card" id="card-b">
+    <div class="selector-label">
+      <div class="selector-dot" style="background:#f59e0b"></div>
+      Device 2
+    </div>
+    <div class="custom-select" id="select-b">
+      <button type="button" class="custom-select-trigger" id="trigger-b">Choose a Mac or iPad</button>
+      <div class="custom-select-dropdown" id="dropdown-b"></div>
+    </div>
+    <div class="selector-preview" id="preview-b"></div>
+  </div>
+</div>
+<div class="compare-btn-wrap">
+  <button class="btn-compare" id="btn-compare" disabled onclick="renderComparison()">Compare →</button>
+</div>
+<div class="hint" id="hint">
+  <div class="hint-icon">⚡</div>
+  <div class="hint-title">Select two devices to compare</div>
+  <p>Choose from MacBook Air, MacBook Pro, Mac mini, iMac, Mac Studio, Mac Pro, the new MacBook Neo, iPad Pro, iPad Air, iPad mini, or iPad.</p>
+</div>
+<div class="compare-panel" id="compare-panel">
+  <div class="compare-inner">
+    <div class="mac-headers" id="mac-headers"></div>
+    <div id="metric-rows"></div>
+    <div class="chart-section">
+      <div class="chart-title">Score Overview</div>
+      <div class="chart-columns">
+        <div class="chart-col">
+          <div class="chart-col-title">Single-Core</div>
+          <canvas id="cmp-chart-sc"></canvas>
+        </div>
+        <div class="chart-col">
+          <div class="chart-col-title">Multi-Core</div>
+          <canvas id="cmp-chart-mc"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<footer>
+  Geekbench 6 CPU benchmark scores sourced from <a href="https://browser.geekbench.com" target="_blank" rel="noopener noreferrer">Geekbench Browser</a> and public benchmark databases. Scores represent
+  typical results; individual results may vary. Battery life figures are <a href="https://www.apple.com/uk/batteries/" target="_blank" rel="noopener noreferrer">Apple video streaming estimates</a>.
+  Last updated April 2026.
+</footer>
+
+<script>
+const MACS = [
+  { category: 'MacBook Neo', model: 'MacBook Neo 13"', type: 'Laptop',  chip: 'A18 Pro', gen: 'A18', year: 2026, sc: 3566,  mc:  8646, metal:  30257, battery: 16,  cpu:  6, gpu:  5, isNew: true },
+  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop',  chip: 'M1',   gen: 'M1', year: 2020, sc: 2348, mc:  8344, metal:  33194, battery: 18, cpu:  8, gpu:  8 },
+  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop',  chip: 'M2',   gen: 'M2', year: 2022, sc: 2588, mc:  9668, metal:  42254, battery: 18, cpu:  8, gpu:  8 },
+  { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop',  chip: 'M2',   gen: 'M2', year: 2023, sc: 2597, mc:  9709, metal:  46354, battery: 18, cpu:  8, gpu: 10 },
+  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop',  chip: 'M3',   gen: 'M3', year: 2024, sc: 3041, mc: 11533, metal:  47761, battery: 18, cpu:  8, gpu: 10 },
+  { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop',  chip: 'M3',   gen: 'M3', year: 2024, sc: 3041, mc: 11533, metal:  47761, battery: 18, cpu:  8, gpu: 10 },
+  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop',  chip: 'M4',   gen: 'M4', year: 2025, sc: 3697, mc: 14750, metal:  54727, battery: 18, cpu: 10, gpu: 10 },
+  { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop',  chip: 'M4',   gen: 'M4', year: 2025, sc: 3708, mc: 14715, metal:  54802, battery: 18, cpu: 10, gpu: 10 },
+  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop',  chip: 'M5',   gen: 'M5', year: 2026, sc: 4141, mc: 16997, metal:  76042, battery: 18, cpu: 10, gpu: 10 },
+  { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop',  chip: 'M5',   gen: 'M5', year: 2026, sc: 4159, mc: 16943, metal:  76042, battery: 18, cpu: 10, gpu: 10 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 13"', type: 'Laptop',  chip: 'M1',           gen: 'M1', year: 2020, sc: 2325, mc:  8191, metal:  33095, battery: 20, cpu:  8, gpu:  8 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 13"', type: 'Laptop',  chip: 'M2',           gen: 'M2', year: 2022, sc: 2600, mc:  9645, metal:  46474, battery: 20, cpu:  8, gpu: 10 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M1 Pro 8-core',gen: 'M1', year: 2021, sc: 2361, mc: 10319, metal:  63946, battery: 17, cpu:  8, gpu: 14 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M1 Pro',       gen: 'M1', year: 2021, sc: 2386, mc: 12350, metal:  68188, battery: 17, cpu: 10, gpu: 16 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M1 Pro',       gen: 'M1', year: 2021, sc: 2375, mc: 12268, metal:  68188, battery: 21, cpu: 10, gpu: 16 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M1 Max',       gen: 'M1', year: 2021, sc: 2386, mc: 12350, metal: 111734, battery: 17, cpu: 10, gpu: 24 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M1 Max',       gen: 'M1', year: 2021, sc: 2375, mc: 12268, metal: 116093, battery: 21, cpu: 10, gpu: 32 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M2 Pro 10-core',gen: 'M2', year: 2023, sc: 2649, mc: 12357, metal:  75406, battery: 18, cpu: 10, gpu: 16 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M2 Pro',       gen: 'M2', year: 2023, sc: 2656, mc: 14459, metal:  83413, battery: 18, cpu: 12, gpu: 19 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M2 Pro',       gen: 'M2', year: 2023, sc: 2643, mc: 14361, metal:  83399, battery: 22, cpu: 12, gpu: 19 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M2 Max',       gen: 'M2', year: 2023, sc: 2749, mc: 14748, metal: 111000, battery: 18, cpu: 12, gpu: 30 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M2 Max',       gen: 'M2', year: 2023, sc: 2749, mc: 14748, metal: 140703, battery: 22, cpu: 12, gpu: 38 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M3',           gen: 'M3', year: 2023, sc: 3076, mc: 11533, metal:  48208, battery: 22, cpu:  8, gpu: 10 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M3 Pro',       gen: 'M3', year: 2023, sc: 3088, mc: 14029, metal:  69693, battery: 18, cpu: 11, gpu: 14 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M3 Pro',       gen: 'M3', year: 2023, sc: 3105, mc: 15252, metal:  79566, battery: 22, cpu: 12, gpu: 18 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M3 Max',       gen: 'M3', year: 2023, sc: 3107, mc: 18937, metal: 126754, battery: 18, cpu: 14, gpu: 30 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M3 Max',       gen: 'M3', year: 2023, sc: 3128, mc: 20965, metal: 156636, battery: 22, cpu: 16, gpu: 40 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M4',           gen: 'M4', year: 2024, sc: 3754, mc: 14924, metal:  57402, battery: 24, cpu: 10, gpu: 10 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M4 Pro 12-core',gen: 'M4', year: 2024, sc: 3853, mc: 20301, metal:  99058, battery: 22, cpu: 12, gpu: 16 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M4 Pro',       gen: 'M4', year: 2024, sc: 3851, mc: 22440, metal: 112261, battery: 22, cpu: 14, gpu: 20 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M4 Pro',       gen: 'M4', year: 2024, sc: 3878, mc: 22518, metal: 112299, battery: 24, cpu: 14, gpu: 20 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M4 Max',       gen: 'M4', year: 2024, sc: 3868, mc: 23090, metal: 158710, battery: 18, cpu: 14, gpu: 32 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M4 Max',       gen: 'M4', year: 2024, sc: 3916, mc: 25721, metal: 187279, battery: 21, cpu: 16, gpu: 40 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M5',           gen: 'M5', year: 2025, sc: 4225, mc: 17455, metal:  75904, battery: 24, cpu: 10, gpu: 10 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M5 Pro',       gen: 'M5', year: 2026, sc: 4309, mc: 28691, metal: 139602, battery: 22, cpu: 18, gpu: 20 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M5 Pro',       gen: 'M5', year: 2026, sc: 4299, mc: 28159, metal: 137248, battery: 24, cpu: 18, gpu: 20 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M5 Max',       gen: 'M5', year: 2026, sc: 4310, mc: 29768, metal: 232718, battery: 20, cpu: 18, gpu: 40 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M5 Max',       gen: 'M5', year: 2026, sc: 4321, mc: 29016, metal: 218359, battery: 22, cpu: 18, gpu: 40 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M1',             gen: 'M1', year: 2020, sc: 2366, mc:  8442, metal:  33261, battery: null, cpu:  8, gpu:  8 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M2',             gen: 'M2', year: 2023, sc: 2642, mc:  9787, metal:  46682, battery: null, cpu:  8, gpu: 10 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M2 Pro 10-core', gen: 'M2', year: 2023, sc: 2658, mc: 12449, metal:  74795, battery: null, cpu: 10, gpu: 16 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M2 Pro',         gen: 'M2', year: 2023, sc: 2661, mc: 14564, metal:  82388, battery: null, cpu: 12, gpu: 19 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4',             gen: 'M4', year: 2024, sc: 3788, mc: 14706, metal:  57201, battery: null, cpu: 10, gpu: 10 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4 Pro 12-core', gen: 'M4', year: 2024, sc: 3829, mc: 20302, metal:  96899, battery: null, cpu: 12, gpu: 16 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4 Pro',         gen: 'M4', year: 2024, sc: 3821, mc: 22416, metal: 110273, battery: null, cpu: 14, gpu: 20 },
+  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M1',       gen: 'M1', year: 2021, sc: 2349, mc:  8367, metal:  32691, battery: null, cpu:  8, gpu:  8 },
+  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M3 8-core',gen: 'M3', year: 2023, sc: 3037, mc: 11667, metal:  41724, battery: null, cpu:  8, gpu:  8 },
+  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M3',       gen: 'M3', year: 2023, sc: 3041, mc: 11674, metal:  47761, battery: null, cpu:  8, gpu: 10 },
+  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M4 8-core',gen: 'M4', year: 2024, sc: 3684, mc: 13625, metal:  48097, battery: null, cpu:  8, gpu:  8 },
+  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M4',       gen: 'M4', year: 2024, sc: 3721, mc: 14673, metal:  54847, battery: null, cpu: 10, gpu: 10 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M1 Max',        gen: 'M1', year: 2022, sc: 2419, mc: 12658, metal: 106622, battery: null, cpu: 10, gpu: 24 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M1 Ultra',       gen: 'M1', year: 2022, sc: 2398, mc: 18444, metal: 162403, battery: null, cpu: 20, gpu: 48 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M2 Max',         gen: 'M2', year: 2023, sc: 2805, mc: 14917, metal: 146389, battery: null, cpu: 12, gpu: 38 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M2 Ultra',       gen: 'M2', year: 2023, sc: 2776, mc: 21413, metal: 223566, battery: null, cpu: 24, gpu: 76 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M3 Ultra 28-core',gen: 'M3', year: 2025, sc: 3212, mc: 26569, metal: 220342, battery: null, cpu: 28, gpu: 60 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M3 Ultra',        gen: 'M3', year: 2025, sc: 3201, mc: 27745, metal: 245298, battery: null, cpu: 32, gpu: 80 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M4 Max',          gen: 'M4', year: 2025, sc: 4016, mc: 23587, metal: 161392, battery: null, cpu: 14, gpu: 32 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M4 Max',          gen: 'M4', year: 2025, sc: 4030, mc: 26188, metal: 191781, battery: null, cpu: 16, gpu: 40 },
+  { category: 'Mac Pro', model: 'Mac Pro', type: 'Desktop', chip: 'M2 Ultra 60-core', gen: 'M2', year: 2023, sc: 2778, mc: 21395, metal: 205010, battery: null, cpu: 24, gpu: 60 },
+  { category: 'Mac Pro', model: 'Mac Pro', type: 'Desktop', chip: 'M2 Ultra',         gen: 'M2', year: 2023, sc: 2778, mc: 21395, metal: 225761, battery: null, cpu: 24, gpu: 76 },
+  { category: 'iPad Pro', model: 'iPad Pro 13"',  type: 'iPad', chip: 'M5',    gen: 'M5',  year: 2025, sc: 4144, mc: 15700, metal:  74318, battery: 10, cpu: 10, gpu: 10 },
+  { category: 'iPad Pro', model: 'iPad Pro 11"',  type: 'iPad', chip: 'M5',    gen: 'M5',  year: 2025, sc: 4137, mc: 15540, metal:  74437, battery: 10, cpu: 10, gpu: 10 },
+  { category: 'iPad Pro', model: 'iPad Pro 13"',  type: 'iPad', chip: 'M4',    gen: 'M4',  year: 2024, sc: 3706, mc: 13813, metal:  54534, battery: 10, cpu: 10, gpu: 10 },
+  { category: 'iPad Pro', model: 'iPad Pro 11"',  type: 'iPad', chip: 'M4',    gen: 'M4',  year: 2024, sc: 3681, mc: 13575, metal:  54715, battery: 10, cpu: 10, gpu: 10 },
+  { category: 'iPad Pro', model: 'iPad Pro 12.9"',type: 'iPad', chip: 'M2',    gen: 'M2',  year: 2022, sc: 2606, mc:  9894, metal:  46240, battery: 10, cpu:  8, gpu: 10 },
+  { category: 'iPad Pro', model: 'iPad Pro 11"',  type: 'iPad', chip: 'M2',    gen: 'M2',  year: 2022, sc: 2583, mc:  9811, metal:  46103, battery: 10, cpu:  8, gpu: 10 },
+  { category: 'iPad Pro', model: 'iPad Pro 12.9"',type: 'iPad', chip: 'M1',    gen: 'M1',  year: 2021, sc: 2316, mc:  8399, metal:  32885, battery: 10, cpu:  8, gpu:  8 },
+  { category: 'iPad Pro', model: 'iPad Pro 11"',  type: 'iPad', chip: 'M1',    gen: 'M1',  year: 2021, sc: 2314, mc:  8350, metal:  32903, battery: 10, cpu:  8, gpu:  8 },
+  { category: 'iPad Pro', model: 'iPad Pro 12.9"',type: 'iPad', chip: 'A12Z',  gen: 'A12', year: 2020, sc: 1339, mc:  4668, metal:  18541, battery: 10, cpu:  8, gpu:  8 },
+  { category: 'iPad Pro', model: 'iPad Pro 11"',  type: 'iPad', chip: 'A12Z',  gen: 'A12', year: 2020, sc: 1331, mc:  4650, metal:  18474, battery: 10, cpu:  8, gpu:  8 },
+  { category: 'iPad Pro', model: 'iPad Pro 12.9"',type: 'iPad', chip: 'A12X',  gen: 'A12', year: 2018, sc: 1326, mc:  4474, metal:  16004, battery: 10, cpu:  8, gpu:  7 },
+  { category: 'iPad Pro', model: 'iPad Pro 11"',  type: 'iPad', chip: 'A12X',  gen: 'A12', year: 2018, sc: 1328, mc:  4577, metal:  16715, battery: 10, cpu:  8, gpu:  7 },
+  { category: 'iPad Pro', model: 'iPad Pro 12.9"',type: 'iPad', chip: 'A10X',  gen: 'A10', year: 2017, sc:  931, mc:  2260, metal:   8119, battery: 10, cpu:  6, gpu: 12 },
+  { category: 'iPad Pro', model: 'iPad Pro 10.5"',type: 'iPad', chip: 'A10X',  gen: 'A10', year: 2017, sc:  940, mc:  2211, metal:   8338, battery: 10, cpu:  6, gpu: 12 },
+  { category: 'iPad Pro', model: 'iPad Pro 12.9"',type: 'iPad', chip: 'A9X',   gen: 'A9',  year: 2015, sc:  749, mc:  1247, metal:   5824, battery: 10, cpu:  2, gpu: 12 },
+  { category: 'iPad Pro', model: 'iPad Pro 9.7"', type: 'iPad', chip: 'A9X',   gen: 'A9',  year: 2016, sc:  739, mc:  1099, metal:   5693, battery: 10, cpu:  2, gpu: 12 },
+  { category: 'iPad Air', model: 'iPad Air 13"',  type: 'iPad', chip: 'M3',    gen: 'M3',  year: 2025, sc: 3052, mc: 11685, metal:  45051, battery: 10, cpu:  8, gpu: 10 },
+  { category: 'iPad Air', model: 'iPad Air 11"',  type: 'iPad', chip: 'M3',    gen: 'M3',  year: 2025, sc: 3050, mc: 11697, metal:  44441, battery: 10, cpu:  8, gpu: 10 },
+  { category: 'iPad Air', model: 'iPad Air 13"',  type: 'iPad', chip: 'M2',    gen: 'M2',  year: 2024, sc: 2599, mc:  9853, metal:  42202, battery: 10, cpu:  8, gpu: 10 },
+  { category: 'iPad Air', model: 'iPad Air 11"',  type: 'iPad', chip: 'M2',    gen: 'M2',  year: 2024, sc: 2598, mc:  9834, metal:  42250, battery: 10, cpu:  8, gpu: 10 },
+  { category: 'iPad Air', model: 'iPad Air',      type: 'iPad', chip: 'M1',    gen: 'M1',  year: 2022, sc: 2300, mc:  8298, metal:  32498, battery: 10, cpu:  8, gpu:  8 },
+  { category: 'iPad Air', model: 'iPad Air',      type: 'iPad', chip: 'A14',   gen: 'A14', year: 2020, sc: 2086, mc:  4994, metal:  16507, battery: 10, cpu:  6, gpu:  4 },
+  { category: 'iPad Air', model: 'iPad Air',      type: 'iPad', chip: 'A12',   gen: 'A12', year: 2019, sc: 1326, mc:  2944, metal:   9676, battery: 10, cpu:  6, gpu:  4 },
+  { category: 'iPad Air', model: 'iPad Air',      type: 'iPad', chip: 'A8X',   gen: 'A8',  year: 2014, sc:  441, mc:   949, metal:    761, battery: 10, cpu:  3, gpu:  8 },
+  { category: 'iPad mini', model: 'iPad mini', type: 'iPad', chip: 'A17 Pro', gen: 'A17', year: 2024, sc: 2909, mc:  7230, metal:  25277, battery: 10, cpu: 6, gpu: 6 },
+  { category: 'iPad mini', model: 'iPad mini', type: 'iPad', chip: 'A15',     gen: 'A15', year: 2021, sc: 2128, mc:  5363, metal:  19665, battery: 10, cpu: 6, gpu: 5 },
+  { category: 'iPad mini', model: 'iPad mini', type: 'iPad', chip: 'A12',     gen: 'A12', year: 2019, sc: 1321, mc:  2880, metal:   9354, battery: 10, cpu: 6, gpu: 4 },
+  { category: 'iPad mini', model: 'iPad mini', type: 'iPad', chip: 'A8',      gen: 'A8',  year: 2015, sc:  413, mc:   603, metal:    551, battery: 10, cpu: 2, gpu: 4 },
+  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A16',  gen: 'A16', year: 2025, sc: 2596, mc: 6060, metal: 19422, battery: 10, cpu: 6, gpu: 5 },
+  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A14',  gen: 'A14', year: 2022, sc: 2051, mc: 4725, metal: 16455, battery: 10, cpu: 6, gpu: 4 },
+  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A13',  gen: 'A13', year: 2021, sc: 1737, mc: 3848, metal: 13646, battery: 10, cpu: 6, gpu: 4 },
+  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A12',  gen: 'A12', year: 2020, sc: 1304, mc: 2801, metal:  9153, battery: 10, cpu: 6, gpu: 4 },
+  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A10',  gen: 'A10', year: 2019, sc:  859, mc: 1376, metal:  4199, battery: 10, cpu: 4, gpu: 6 },
+  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A10',  gen: 'A10', year: 2018, sc:  829, mc: 1133, metal:  4307, battery: 10, cpu: 4, gpu: 6 },
+  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A9',   gen: 'A9',  year: 2017, sc:  632, mc:  975, metal:  3080, battery: 10, cpu: 2, gpu: 6 },
+];
+const CATEGORY_ORDER = ['MacBook Neo','MacBook Air','MacBook Pro','Mac mini','iMac','Mac Studio','Mac Pro','iPad Pro','iPad Air','iPad mini','iPad'];
+const A_COLOR = '#3b82f6';
+const B_COLOR = '#f59e0b';
+let selectedA = null;
+let selectedB = null;
+let chartSC = null;
+let chartMC = null;
+
+function buildCustomSelects() {
+  const chipBase = chip => chip.replace(/\s+\d+-core$/i, '');
+  const groups = [];
+  CATEGORY_ORDER.forEach(cat => {
+    const items = MACS.filter(m => m.category === cat);
+    if (!items.length) return;
+    const uniqueModels = [...new Set(items.map(m => m.model))];
+    uniqueModels.forEach(modelName => {
+      const modelItems = items.filter(m => m.model === modelName);
+      const variantKey = m => `${m.model}||${chipBase(m.chip)}`;
+      const variantCpus = {};
+      const variantGpus = {};
+      modelItems.forEach(m => {
+        const key = variantKey(m);
+        if (!variantCpus[key]) variantCpus[key] = new Set();
+        variantCpus[key].add(m.cpu);
+        if (!variantGpus[key]) variantGpus[key] = new Set();
+        variantGpus[key].add(m.gpu);
+      });
+      const showCores = m => variantCpus[variantKey(m)].size > 1;
+      const showGpuCores = m => !showCores(m) && variantGpus[variantKey(m)].size > 1;
+      groups.push({
+        label: modelName,
+        options: modelItems.map(m => {
+          const globalIdx = MACS.indexOf(m);
+          const chipLabel = (showCores(m) || showGpuCores(m)) ? chipBase(m.chip) : m.chip;
+          const cores = showCores(m) ? ` · ${m.cpu}-core CPU` : showGpuCores(m) ? ` · ${m.gpu}-core GPU` : '';
+          return {
+            idx: globalIdx,
+            text: `${chipLabel}${cores} (${m.year})`,
+            model: m,
+            isNew: !!m.isNew
+          };
+        })
+      });
+    });
+  });
+  ['a', 'b'].forEach(side => {
+    const dropdown = document.getElementById(`dropdown-${side}`);
+    dropdown.innerHTML = '';
+    groups.forEach(group => {
+      const cat = document.createElement('div');
+      cat.className = 'custom-select-category';
+      cat.textContent = group.label;
+      dropdown.appendChild(cat);
+      group.options.forEach(opt => {
+        const el = document.createElement('div');
+        el.className = 'custom-select-option';
+        el.dataset.idx = opt.idx;
+        el.dataset.side = side;
+        el.innerHTML = opt.text + (opt.isNew ? ' <span class="new-badge">New</span>' : '');
+        el.addEventListener('click', () => selectOption(side, opt.idx, opt.text));
+        dropdown.appendChild(el);
+      });
+    });
+  });
+}
+
+function toggleDropdown(side) {
+  const select = document.getElementById(`select-${side}`);
+  const isOpen = select.classList.contains('open');
+  document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('open'));
+  if (!isOpen) select.classList.add('open');
+}
+
+function selectOption(side, idx, text) {
+  const trigger = document.getElementById(`trigger-${side}`);
+  const m = MACS[idx];
+  if (m.isNew) {
+    trigger.innerHTML = text + ' <span class="new-badge">New</span>';
+  } else {
+    trigger.textContent = text;
+  }
+  if (side === 'a') selectedA = idx;
+  else selectedB = idx;
+  document.querySelectorAll(`#dropdown-${side} .custom-select-option`).forEach(el => {
+    el.classList.toggle('selected', +el.dataset.idx === idx);
+  });
+  document.getElementById(`select-${side}`).classList.remove('open');
+  updatePreview(side, idx);
+  updateCompareButton();
+}
+
+function updatePreview(side, idx) {
+  const preview = document.getElementById(`preview-${side}`);
+  const card = document.getElementById(`card-${side}`);
+  if (idx === null) {
+    preview.classList.remove('visible');
+    card.classList.remove('has-selection');
+    return;
+  }
+  const m = MACS[idx];
+  preview.innerHTML = `
+    <div class="preview-model">${m.model}</div>
+    <div class="preview-chip">${m.chip} · ${m.year}</div>
+    <div class="preview-scores">
+      <span><span class="preview-score-val">${m.sc.toLocaleString()}</span> SC</span>
+      <span><span class="preview-score-val">${m.mc.toLocaleString()}</span> MC</span>
+    </div>
+  `;
+  preview.classList.add('visible');
+  card.classList.add('has-selection');
+}
+
+function updateCompareButton() {
+  document.getElementById('btn-compare').disabled = !(selectedA !== null && selectedB !== null);
+}
+
+document.getElementById('trigger-a').addEventListener('click', (e) => {
+  e.stopPropagation();
+  toggleDropdown('a');
+});
+document.getElementById('trigger-b').addEventListener('click', (e) => {
+  e.stopPropagation();
+  toggleDropdown('b');
+});
+document.addEventListener('click', () => {
+  document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('open'));
+});
+document.querySelectorAll('.custom-select-dropdown').forEach(d => {
+  d.addEventListener('click', e => e.stopPropagation());
+});
+document.addEventListener('keydown', (e) => {
+  const openSelect = document.querySelector('.custom-select.open');
+  if (!openSelect) return;
+  const options = [...openSelect.querySelectorAll('.custom-select-option')];
+  const current = openSelect.querySelector('.custom-select-option.highlighted') ||
+                  openSelect.querySelector('.custom-select-option.selected');
+  let idx = current ? options.indexOf(current) : -1;
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    idx = Math.min(idx + 1, options.length - 1);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    idx = Math.max(idx - 1, 0);
+  } else if (e.key === 'Enter' && current) {
+    e.preventDefault();
+    current.click();
+    return;
+  } else if (e.key === 'Escape') {
+    openSelect.classList.remove('open');
+    return;
+  } else {
+    return;
+  }
+  options.forEach(o => o.classList.remove('highlighted'));
+  if (options[idx]) {
+    options[idx].classList.add('highlighted');
+    options[idx].scrollIntoView({ block: 'nearest' });
+  }
+});
+
+function renderComparison() {
+  const a = MACS[selectedA];
+  const b = MACS[selectedB];
+  document.getElementById('hint').style.display = 'none';
+  document.getElementById('compare-panel').classList.add('visible');
+  document.getElementById('mac-headers').innerHTML = `
+    <div class="mac-header">
+      <div class="mac-header-accent" style="background:${A_COLOR}"></div>
+      <div class="mac-name">${a.model}</div>
+      <div class="mac-badges">
+        <span class="chip-badge chip-${a.gen}">${a.chip}</span>
+        <span class="type-badge type-${a.type}">${a.type}</span>
+        <span class="year-badge">${a.year}</span>
+        ${a.isNew ? '<span class="new-badge">New</span>' : ''}
+      </div>
+    </div>
+    <div class="vs-mid">VS</div>
+    <div class="mac-header">
+      <div class="mac-header-accent" style="background:${B_COLOR}"></div>
+      <div class="mac-name">${b.model}</div>
+      <div class="mac-badges">
+        <span class="chip-badge chip-${b.gen}">${b.chip}</span>
+        <span class="type-badge type-${b.type}">${b.type}</span>
+        <span class="year-badge">${b.year}</span>
+        ${b.isNew ? '<span class="new-badge">New</span>' : ''}
+      </div>
+    </div>
+  `;
+  const metrics = [
+    { key: 'sc',     label: 'Single-Core' },
+    { key: 'mc',     label: 'Multi-Core' },
+    { key: 'metal',  label: 'Metal GPU' },
+    { key: 'battery',label: 'Battery (hrs)' },
+    { key: 'cpu',    label: 'CPU Cores' },
+    { key: 'gpu',    label: 'GPU Cores' },
+  ];
+  const rowsEl = document.getElementById('metric-rows');
+  rowsEl.innerHTML = '';
+  metrics.forEach(met => {
+    const va = a[met.key];
+    const vb = b[met.key];
+    if (met.key === 'battery' && (va === null || vb === null)) {
+      const displayA = va === null ? '—' : va + 'h';
+      const displayB = vb === null ? '—' : vb + 'h';
+      rowsEl.innerHTML += `
+        <div class="metric-row">
+          <div class="metric-cell">
+            <div class="metric-label">${met.label}</div>
+            <div class="metric-score tied">${displayA}</div>
+          </div>
+          <div class="metric-mid">${met.label}</div>
+          <div class="metric-cell">
+            <div class="metric-label">${met.label}</div>
+            <div class="metric-score tied">${displayB}</div>
+          </div>
+        </div>
+      `;
+      return;
+    }
+    const max = Math.max(va, vb) || 1;
+    const pctA = (va / max) * 100;
+    const pctB = (vb / max) * 100;
+    let classA = 'tied', classB = 'tied';
+    let diffA = '', diffB = '';
+    if (va > vb) {
+      classA = 'winner'; classB = 'loser';
+      const pct = ((va - vb) / vb * 100).toFixed(1);
+      diffA = `<span class="metric-diff faster">+${pct}%</span>`;
+      diffB = `<span class="metric-diff slower">−${pct}%</span>`;
+    } else if (vb > va) {
+      classB = 'winner'; classA = 'loser';
+      const pct = ((vb - va) / va * 100).toFixed(1);
+      diffB = `<span class="metric-diff faster">+${pct}%</span>`;
+      diffA = `<span class="metric-diff slower">−${pct}%</span>`;
+    } else {
+      diffA = diffB = `<span class="metric-diff tied">Tied</span>`;
+    }
+    const displayA = met.key === 'battery' ? va + 'h' : va.toLocaleString();
+    const displayB = met.key === 'battery' ? vb + 'h' : vb.toLocaleString();
+    rowsEl.innerHTML += `
+      <div class="metric-row">
+        <div class="metric-cell">
+          <div class="metric-label">${met.label}</div>
+          <div class="metric-score ${classA}">${displayA}</div>
+          <div class="metric-bar-wrap">
+            <div class="metric-bar" style="width:${pctA}%; background:${A_COLOR}"></div>
+          </div>
+          ${diffA}
+        </div>
+        <div class="metric-mid">${met.label}</div>
+        <div class="metric-cell">
+          <div class="metric-label">${met.label}</div>
+          <div class="metric-score ${classB}">${displayB}</div>
+          <div class="metric-bar-wrap">
+            <div class="metric-bar" style="width:${pctB}%; background:${B_COLOR}; margin-left:auto"></div>
+          </div>
+          ${diffB}
+        </div>
+      </div>
+    `;
+  });
+  renderCharts(a, b);
+}
+
+function renderCharts(a, b) {
+  if (chartSC) chartSC.destroy();
+  if (chartMC) chartMC.destroy();
+  const commonOpts = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => ctx.raw.toLocaleString() } }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: { color: '#8888a0', font: { size: 11 } },
+        grid: { color: '#2e2e3a' }
+      },
+      x: {
+        ticks: { color: '#8888a0', font: { size: 11 } },
+        grid: { display: false }
+      }
+    }
+  };
+  chartSC = new Chart(document.getElementById('cmp-chart-sc'), {
+    type: 'bar',
+    data: {
+      labels: [a.model, b.model],
+      datasets: [{
+        data: [a.sc, b.sc],
+        backgroundColor: [A_COLOR, B_COLOR],
+        borderRadius: 6,
+        barThickness: 36
+      }]
+    },
+    options: commonOpts
+  });
+  chartMC = new Chart(document.getElementById('cmp-chart-mc'), {
+    type: 'bar',
+    data: {
+      labels: [a.model, b.model],
+      datasets: [{
+        data: [a.mc, b.mc],
+        backgroundColor: [A_COLOR, B_COLOR],
+        borderRadius: 6,
+        barThickness: 36
+      }]
+    },
+    options: commonOpts
+  });
+}
+
+buildCustomSelects();
+</script>
+</body>
+</html>
