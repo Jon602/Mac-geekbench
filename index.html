@@ -71,7 +71,6 @@
     .selector-dot {
       width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
     }
-    /* ── Custom Dropdown ──────────────────────────────────────────────── */
     .custom-select {
       position: relative;
       width: 100%;
@@ -243,8 +242,29 @@
     .type-Desktop { background: rgba(139,92,246,.15); color: #c4b5fd; }
     .type-iPad    { background: rgba(236,72,153,.15); color: #f9a8d4; }
     .year-badge {
-      display: inline-block; padding: 3px 9px; border-radius: 6px;
-      font-size: 11px; background: rgba(255,255,255,.06); color: var(--muted);
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(99, 102, 241, 0.18);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+    .price-badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(74, 222, 128, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+    .price-badge.unknown {
+      background: rgba(148, 163, 184, 0.15);
+      color: #94a3b8;
+      border: 1px solid rgba(148, 163, 184, 0.3);
     }
     .new-badge {
       display: inline-block; padding: 2px 8px; border-radius: 20px;
@@ -398,106 +418,109 @@
   Geekbench 6 CPU benchmark scores sourced from <a href="https://browser.geekbench.com" target="_blank" rel="noopener noreferrer">Geekbench Browser</a> and public benchmark databases. Scores represent
   typical results; individual results may vary. Battery life figures are <a href="https://www.apple.com/uk/batteries/" target="_blank" rel="noopener noreferrer">Apple video streaming estimates</a>.
   Last updated April 2026.
+  <br><br>
+  <img src="https://hits.sh/YOUR-USERNAME.github.io/YOUR-REPO-NAME.svg?style=flat-square&label=views&color=3b82f6" alt="Views">
 </footer>
 
 <script>
 const MACS = [
-  { category: 'MacBook Neo', model: 'MacBook Neo 13"', type: 'Laptop',  chip: 'A18 Pro', gen: 'A18', year: 2026, sc: 3566,  mc:  8646, metal:  30257, battery: 16,  cpu:  6, gpu:  5, isNew: true },
-  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop',  chip: 'M1',   gen: 'M1', year: 2020, sc: 2348, mc:  8344, metal:  33194, battery: 18, cpu:  8, gpu:  8 },
-  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop',  chip: 'M2',   gen: 'M2', year: 2022, sc: 2588, mc:  9668, metal:  42254, battery: 18, cpu:  8, gpu:  8 },
-  { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop',  chip: 'M2',   gen: 'M2', year: 2023, sc: 2597, mc:  9709, metal:  46354, battery: 18, cpu:  8, gpu: 10 },
-  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop',  chip: 'M3',   gen: 'M3', year: 2024, sc: 3041, mc: 11533, metal:  47761, battery: 18, cpu:  8, gpu: 10 },
-  { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop',  chip: 'M3',   gen: 'M3', year: 2024, sc: 3041, mc: 11533, metal:  47761, battery: 18, cpu:  8, gpu: 10 },
-  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop',  chip: 'M4',   gen: 'M4', year: 2025, sc: 3697, mc: 14750, metal:  54727, battery: 18, cpu: 10, gpu: 10 },
-  { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop',  chip: 'M4',   gen: 'M4', year: 2025, sc: 3708, mc: 14715, metal:  54802, battery: 18, cpu: 10, gpu: 10 },
-  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop',  chip: 'M5',   gen: 'M5', year: 2026, sc: 4141, mc: 16997, metal:  76042, battery: 18, cpu: 10, gpu: 10 },
-  { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop',  chip: 'M5',   gen: 'M5', year: 2026, sc: 4159, mc: 16943, metal:  76042, battery: 18, cpu: 10, gpu: 10 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 13"', type: 'Laptop',  chip: 'M1',           gen: 'M1', year: 2020, sc: 2325, mc:  8191, metal:  33095, battery: 20, cpu:  8, gpu:  8 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 13"', type: 'Laptop',  chip: 'M2',           gen: 'M2', year: 2022, sc: 2600, mc:  9645, metal:  46474, battery: 20, cpu:  8, gpu: 10 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M1 Pro 8-core',gen: 'M1', year: 2021, sc: 2361, mc: 10319, metal:  63946, battery: 17, cpu:  8, gpu: 14 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M1 Pro',       gen: 'M1', year: 2021, sc: 2386, mc: 12350, metal:  68188, battery: 17, cpu: 10, gpu: 16 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M1 Pro',       gen: 'M1', year: 2021, sc: 2375, mc: 12268, metal:  68188, battery: 21, cpu: 10, gpu: 16 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M1 Max',       gen: 'M1', year: 2021, sc: 2386, mc: 12350, metal: 111734, battery: 17, cpu: 10, gpu: 24 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M1 Max',       gen: 'M1', year: 2021, sc: 2375, mc: 12268, metal: 116093, battery: 21, cpu: 10, gpu: 32 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M2 Pro 10-core',gen: 'M2', year: 2023, sc: 2649, mc: 12357, metal:  75406, battery: 18, cpu: 10, gpu: 16 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M2 Pro',       gen: 'M2', year: 2023, sc: 2656, mc: 14459, metal:  83413, battery: 18, cpu: 12, gpu: 19 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M2 Pro',       gen: 'M2', year: 2023, sc: 2643, mc: 14361, metal:  83399, battery: 22, cpu: 12, gpu: 19 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M2 Max',       gen: 'M2', year: 2023, sc: 2749, mc: 14748, metal: 111000, battery: 18, cpu: 12, gpu: 30 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M2 Max',       gen: 'M2', year: 2023, sc: 2749, mc: 14748, metal: 140703, battery: 22, cpu: 12, gpu: 38 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M3',           gen: 'M3', year: 2023, sc: 3076, mc: 11533, metal:  48208, battery: 22, cpu:  8, gpu: 10 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M3 Pro',       gen: 'M3', year: 2023, sc: 3088, mc: 14029, metal:  69693, battery: 18, cpu: 11, gpu: 14 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M3 Pro',       gen: 'M3', year: 2023, sc: 3105, mc: 15252, metal:  79566, battery: 22, cpu: 12, gpu: 18 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M3 Max',       gen: 'M3', year: 2023, sc: 3107, mc: 18937, metal: 126754, battery: 18, cpu: 14, gpu: 30 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M3 Max',       gen: 'M3', year: 2023, sc: 3128, mc: 20965, metal: 156636, battery: 22, cpu: 16, gpu: 40 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M4',           gen: 'M4', year: 2024, sc: 3754, mc: 14924, metal:  57402, battery: 24, cpu: 10, gpu: 10 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M4 Pro 12-core',gen: 'M4', year: 2024, sc: 3853, mc: 20301, metal:  99058, battery: 22, cpu: 12, gpu: 16 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M4 Pro',       gen: 'M4', year: 2024, sc: 3851, mc: 22440, metal: 112261, battery: 22, cpu: 14, gpu: 20 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M4 Pro',       gen: 'M4', year: 2024, sc: 3878, mc: 22518, metal: 112299, battery: 24, cpu: 14, gpu: 20 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M4 Max',       gen: 'M4', year: 2024, sc: 3868, mc: 23090, metal: 158710, battery: 18, cpu: 14, gpu: 32 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M4 Max',       gen: 'M4', year: 2024, sc: 3916, mc: 25721, metal: 187279, battery: 21, cpu: 16, gpu: 40 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M5',           gen: 'M5', year: 2025, sc: 4225, mc: 17455, metal:  75904, battery: 24, cpu: 10, gpu: 10 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M5 Pro',       gen: 'M5', year: 2026, sc: 4309, mc: 28691, metal: 139602, battery: 22, cpu: 18, gpu: 20 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M5 Pro',       gen: 'M5', year: 2026, sc: 4299, mc: 28159, metal: 137248, battery: 24, cpu: 18, gpu: 20 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop',  chip: 'M5 Max',       gen: 'M5', year: 2026, sc: 4310, mc: 29768, metal: 232718, battery: 20, cpu: 18, gpu: 40 },
-  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop',  chip: 'M5 Max',       gen: 'M5', year: 2026, sc: 4321, mc: 29016, metal: 218359, battery: 22, cpu: 18, gpu: 40 },
-  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M1',             gen: 'M1', year: 2020, sc: 2366, mc:  8442, metal:  33261, battery: null, cpu:  8, gpu:  8 },
-  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M2',             gen: 'M2', year: 2023, sc: 2642, mc:  9787, metal:  46682, battery: null, cpu:  8, gpu: 10 },
-  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M2 Pro 10-core', gen: 'M2', year: 2023, sc: 2658, mc: 12449, metal:  74795, battery: null, cpu: 10, gpu: 16 },
-  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M2 Pro',         gen: 'M2', year: 2023, sc: 2661, mc: 14564, metal:  82388, battery: null, cpu: 12, gpu: 19 },
-  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4',             gen: 'M4', year: 2024, sc: 3788, mc: 14706, metal:  57201, battery: null, cpu: 10, gpu: 10 },
-  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4 Pro 12-core', gen: 'M4', year: 2024, sc: 3829, mc: 20302, metal:  96899, battery: null, cpu: 12, gpu: 16 },
-  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4 Pro',         gen: 'M4', year: 2024, sc: 3821, mc: 22416, metal: 110273, battery: null, cpu: 14, gpu: 20 },
-  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M1',       gen: 'M1', year: 2021, sc: 2349, mc:  8367, metal:  32691, battery: null, cpu:  8, gpu:  8 },
-  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M3 8-core',gen: 'M3', year: 2023, sc: 3037, mc: 11667, metal:  41724, battery: null, cpu:  8, gpu:  8 },
-  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M3',       gen: 'M3', year: 2023, sc: 3041, mc: 11674, metal:  47761, battery: null, cpu:  8, gpu: 10 },
-  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M4 8-core',gen: 'M4', year: 2024, sc: 3684, mc: 13625, metal:  48097, battery: null, cpu:  8, gpu:  8 },
-  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M4',       gen: 'M4', year: 2024, sc: 3721, mc: 14673, metal:  54847, battery: null, cpu: 10, gpu: 10 },
-  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M1 Max',        gen: 'M1', year: 2022, sc: 2419, mc: 12658, metal: 106622, battery: null, cpu: 10, gpu: 24 },
-  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M1 Ultra',       gen: 'M1', year: 2022, sc: 2398, mc: 18444, metal: 162403, battery: null, cpu: 20, gpu: 48 },
-  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M2 Max',         gen: 'M2', year: 2023, sc: 2805, mc: 14917, metal: 146389, battery: null, cpu: 12, gpu: 38 },
-  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M2 Ultra',       gen: 'M2', year: 2023, sc: 2776, mc: 21413, metal: 223566, battery: null, cpu: 24, gpu: 76 },
-  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M3 Ultra 28-core',gen: 'M3', year: 2025, sc: 3212, mc: 26569, metal: 220342, battery: null, cpu: 28, gpu: 60 },
-  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M3 Ultra',        gen: 'M3', year: 2025, sc: 3201, mc: 27745, metal: 245298, battery: null, cpu: 32, gpu: 80 },
-  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M4 Max',          gen: 'M4', year: 2025, sc: 4016, mc: 23587, metal: 161392, battery: null, cpu: 14, gpu: 32 },
-  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M4 Max',          gen: 'M4', year: 2025, sc: 4030, mc: 26188, metal: 191781, battery: null, cpu: 16, gpu: 40 },
-  { category: 'Mac Pro', model: 'Mac Pro', type: 'Desktop', chip: 'M2 Ultra 60-core', gen: 'M2', year: 2023, sc: 2778, mc: 21395, metal: 205010, battery: null, cpu: 24, gpu: 60 },
-  { category: 'Mac Pro', model: 'Mac Pro', type: 'Desktop', chip: 'M2 Ultra',         gen: 'M2', year: 2023, sc: 2778, mc: 21395, metal: 225761, battery: null, cpu: 24, gpu: 76 },
-  { category: 'iPad Pro', model: 'iPad Pro 13"',  type: 'iPad', chip: 'M5',    gen: 'M5',  year: 2025, sc: 4144, mc: 15700, metal:  74318, battery: 10, cpu: 10, gpu: 10 },
-  { category: 'iPad Pro', model: 'iPad Pro 11"',  type: 'iPad', chip: 'M5',    gen: 'M5',  year: 2025, sc: 4137, mc: 15540, metal:  74437, battery: 10, cpu: 10, gpu: 10 },
-  { category: 'iPad Pro', model: 'iPad Pro 13"',  type: 'iPad', chip: 'M4',    gen: 'M4',  year: 2024, sc: 3706, mc: 13813, metal:  54534, battery: 10, cpu: 10, gpu: 10 },
-  { category: 'iPad Pro', model: 'iPad Pro 11"',  type: 'iPad', chip: 'M4',    gen: 'M4',  year: 2024, sc: 3681, mc: 13575, metal:  54715, battery: 10, cpu: 10, gpu: 10 },
-  { category: 'iPad Pro', model: 'iPad Pro 12.9"',type: 'iPad', chip: 'M2',    gen: 'M2',  year: 2022, sc: 2606, mc:  9894, metal:  46240, battery: 10, cpu:  8, gpu: 10 },
-  { category: 'iPad Pro', model: 'iPad Pro 11"',  type: 'iPad', chip: 'M2',    gen: 'M2',  year: 2022, sc: 2583, mc:  9811, metal:  46103, battery: 10, cpu:  8, gpu: 10 },
-  { category: 'iPad Pro', model: 'iPad Pro 12.9"',type: 'iPad', chip: 'M1',    gen: 'M1',  year: 2021, sc: 2316, mc:  8399, metal:  32885, battery: 10, cpu:  8, gpu:  8 },
-  { category: 'iPad Pro', model: 'iPad Pro 11"',  type: 'iPad', chip: 'M1',    gen: 'M1',  year: 2021, sc: 2314, mc:  8350, metal:  32903, battery: 10, cpu:  8, gpu:  8 },
-  { category: 'iPad Pro', model: 'iPad Pro 12.9"',type: 'iPad', chip: 'A12Z',  gen: 'A12', year: 2020, sc: 1339, mc:  4668, metal:  18541, battery: 10, cpu:  8, gpu:  8 },
-  { category: 'iPad Pro', model: 'iPad Pro 11"',  type: 'iPad', chip: 'A12Z',  gen: 'A12', year: 2020, sc: 1331, mc:  4650, metal:  18474, battery: 10, cpu:  8, gpu:  8 },
-  { category: 'iPad Pro', model: 'iPad Pro 12.9"',type: 'iPad', chip: 'A12X',  gen: 'A12', year: 2018, sc: 1326, mc:  4474, metal:  16004, battery: 10, cpu:  8, gpu:  7 },
-  { category: 'iPad Pro', model: 'iPad Pro 11"',  type: 'iPad', chip: 'A12X',  gen: 'A12', year: 2018, sc: 1328, mc:  4577, metal:  16715, battery: 10, cpu:  8, gpu:  7 },
-  { category: 'iPad Pro', model: 'iPad Pro 12.9"',type: 'iPad', chip: 'A10X',  gen: 'A10', year: 2017, sc:  931, mc:  2260, metal:   8119, battery: 10, cpu:  6, gpu: 12 },
-  { category: 'iPad Pro', model: 'iPad Pro 10.5"',type: 'iPad', chip: 'A10X',  gen: 'A10', year: 2017, sc:  940, mc:  2211, metal:   8338, battery: 10, cpu:  6, gpu: 12 },
-  { category: 'iPad Pro', model: 'iPad Pro 12.9"',type: 'iPad', chip: 'A9X',   gen: 'A9',  year: 2015, sc:  749, mc:  1247, metal:   5824, battery: 10, cpu:  2, gpu: 12 },
-  { category: 'iPad Pro', model: 'iPad Pro 9.7"', type: 'iPad', chip: 'A9X',   gen: 'A9',  year: 2016, sc:  739, mc:  1099, metal:   5693, battery: 10, cpu:  2, gpu: 12 },
-  { category: 'iPad Air', model: 'iPad Air 13"',  type: 'iPad', chip: 'M3',    gen: 'M3',  year: 2025, sc: 3052, mc: 11685, metal:  45051, battery: 10, cpu:  8, gpu: 10 },
-  { category: 'iPad Air', model: 'iPad Air 11"',  type: 'iPad', chip: 'M3',    gen: 'M3',  year: 2025, sc: 3050, mc: 11697, metal:  44441, battery: 10, cpu:  8, gpu: 10 },
-  { category: 'iPad Air', model: 'iPad Air 13"',  type: 'iPad', chip: 'M2',    gen: 'M2',  year: 2024, sc: 2599, mc:  9853, metal:  42202, battery: 10, cpu:  8, gpu: 10 },
-  { category: 'iPad Air', model: 'iPad Air 11"',  type: 'iPad', chip: 'M2',    gen: 'M2',  year: 2024, sc: 2598, mc:  9834, metal:  42250, battery: 10, cpu:  8, gpu: 10 },
-  { category: 'iPad Air', model: 'iPad Air',      type: 'iPad', chip: 'M1',    gen: 'M1',  year: 2022, sc: 2300, mc:  8298, metal:  32498, battery: 10, cpu:  8, gpu:  8 },
-  { category: 'iPad Air', model: 'iPad Air',      type: 'iPad', chip: 'A14',   gen: 'A14', year: 2020, sc: 2086, mc:  4994, metal:  16507, battery: 10, cpu:  6, gpu:  4 },
-  { category: 'iPad Air', model: 'iPad Air',      type: 'iPad', chip: 'A12',   gen: 'A12', year: 2019, sc: 1326, mc:  2944, metal:   9676, battery: 10, cpu:  6, gpu:  4 },
-  { category: 'iPad Air', model: 'iPad Air',      type: 'iPad', chip: 'A8X',   gen: 'A8',  year: 2014, sc:  441, mc:   949, metal:    761, battery: 10, cpu:  3, gpu:  8 },
-  { category: 'iPad mini', model: 'iPad mini', type: 'iPad', chip: 'A17 Pro', gen: 'A17', year: 2024, sc: 2909, mc:  7230, metal:  25277, battery: 10, cpu: 6, gpu: 6 },
-  { category: 'iPad mini', model: 'iPad mini', type: 'iPad', chip: 'A15',     gen: 'A15', year: 2021, sc: 2128, mc:  5363, metal:  19665, battery: 10, cpu: 6, gpu: 5 },
-  { category: 'iPad mini', model: 'iPad mini', type: 'iPad', chip: 'A12',     gen: 'A12', year: 2019, sc: 1321, mc:  2880, metal:   9354, battery: 10, cpu: 6, gpu: 4 },
-  { category: 'iPad mini', model: 'iPad mini', type: 'iPad', chip: 'A8',      gen: 'A8',  year: 2015, sc:  413, mc:   603, metal:    551, battery: 10, cpu: 2, gpu: 4 },
-  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A16',  gen: 'A16', year: 2025, sc: 2596, mc: 6060, metal: 19422, battery: 10, cpu: 6, gpu: 5 },
-  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A14',  gen: 'A14', year: 2022, sc: 2051, mc: 4725, metal: 16455, battery: 10, cpu: 6, gpu: 4 },
-  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A13',  gen: 'A13', year: 2021, sc: 1737, mc: 3848, metal: 13646, battery: 10, cpu: 6, gpu: 4 },
-  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A12',  gen: 'A12', year: 2020, sc: 1304, mc: 2801, metal:  9153, battery: 10, cpu: 6, gpu: 4 },
-  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A10',  gen: 'A10', year: 2019, sc:  859, mc: 1376, metal:  4199, battery: 10, cpu: 4, gpu: 6 },
-  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A10',  gen: 'A10', year: 2018, sc:  829, mc: 1133, metal:  4307, battery: 10, cpu: 4, gpu: 6 },
-  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A9',   gen: 'A9',  year: 2017, sc:  632, mc:  975, metal:  3080, battery: 10, cpu: 2, gpu: 6 },
+  { category: 'MacBook Neo', model: 'MacBook Neo 13"', type: 'Laptop', chip: 'A18 Pro', gen: 'A18', year: 2026, sc: 3566, mc: 8646, metal: 30257, battery: 16, cpu: 6, gpu: 5, price: 599, isNew: true },
+  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop', chip: 'M1', gen: 'M1', year: 2020, sc: 2348, mc: 8344, metal: 33194, battery: 18, cpu: 8, gpu: 8, price: 999 },
+  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop', chip: 'M2', gen: 'M2', year: 2022, sc: 2588, mc: 9668, metal: 42254, battery: 18, cpu: 8, gpu: 8, price: 1249 },
+  { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop', chip: 'M2', gen: 'M2', year: 2023, sc: 2597, mc: 9709, metal: 46354, battery: 18, cpu: 8, gpu: 10, price: 1399 },
+  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop', chip: 'M3', gen: 'M3', year: 2024, sc: 3041, mc: 11533, metal: 47761, battery: 18, cpu: 8, gpu: 10, price: 1099 },
+  { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop', chip: 'M3', gen: 'M3', year: 2024, sc: 3041, mc: 11533, metal: 47761, battery: 18, cpu: 8, gpu: 10, price: 1299 },
+  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop', chip: 'M4', gen: 'M4', year: 2025, sc: 3697, mc: 14750, metal: 54727, battery: 18, cpu: 10, gpu: 10, price: 999 },
+  { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop', chip: 'M4', gen: 'M4', year: 2025, sc: 3708, mc: 14715, metal: 54802, battery: 18, cpu: 10, gpu: 10, price: 1199 },
+  { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop', chip: 'M5', gen: 'M5', year: 2026, sc: 4141, mc: 16997, metal: 76042, battery: 18, cpu: 10, gpu: 10, price: 1099 },
+  { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop', chip: 'M5', gen: 'M5', year: 2026, sc: 4159, mc: 16943, metal: 76042, battery: 18, cpu: 10, gpu: 10, price: 1299 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 13"', type: 'Laptop', chip: 'M1', gen: 'M1', year: 2020, sc: 2325, mc: 8191, metal: 33095, battery: 20, cpu: 8, gpu: 8, price: 1299 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 13"', type: 'Laptop', chip: 'M2', gen: 'M2', year: 2022, sc: 2600, mc: 9645, metal: 46474, battery: 20, cpu: 8, gpu: 10, price: 1349 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M1 Pro 8-core', gen: 'M1', year: 2021, sc: 2361, mc: 10319, metal: 63946, battery: 17, cpu: 8, gpu: 14, price: 1899 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M1 Pro', gen: 'M1', year: 2021, sc: 2386, mc: 12350, metal: 68188, battery: 17, cpu: 10, gpu: 16, price: 2099 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop', chip: 'M1 Pro', gen: 'M1', year: 2021, sc: 2375, mc: 12268, metal: 68188, battery: 21, cpu: 10, gpu: 16, price: 2399 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M1 Max', gen: 'M1', year: 2021, sc: 2386, mc: 12350, metal: 111734, battery: 17, cpu: 10, gpu: 24, price: 2799 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop', chip: 'M1 Max', gen: 'M1', year: 2021, sc: 2375, mc: 12268, metal: 116093, battery: 21, cpu: 10, gpu: 32, price: 2999 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M2 Pro 10-core', gen: 'M2', year: 2023, sc: 2649, mc: 12357, metal: 75406, battery: 18, cpu: 10, gpu: 16, price: 2149 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M2 Pro', gen: 'M2', year: 2023, sc: 2656, mc: 14459, metal: 83413, battery: 18, cpu: 12, gpu: 19, price: 2699 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop', chip: 'M2 Pro', gen: 'M2', year: 2023, sc: 2643, mc: 14361, metal: 83399, battery: 22, cpu: 12, gpu: 19, price: 2699 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M2 Max', gen: 'M2', year: 2023, sc: 2749, mc: 14748, metal: 111000, battery: 18, cpu: 12, gpu: 30, price: 3349 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop', chip: 'M2 Max', gen: 'M2', year: 2023, sc: 2749, mc: 14748, metal: 140703, battery: 22, cpu: 12, gpu: 38, price: 3749 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M3', gen: 'M3', year: 2023, sc: 3076, mc: 11533, metal: 48208, battery: 22, cpu: 8, gpu: 10, price: 1699 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M3 Pro', gen: 'M3', year: 2023, sc: 3088, mc: 14029, metal: 69693, battery: 18, cpu: 11, gpu: 14, price: 2099 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop', chip: 'M3 Pro', gen: 'M3', year: 2023, sc: 3105, mc: 15252, metal: 79566, battery: 22, cpu: 12, gpu: 18, price: 2599 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M3 Max', gen: 'M3', year: 2023, sc: 3107, mc: 18937, metal: 126754, battery: 18, cpu: 14, gpu: 30, price: 3299 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop', chip: 'M3 Max', gen: 'M3', year: 2023, sc: 3128, mc: 20965, metal: 156636, battery: 22, cpu: 16, gpu: 40, price: 4099 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M4', gen: 'M4', year: 2024, sc: 3754, mc: 14924, metal: 57402, battery: 24, cpu: 10, gpu: 10, price: 1599 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M4 Pro 12-core', gen: 'M4', year: 2024, sc: 3853, mc: 20301, metal: 99058, battery: 22, cpu: 12, gpu: 16, price: null },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M4 Pro', gen: 'M4', year: 2024, sc: 3851, mc: 22440, metal: 112261, battery: 22, cpu: 14, gpu: 20, price: null },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop', chip: 'M4 Pro', gen: 'M4', year: 2024, sc: 3878, mc: 22518, metal: 112299, battery: 24, cpu: 14, gpu: 20, price: null },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M4 Max', gen: 'M4', year: 2024, sc: 3868, mc: 23090, metal: 158710, battery: 18, cpu: 14, gpu: 32, price: null },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop', chip: 'M4 Max', gen: 'M4', year: 2024, sc: 3916, mc: 25721, metal: 187279, battery: 21, cpu: 16, gpu: 40, price: null },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M5', gen: 'M5', year: 2025, sc: 4225, mc: 17455, metal: 75904, battery: 24, cpu: 10, gpu: 10, price: 1699 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M5 Pro', gen: 'M5', year: 2026, sc: 4309, mc: 28691, metal: 139602, battery: 22, cpu: 18, gpu: 20, price: 2199 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop', chip: 'M5 Pro', gen: 'M5', year: 2026, sc: 4299, mc: 28159, metal: 137248, battery: 24, cpu: 18, gpu: 20, price: 2699 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M5 Max', gen: 'M5', year: 2026, sc: 4310, mc: 29768, metal: 232718, battery: 20, cpu: 18, gpu: 40, price: 3599 },
+  { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop', chip: 'M5 Max', gen: 'M5', year: 2026, sc: 4321, mc: 29016, metal: 218359, battery: 22, cpu: 18, gpu: 40, price: 3899 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M1', gen: 'M1', year: 2020, sc: 2366, mc: 8442, metal: 33261, battery: null, cpu: 8, gpu: 8, price: 699 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M2', gen: 'M2', year: 2023, sc: 2642, mc: 9787, metal: 46682, battery: null, cpu: 8, gpu: 10, price: 649 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M2 Pro 10-core', gen: 'M2', year: 2023, sc: 2658, mc: 12449, metal: 74795, battery: null, cpu: 10, gpu: 16, price: 1399 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M2 Pro', gen: 'M2', year: 2023, sc: 2661, mc: 14564, metal: 82388, battery: null, cpu: 12, gpu: 19, price: 1699 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4', gen: 'M4', year: 2024, sc: 3788, mc: 14706, metal: 57201, battery: null, cpu: 10, gpu: 10, price: 599 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4 Pro 12-core', gen: 'M4', year: 2024, sc: 3829, mc: 20302, metal: 96899, battery: null, cpu: 12, gpu: 16, price: 1399 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4 Pro', gen: 'M4', year: 2024, sc: 3821, mc: 22416, metal: 110273, battery: null, cpu: 14, gpu: 20, price: 1599 },
+  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M1', gen: 'M1', year: 2021, sc: 2349, mc: 8367, metal: 32691, battery: null, cpu: 8, gpu: 8, price: 1249 },
+  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M3 8-core', gen: 'M3', year: 2023, sc: 3037, mc: 11667, metal: 41724, battery: null, cpu: 8, gpu: 8, price: 1299 },
+  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M3', gen: 'M3', year: 2023, sc: 3041, mc: 11674, metal: 47761, battery: null, cpu: 8, gpu: 10, price: 1499 },
+  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M4 8-core', gen: 'M4', year: 2024, sc: 3684, mc: 13625, metal: 48097, battery: null, cpu: 8, gpu: 8, price: 1299 },
+  { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M4', gen: 'M4', year: 2024, sc: 3721, mc: 14673, metal: 54847, battery: null, cpu: 10, gpu: 10, price: 1499 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M1 Max', gen: 'M1', year: 2022, sc: 2419, mc: 12658, metal: 106622, battery: null, cpu: 10, gpu: 24, price: 1999 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M1 Ultra', gen: 'M1', year: 2022, sc: 2398, mc: 18444, metal: 162403, battery: null, cpu: 20, gpu: 48, price: 3999 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M2 Max', gen: 'M2', year: 2023, sc: 2805, mc: 14917, metal: 146389, battery: null, cpu: 12, gpu: 38, price: 1999 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M2 Ultra', gen: 'M2', year: 2023, sc: 2776, mc: 21413, metal: 223566, battery: null, cpu: 24, gpu: 76, price: 3999 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M3 Ultra 28-core', gen: 'M3', year: 2025, sc: 3212, mc: 26569, metal: 220342, battery: null, cpu: 28, gpu: 60, price: null },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M3 Ultra', gen: 'M3', year: 2025, sc: 3201, mc: 27745, metal: 245298, battery: null, cpu: 32, gpu: 80, price: 3999 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M4 Max', gen: 'M4', year: 2025, sc: 4016, mc: 23587, metal: 161392, battery: null, cpu: 14, gpu: 32, price: 1999 },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M4 Max', gen: 'M4', year: 2025, sc: 4030, mc: 26188, metal: 191781, battery: null, cpu: 16, gpu: 40, price: null },
+  { category: 'Mac Pro', model: 'Mac Pro', type: 'Desktop', chip: 'M2 Ultra 60-core', gen: 'M2', year: 2023, sc: 2778, mc: 21395, metal: 205010, battery: null, cpu: 24, gpu: 60, price: 7199 },
+  { category: 'Mac Pro', model: 'Mac Pro', type: 'Desktop', chip: 'M2 Ultra', gen: 'M2', year: 2023, sc: 2778, mc: 21395, metal: 225761, battery: null, cpu: 24, gpu: 76, price: 7199 },
+  { category: 'iPad Pro', model: 'iPad Pro 13"', type: 'iPad', chip: 'M5', gen: 'M5', year: 2025, sc: 4144, mc: 15700, metal: 74318, battery: 10, cpu: 10, gpu: 10, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 11"', type: 'iPad', chip: 'M5', gen: 'M5', year: 2025, sc: 4137, mc: 15540, metal: 74437, battery: 10, cpu: 10, gpu: 10, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 13"', type: 'iPad', chip: 'M4', gen: 'M4', year: 2024, sc: 3706, mc: 13813, metal: 54534, battery: 10, cpu: 10, gpu: 10, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 11"', type: 'iPad', chip: 'M4', gen: 'M4', year: 2024, sc: 3681, mc: 13575, metal: 54715, battery: 10, cpu: 10, gpu: 10, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 12.9"', type: 'iPad', chip: 'M2', gen: 'M2', year: 2022, sc: 2606, mc: 9894, metal: 46240, battery: 10, cpu: 8, gpu: 10, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 11"', type: 'iPad', chip: 'M2', gen: 'M2', year: 2022, sc: 2583, mc: 9811, metal: 46103, battery: 10, cpu: 8, gpu: 10, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 12.9"', type: 'iPad', chip: 'M1', gen: 'M1', year: 2021, sc: 2316, mc: 8399, metal: 32885, battery: 10, cpu: 8, gpu: 8, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 11"', type: 'iPad', chip: 'M1', gen: 'M1', year: 2021, sc: 2314, mc: 8350, metal: 32903, battery: 10, cpu: 8, gpu: 8, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 12.9"', type: 'iPad', chip: 'A12Z', gen: 'A12', year: 2020, sc: 1339, mc: 4668, metal: 18541, battery: 10, cpu: 8, gpu: 8, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 11"', type: 'iPad', chip: 'A12Z', gen: 'A12', year: 2020, sc: 1331, mc: 4650, metal: 18474, battery: 10, cpu: 8, gpu: 8, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 12.9"', type: 'iPad', chip: 'A12X', gen: 'A12', year: 2018, sc: 1326, mc: 4474, metal: 16004, battery: 10, cpu: 8, gpu: 7, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 11"', type: 'iPad', chip: 'A12X', gen: 'A12', year: 2018, sc: 1328, mc: 4577, metal: 16715, battery: 10, cpu: 8, gpu: 7, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 12.9"', type: 'iPad', chip: 'A10X', gen: 'A10', year: 2017, sc: 931, mc: 2260, metal: 8119, battery: 10, cpu: 6, gpu: 12, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 10.5"', type: 'iPad', chip: 'A10X', gen: 'A10', year: 2017, sc: 940, mc: 2211, metal: 8338, battery: 10, cpu: 6, gpu: 12, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 12.9"', type: 'iPad', chip: 'A9X', gen: 'A9', year: 2015, sc: 749, mc: 1247, metal: 5824, battery: 10, cpu: 2, gpu: 12, price: null },
+  { category: 'iPad Pro', model: 'iPad Pro 9.7"', type: 'iPad', chip: 'A9X', gen: 'A9', year: 2016, sc: 739, mc: 1099, metal: 5693, battery: 10, cpu: 2, gpu: 12, price: null },
+  { category: 'iPad Air', model: 'iPad Air 13"', type: 'iPad', chip: 'M3', gen: 'M3', year: 2025, sc: 3052, mc: 11685, metal: 45051, battery: 10, cpu: 8, gpu: 10, price: null },
+  { category: 'iPad Air', model: 'iPad Air 11"', type: 'iPad', chip: 'M3', gen: 'M3', year: 2025, sc: 3050, mc: 11697, metal: 44441, battery: 10, cpu: 8, gpu: 10, price: null },
+  { category: 'iPad Air', model: 'iPad Air 13"', type: 'iPad', chip: 'M2', gen: 'M2', year: 2024, sc: 2599, mc: 9853, metal: 42202, battery: 10, cpu: 8, gpu: 10, price: null },
+  { category: 'iPad Air', model: 'iPad Air 11"', type: 'iPad', chip: 'M2', gen: 'M2', year: 2024, sc: 2598, mc: 9834, metal: 42250, battery: 10, cpu: 8, gpu: 10, price: null },
+  { category: 'iPad Air', model: 'iPad Air', type: 'iPad', chip: 'M1', gen: 'M1', year: 2022, sc: 2300, mc: 8298, metal: 32498, battery: 10, cpu: 8, gpu: 8, price: null },
+  { category: 'iPad Air', model: 'iPad Air', type: 'iPad', chip: 'A14', gen: 'A14', year: 2020, sc: 2086, mc: 4994, metal: 16507, battery: 10, cpu: 6, gpu: 4, price: null },
+  { category: 'iPad Air', model: 'iPad Air', type: 'iPad', chip: 'A12', gen: 'A12', year: 2019, sc: 1326, mc: 2944, metal: 9676, battery: 10, cpu: 6, gpu: 4, price: null },
+  { category: 'iPad Air', model: 'iPad Air', type: 'iPad', chip: 'A8X', gen: 'A8', year: 2014, sc: 441, mc: 949, metal: 761, battery: 10, cpu: 3, gpu: 8, price: null },
+  { category: 'iPad mini', model: 'iPad mini', type: 'iPad', chip: 'A17 Pro', gen: 'A17', year: 2024, sc: 2909, mc: 7230, metal: 25277, battery: 10, cpu: 6, gpu: 6, price: null },
+  { category: 'iPad mini', model: 'iPad mini', type: 'iPad', chip: 'A15', gen: 'A15', year: 2021, sc: 2128, mc: 5363, metal: 19665, battery: 10, cpu: 6, gpu: 5, price: null },
+  { category: 'iPad mini', model: 'iPad mini', type: 'iPad', chip: 'A12', gen: 'A12', year: 2019, sc: 1321, mc: 2880, metal: 9354, battery: 10, cpu: 6, gpu: 4, price: null },
+  { category: 'iPad mini', model: 'iPad mini', type: 'iPad', chip: 'A8', gen: 'A8', year: 2015, sc: 413, mc: 603, metal: 551, battery: 10, cpu: 2, gpu: 4, price: null },
+  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A16', gen: 'A16', year: 2025, sc: 2596, mc: 6060, metal: 19422, battery: 10, cpu: 6, gpu: 5, price: null },
+  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A14', gen: 'A14', year: 2022, sc: 2051, mc: 4725, metal: 16455, battery: 10, cpu: 6, gpu: 4, price: null },
+  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A13', gen: 'A13', year: 2021, sc: 1737, mc: 3848, metal: 13646, battery: 10, cpu: 6, gpu: 4, price: null },
+  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A12', gen: 'A12', year: 2020, sc: 1304, mc: 2801, metal: 9153, battery: 10, cpu: 6, gpu: 4, price: null },
+  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A10', gen: 'A10', year: 2019, sc: 859, mc: 1376, metal: 4199, battery: 10, cpu: 4, gpu: 6, price: null },
+  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A10', gen: 'A10', year: 2018, sc: 829, mc: 1133, metal: 4307, battery: 10, cpu: 4, gpu: 6, price: null },
+  { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A9', gen: 'A9', year: 2017, sc: 632, mc: 975, metal: 3080, battery: 10, cpu: 2, gpu: 6, price: null },
 ];
+
 const CATEGORY_ORDER = ['MacBook Neo','MacBook Air','MacBook Pro','Mac mini','iMac','Mac Studio','Mac Pro','iPad Pro','iPad Air','iPad mini','iPad'];
 const A_COLOR = '#3b82f6';
 const B_COLOR = '#f59e0b';
@@ -671,6 +694,9 @@ function renderComparison() {
         <span class="chip-badge chip-${a.gen}">${a.chip}</span>
         <span class="type-badge type-${a.type}">${a.type}</span>
         <span class="year-badge">${a.year}</span>
+        ${a.price 
+          ? `<span class="price-badge">Launch price £${a.price.toLocaleString()}</span>` 
+          : `<span class="price-badge unknown">Launch price unknown</span>`}
         ${a.isNew ? '<span class="new-badge">New</span>' : ''}
       </div>
     </div>
@@ -682,6 +708,9 @@ function renderComparison() {
         <span class="chip-badge chip-${b.gen}">${b.chip}</span>
         <span class="type-badge type-${b.type}">${b.type}</span>
         <span class="year-badge">${b.year}</span>
+        ${b.price 
+          ? `<span class="price-badge">Launch price £${b.price.toLocaleString()}</span>` 
+          : `<span class="price-badge unknown">Launch price unknown</span>`}
         ${b.isNew ? '<span class="new-badge">New</span>' : ''}
       </div>
     </div>
