@@ -234,6 +234,10 @@
     .chip-M4  { background: rgba(16,185,129,.2);  color: #6ee7b7; border: 1px solid rgba(16,185,129,.3); }
     .chip-M5  { background: rgba(245,158,11,.2);  color: #fde68a; border: 1px solid rgba(245,158,11,.3); }
     .chip-A18 { background: rgba(236,72,153,.2);  color: #f9a8d4; border: 1px solid rgba(236,72,153,.3); }
+    .chip-i5  { background: rgba(59,130,246,.2);  color: #93c5fd; border: 1px solid rgba(59,130,246,.35); }
+    .chip-i7  { background: rgba(168,85,247,.2);  color: #d8b4fe; border: 1px solid rgba(168,85,247,.35); }
+    .chip-i9  { background: rgba(239,68,68,.2);   color: #fca5a5; border: 1px solid rgba(239,68,68,.35); }
+    .chip-Xeon{ background: rgba(234,179,8,.2);   color: #fde047; border: 1px solid rgba(234,179,8,.35); }
     .type-badge {
       display: inline-block; padding: 3px 9px; border-radius: 6px;
       font-size: 11px; font-weight: 600;
@@ -257,14 +261,14 @@
       border-radius: 6px;
       font-size: 11px;
       font-weight: 700;
-      background: rgba(245, 158, 11, 0.15);
-      color: #fcd34d;
-      border: 1px solid rgba(245, 158, 11, 0.3);
+      background: rgba(74, 222, 128, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(74, 222, 128, 0.3);
     }
     .price-badge.unknown {
       background: rgba(100, 116, 139, 0.15);
       color: #94a3b8;
-      border: 1px solid rgba(100, 116, 139, 0.3);
+      border: 1px solid rgba(100, 116, 139, 0.25);
     }
     .new-badge {
       display: inline-block; padding: 2px 8px; border-radius: 20px;
@@ -393,7 +397,7 @@
 <div class="hint" id="hint">
   <div class="hint-icon">⚡</div>
   <div class="hint-title">Select two devices to compare</div>
-  <p>Choose from MacBook Air, MacBook Pro, Mac mini, iMac, Mac Studio, Mac Pro, the new MacBook Neo, iPad Pro, iPad Air, iPad mini, or iPad.</p>
+  <p>Choose from MacBook Air, MacBook Pro, Mac mini, iMac, iMac Pro, Mac Studio, Mac Pro, the new MacBook Neo, iPad Pro, iPad Air, iPad mini, or iPad.</p>
 </div>
 <div class="compare-panel" id="compare-panel">
   <div class="compare-inner">
@@ -424,7 +428,10 @@
 
 <script>
 const MACS = [
+  // MacBook Neo
   { category: 'MacBook Neo', model: 'MacBook Neo 13"', type: 'Laptop', chip: 'A18 Pro', gen: 'A18', year: 2026, sc: 3566, mc: 8646, metal: 30257, battery: 16, cpu: 6, gpu: 5, price: 599, isNew: true },
+
+  // MacBook Air
   { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop', chip: 'M1', gen: 'M1', year: 2020, sc: 2348, mc: 8344, metal: 33194, battery: 18, cpu: 8, gpu: 8, price: 999 },
   { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop', chip: 'M2', gen: 'M2', year: 2022, sc: 2588, mc: 9668, metal: 42254, battery: 18, cpu: 8, gpu: 8, price: 1249 },
   { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop', chip: 'M2', gen: 'M2', year: 2023, sc: 2597, mc: 9709, metal: 46354, battery: 18, cpu: 8, gpu: 10, price: 1399 },
@@ -434,6 +441,8 @@ const MACS = [
   { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop', chip: 'M4', gen: 'M4', year: 2025, sc: 3708, mc: 14715, metal: 54802, battery: 18, cpu: 10, gpu: 10, price: 1199 },
   { category: 'MacBook Air', model: 'MacBook Air 13"', type: 'Laptop', chip: 'M5', gen: 'M5', year: 2026, sc: 4141, mc: 16997, metal: 76042, battery: 18, cpu: 10, gpu: 10, price: 1099 },
   { category: 'MacBook Air', model: 'MacBook Air 15"', type: 'Laptop', chip: 'M5', gen: 'M5', year: 2026, sc: 4159, mc: 16943, metal: 76042, battery: 18, cpu: 10, gpu: 10, price: 1299 },
+
+  // MacBook Pro
   { category: 'MacBook Pro', model: 'MacBook Pro 13"', type: 'Laptop', chip: 'M1', gen: 'M1', year: 2020, sc: 2325, mc: 8191, metal: 33095, battery: 20, cpu: 8, gpu: 8, price: 1299 },
   { category: 'MacBook Pro', model: 'MacBook Pro 13"', type: 'Laptop', chip: 'M2', gen: 'M2', year: 2022, sc: 2600, mc: 9645, metal: 46474, battery: 20, cpu: 8, gpu: 10, price: 1349 },
   { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M1 Pro 8-core', gen: 'M1', year: 2021, sc: 2361, mc: 10319, metal: 63946, battery: 17, cpu: 8, gpu: 14, price: 1899 },
@@ -462,6 +471,16 @@ const MACS = [
   { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop', chip: 'M5 Pro', gen: 'M5', year: 2026, sc: 4299, mc: 28159, metal: 137248, battery: 24, cpu: 18, gpu: 20, price: 2699 },
   { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M5 Max', gen: 'M5', year: 2026, sc: 4310, mc: 29768, metal: 232718, battery: 20, cpu: 18, gpu: 40, price: 3599 },
   { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop', chip: 'M5 Max', gen: 'M5', year: 2026, sc: 4321, mc: 29016, metal: 218359, battery: 22, cpu: 18, gpu: 40, price: 3899 },
+
+  // Mac mini - Intel era
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'Intel Core i5', gen: 'i5', year: 2012, sc: 534, mc: 1083, metal: 2100, battery: null, cpu: 2, gpu: 0, price: 529 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'Intel Core i7', gen: 'i7', year: 2012, sc: 684, mc: 2354, metal: 3200, battery: null, cpu: 4, gpu: 0, price: 759 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'Intel Core i5', gen: 'i5', year: 2014, sc: 887, mc: 1767, metal: 2800, battery: null, cpu: 2, gpu: 0, price: 569 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'Intel Core i3', gen: 'i5', year: 2018, sc: 980, mc: 3589, metal: 4500, battery: null, cpu: 4, gpu: 0, price: 799 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'Intel Core i5', gen: 'i5', year: 2018, sc: 1100, mc: 4896, metal: 5200, battery: null, cpu: 6, gpu: 0, price: 1099 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'Intel Core i7', gen: 'i7', year: 2018, sc: 1200, mc: 5558, metal: 5800, battery: null, cpu: 6, gpu: 0, price: 1249 },
+
+  // Mac mini - Apple Silicon
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M1', gen: 'M1', year: 2020, sc: 2366, mc: 8442, metal: 33261, battery: null, cpu: 8, gpu: 8, price: 699 },
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M2', gen: 'M2', year: 2023, sc: 2642, mc: 9787, metal: 46682, battery: null, cpu: 8, gpu: 10, price: 649 },
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M2 Pro 10-core', gen: 'M2', year: 2023, sc: 2658, mc: 12449, metal: 74795, battery: null, cpu: 10, gpu: 16, price: 1399 },
@@ -469,11 +488,27 @@ const MACS = [
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4', gen: 'M4', year: 2024, sc: 3788, mc: 14706, metal: 57201, battery: null, cpu: 10, gpu: 10, price: 599 },
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4 Pro 12-core', gen: 'M4', year: 2024, sc: 3829, mc: 20302, metal: 96899, battery: null, cpu: 12, gpu: 16, price: 1399 },
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4 Pro', gen: 'M4', year: 2024, sc: 3821, mc: 22416, metal: 110273, battery: null, cpu: 14, gpu: 20, price: 1599 },
+
+  // iMac 24" (existing)
   { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M1', gen: 'M1', year: 2021, sc: 2349, mc: 8367, metal: 32691, battery: null, cpu: 8, gpu: 8, price: 1249 },
   { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M3 8-core', gen: 'M3', year: 2023, sc: 3037, mc: 11667, metal: 41724, battery: null, cpu: 8, gpu: 8, price: 1299 },
   { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M3', gen: 'M3', year: 2023, sc: 3041, mc: 11674, metal: 47761, battery: null, cpu: 8, gpu: 10, price: 1499 },
   { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M4 8-core', gen: 'M4', year: 2024, sc: 3684, mc: 13625, metal: 48097, battery: null, cpu: 8, gpu: 8, price: 1299 },
   { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M4', gen: 'M4', year: 2024, sc: 3721, mc: 14673, metal: 54847, battery: null, cpu: 10, gpu: 10, price: 1499 },
+
+  // iMac 27" (new)
+  { category: 'iMac', model: 'iMac 27"', type: 'Desktop', chip: 'Intel Core i5', gen: 'i5', year: 2017, sc: 1266, mc: 3611, metal: 18000, battery: null, cpu: 4, gpu: 0, price: 1749 },
+  { category: 'iMac', model: 'iMac 27"', type: 'Desktop', chip: 'Intel Core i7', gen: 'i7', year: 2017, sc: 1419, mc: 4775, metal: 28000, battery: null, cpu: 4, gpu: 0, price: 2249 },
+  { category: 'iMac', model: 'iMac 27"', type: 'Desktop', chip: 'Intel Core i5', gen: 'i5', year: 2020, sc: 1509, mc: 6080, metal: 32000, battery: null, cpu: 6, gpu: 0, price: 1799 },
+  { category: 'iMac', model: 'iMac 27"', type: 'Desktop', chip: 'Intel Core i7', gen: 'i7', year: 2020, sc: 1600, mc: 7660, metal: 45000, battery: null, cpu: 8, gpu: 0, price: 2299 },
+
+  // iMac Pro 2017
+{ category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 8-core', gen: 'Xeon', year: 2017, sc: 1305, mc: 7369, metal: 55000, battery: null, cpu: 8, gpu: 0, price: 4999 },
+{ category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 10-core', gen: 'Xeon', year: 2017, sc: 1342, mc: 8059, metal: 62000, battery: null, cpu: 10, gpu: 0, price: 5499 },
+{ category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 14-core', gen: 'Xeon', year: 2017, sc: 1358, mc: 9021, metal: 70000, battery: null, cpu: 14, gpu: 0, price: 6499 },
+{ category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 18-core', gen: 'Xeon', year: 2017, sc: 1355, mc: 9912, metal: 75000, battery: null, cpu: 18, gpu: 0, price: 9999 },
+
+  // Mac Studio
   { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M1 Max', gen: 'M1', year: 2022, sc: 2419, mc: 12658, metal: 106622, battery: null, cpu: 10, gpu: 24, price: 1999 },
   { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M1 Ultra', gen: 'M1', year: 2022, sc: 2398, mc: 18444, metal: 162403, battery: null, cpu: 20, gpu: 48, price: 3999 },
   { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M2 Max', gen: 'M2', year: 2023, sc: 2805, mc: 14917, metal: 146389, battery: null, cpu: 12, gpu: 38, price: 1999 },
@@ -482,8 +517,12 @@ const MACS = [
   { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M3 Ultra', gen: 'M3', year: 2025, sc: 3201, mc: 27745, metal: 245298, battery: null, cpu: 32, gpu: 80, price: 3999 },
   { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M4 Max', gen: 'M4', year: 2025, sc: 4016, mc: 23587, metal: 161392, battery: null, cpu: 14, gpu: 32, price: 1999 },
   { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M4 Max', gen: 'M4', year: 2025, sc: 4030, mc: 26188, metal: 191781, battery: null, cpu: 16, gpu: 40, price: null },
+
+  // Mac Pro
   { category: 'Mac Pro', model: 'Mac Pro', type: 'Desktop', chip: 'M2 Ultra 60-core', gen: 'M2', year: 2023, sc: 2778, mc: 21395, metal: 205010, battery: null, cpu: 24, gpu: 60, price: 7199 },
   { category: 'Mac Pro', model: 'Mac Pro', type: 'Desktop', chip: 'M2 Ultra', gen: 'M2', year: 2023, sc: 2778, mc: 21395, metal: 225761, battery: null, cpu: 24, gpu: 76, price: 7199 },
+
+  // iPads (unchanged)
   { category: 'iPad Pro', model: 'iPad Pro 13"', type: 'iPad', chip: 'M5', gen: 'M5', year: 2025, sc: 4144, mc: 15700, metal: 74318, battery: 10, cpu: 10, gpu: 10, price: null },
   { category: 'iPad Pro', model: 'iPad Pro 11"', type: 'iPad', chip: 'M5', gen: 'M5', year: 2025, sc: 4137, mc: 15540, metal: 74437, battery: 10, cpu: 10, gpu: 10, price: null },
   { category: 'iPad Pro', model: 'iPad Pro 13"', type: 'iPad', chip: 'M4', gen: 'M4', year: 2024, sc: 3706, mc: 13813, metal: 54534, battery: 10, cpu: 10, gpu: 10, price: null },
@@ -521,7 +560,12 @@ const MACS = [
   { category: 'iPad', model: 'iPad', type: 'iPad', chip: 'A9', gen: 'A9', year: 2017, sc: 632, mc: 975, metal: 3080, battery: 10, cpu: 2, gpu: 6, price: null },
 ];
 
-const CATEGORY_ORDER = ['MacBook Neo','MacBook Air','MacBook Pro','Mac mini','iMac','Mac Studio','Mac Pro','iPad Pro','iPad Air','iPad mini','iPad'];
+const CATEGORY_ORDER = [
+  'MacBook Neo','MacBook Air','MacBook Pro','Mac mini',
+  'iMac','iMac Pro','Mac Studio','Mac Pro',
+  'iPad Pro','iPad Air','iPad mini','iPad'
+];
+
 const A_COLOR = '#3b82f6';
 const B_COLOR = '#f59e0b';
 let selectedA = null;
