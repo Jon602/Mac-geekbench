@@ -287,8 +287,10 @@
       color: #93c5fd;
       border: 1px solid rgba(59,130,246,0.3);
       display: none;
+      align-items: center;
+      justify-content: center;
     }
-    .btn-copy.visible { display: inline-block; }
+    .btn-copy.visible { display: inline-flex; }
     .btn-copy:hover { background: rgba(59,130,246,0.25); }
     .btn-copy.copied {
       background: rgba(74,222,128,0.15);
@@ -307,11 +309,11 @@
     }
     .compare-panel.visible { display: block; }
     .compare-inner {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  overflow: visible;   /* ← changed */
-}
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: visible;
+    }
 
     /* ===== STICKY HEADER ===== */
     .mac-headers {
@@ -585,7 +587,13 @@
 </div>
 <div class="compare-btn-wrap">
   <button class="btn-reset" id="btn-reset" onclick="resetComparison()">Reset</button>
-  <button class="btn-copy" id="btn-copy" onclick="copyShareLink()">Copy shareable link</button>
+  <button class="btn-copy" id="btn-copy" onclick="copyShareLink()">
+    Copy link
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 6px; vertical-align: middle;">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>
+  </button>
 </div>
 <div class="hint" id="hint">
   <div class="hint-icon">⚡</div>
@@ -959,6 +967,14 @@ function loadFromURL() {
   renderComparison();
 }
 
+function getCopyButtonInnerHTML(text) {
+  return `${text}
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 6px; vertical-align: middle;">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+    </svg>`;
+}
+
 function resetComparison() {
   selectedA = null;
   selectedB = null;
@@ -975,7 +991,7 @@ function resetComparison() {
   document.getElementById('hint').style.display = 'block';
 
   document.getElementById('btn-copy').classList.remove('visible', 'copied');
-  document.getElementById('btn-copy').textContent = 'Copy shareable link';
+  document.getElementById('btn-copy').innerHTML = getCopyButtonInnerHTML('Copy link');
 
   clearURL();
   document.title = 'Apple Silicon Geekbench 6 Comparison – MacBook, Mac mini, iMac & iPad Scores';
@@ -988,10 +1004,10 @@ function copyShareLink() {
   const url = window.location.href;
   navigator.clipboard.writeText(url).then(() => {
     const btn = document.getElementById('btn-copy');
-    btn.textContent = 'Copied!';
+    btn.innerHTML = getCopyButtonInnerHTML('Copied!');
     btn.classList.add('copied');
     setTimeout(() => {
-      btn.textContent = 'Copy shareable link';
+      btn.innerHTML = getCopyButtonInnerHTML('Copy link');
       btn.classList.remove('copied');
     }, 2000);
   }).catch(() => {
