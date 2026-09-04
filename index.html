@@ -460,15 +460,22 @@
     footer a { color: #7878c0; text-decoration: none; }
     footer a:hover { text-decoration: underline; }
     @media (max-width: 640px) {
-      .selector-bar { grid-template-columns: 1fr 36px 1fr; gap: 0; }
-      .selector-card:first-child { border-radius: 16px 0 0 16px; }
-      .selector-card:last-child  { border-radius: 0 16px 16px 0; }
+      .selector-bar {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .selector-card:first-child {
+        border-radius: 16px 16px 0 0;
+      }
+      .selector-card:last-child {
+        border-radius: 0 0 16px 16px;
+      }
       .vs-divider {
-        min-height: 100%;
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
-        border-left: none;
-        border-right: none;
+        min-height: 36px;
+        border-top: none;
+        border-bottom: none;
+        border-left: 1px solid var(--border);
+        border-right: 1px solid var(--border);
       }
 
       /* Side-by-side sticky headers on mobile */
