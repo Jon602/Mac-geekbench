@@ -119,7 +119,7 @@
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 12px;
-      max-height: 340px;
+      max-height: 380px;
       overflow-y: auto;
       z-index: 100;
       display: none;
@@ -127,6 +127,30 @@
     }
     .custom-select.open .custom-select-dropdown {
       display: block;
+    }
+    .dropdown-search {
+      position: sticky;
+      top: 0;
+      background: var(--surface2);
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      z-index: 2;
+    }
+    .dropdown-search input {
+      width: 100%;
+      background: var(--surface3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+    }
+    .dropdown-search input:focus {
+      border-color: var(--accent);
+    }
+    .dropdown-search input::placeholder {
+      color: var(--muted);
     }
     .custom-select-category {
       padding: 8px 14px 4px;
@@ -152,6 +176,10 @@
       background: rgba(59,130,246,0.28);
       color: #93c5fd;
       font-weight: 600;
+    }
+    .custom-select-option.hidden,
+    .custom-select-category.hidden {
+      display: none;
     }
     .selector-preview {
       margin-top: 12px;
@@ -261,9 +289,9 @@
       border-radius: 6px;
       font-size: 11px;
       font-weight: 700;
-      background: rgba(74, 222, 128, 0.15);
-      color: #4ade80;
-      border: 1px solid rgba(74, 222, 128, 0.3);
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.3);
     }
     .price-badge.unknown {
       background: rgba(100, 116, 139, 0.15);
@@ -362,9 +390,9 @@
 </head>
 <body>
 <header>
-  <!-- <div class="eyebrow">Apple Silicon</div> -->
+  <div class="eyebrow">Apple Silicon</div>
   <h1>iPad & Mac Geekbench 6 Comparison</h1>
-  <!-- <p>Pick two devices to compare side by side — performance, battery, and more.</p> -->
+  <p>Pick two devices to compare side by side — performance, battery, and more.</p>
 </header>
 <div class="selector-bar">
   <div class="selector-card" id="card-a">
@@ -397,7 +425,7 @@
 <div class="hint" id="hint">
   <div class="hint-icon">⚡</div>
   <div class="hint-title">Select two devices to compare</div>
-  <!-- <p>Choose from MacBook Air, MacBook Pro, Mac mini, iMac, iMac Pro, Mac Studio, Mac Pro, the new MacBook Neo, iPad Pro, iPad Air, iPad mini, or iPad.</p> -->
+  <p>Choose from MacBook Air, MacBook Pro, Mac mini, iMac, iMac Pro, Mac Studio, Mac Pro, the new MacBook Neo, iPad Pro, iPad Air, iPad mini, or iPad.</p>
 </div>
 <div class="compare-panel" id="compare-panel">
   <div class="compare-inner">
@@ -421,7 +449,7 @@
 <footer>
   Geekbench 6 CPU benchmark scores sourced from <a href="https://browser.geekbench.com" target="_blank" rel="noopener noreferrer">Geekbench Browser</a> and public benchmark databases. Scores represent
   typical results; individual results may vary. Battery life figures are <a href="https://www.apple.com/uk/batteries/" target="_blank" rel="noopener noreferrer">Apple video streaming estimates</a>.
-  Last updated April 2026.
+  Last updated September 2026.
   <br><br>
   <img src="https://hits.sh/YOUR-USERNAME.github.io/YOUR-REPO-NAME.svg?style=flat-square&label=views&color=3b82f6" alt="Views">
 </footer>
@@ -472,7 +500,7 @@ const MACS = [
   { category: 'MacBook Pro', model: 'MacBook Pro 14"', type: 'Laptop', chip: 'M5 Max', gen: 'M5', year: 2026, sc: 4310, mc: 29768, metal: 232718, battery: 20, cpu: 18, gpu: 40, price: 3599 },
   { category: 'MacBook Pro', model: 'MacBook Pro 16"', type: 'Laptop', chip: 'M5 Max', gen: 'M5', year: 2026, sc: 4321, mc: 29016, metal: 218359, battery: 22, cpu: 18, gpu: 40, price: 3899 },
 
-  // Mac mini - Intel era
+  // Mac mini – Intel
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'Intel Core i5', gen: 'i5', year: 2012, sc: 534, mc: 1083, metal: 2100, battery: null, cpu: 2, gpu: 0, price: 529 },
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'Intel Core i7', gen: 'i7', year: 2012, sc: 684, mc: 2354, metal: 3200, battery: null, cpu: 4, gpu: 0, price: 759 },
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'Intel Core i5', gen: 'i5', year: 2014, sc: 887, mc: 1767, metal: 2800, battery: null, cpu: 2, gpu: 0, price: 569 },
@@ -480,7 +508,7 @@ const MACS = [
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'Intel Core i5', gen: 'i5', year: 2018, sc: 1100, mc: 4896, metal: 5200, battery: null, cpu: 6, gpu: 0, price: 1099 },
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'Intel Core i7', gen: 'i7', year: 2018, sc: 1200, mc: 5558, metal: 5800, battery: null, cpu: 6, gpu: 0, price: 1249 },
 
-  // Mac mini - Apple Silicon
+  // Mac mini – Apple Silicon
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M1', gen: 'M1', year: 2020, sc: 2366, mc: 8442, metal: 33261, battery: null, cpu: 8, gpu: 8, price: 699 },
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M2', gen: 'M2', year: 2023, sc: 2642, mc: 9787, metal: 46682, battery: null, cpu: 8, gpu: 10, price: 649 },
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M2 Pro 10-core', gen: 'M2', year: 2023, sc: 2658, mc: 12449, metal: 74795, battery: null, cpu: 10, gpu: 16, price: 1399 },
@@ -489,24 +517,24 @@ const MACS = [
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4 Pro 12-core', gen: 'M4', year: 2024, sc: 3829, mc: 20302, metal: 96899, battery: null, cpu: 12, gpu: 16, price: 1399 },
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4 Pro', gen: 'M4', year: 2024, sc: 3821, mc: 22416, metal: 110273, battery: null, cpu: 14, gpu: 20, price: 1599 },
 
-  // iMac 24" (existing)
+  // iMac 24"
   { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M1', gen: 'M1', year: 2021, sc: 2349, mc: 8367, metal: 32691, battery: null, cpu: 8, gpu: 8, price: 1249 },
   { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M3 8-core', gen: 'M3', year: 2023, sc: 3037, mc: 11667, metal: 41724, battery: null, cpu: 8, gpu: 8, price: 1299 },
   { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M3', gen: 'M3', year: 2023, sc: 3041, mc: 11674, metal: 47761, battery: null, cpu: 8, gpu: 10, price: 1499 },
   { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M4 8-core', gen: 'M4', year: 2024, sc: 3684, mc: 13625, metal: 48097, battery: null, cpu: 8, gpu: 8, price: 1299 },
   { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M4', gen: 'M4', year: 2024, sc: 3721, mc: 14673, metal: 54847, battery: null, cpu: 10, gpu: 10, price: 1499 },
 
-  // iMac 27" (new)
+  // iMac 27"
   { category: 'iMac', model: 'iMac 27"', type: 'Desktop', chip: 'Intel Core i5', gen: 'i5', year: 2017, sc: 1266, mc: 3611, metal: 18000, battery: null, cpu: 4, gpu: 0, price: 1749 },
   { category: 'iMac', model: 'iMac 27"', type: 'Desktop', chip: 'Intel Core i7', gen: 'i7', year: 2017, sc: 1419, mc: 4775, metal: 28000, battery: null, cpu: 4, gpu: 0, price: 2249 },
   { category: 'iMac', model: 'iMac 27"', type: 'Desktop', chip: 'Intel Core i5', gen: 'i5', year: 2020, sc: 1509, mc: 6080, metal: 32000, battery: null, cpu: 6, gpu: 0, price: 1799 },
   { category: 'iMac', model: 'iMac 27"', type: 'Desktop', chip: 'Intel Core i7', gen: 'i7', year: 2020, sc: 1600, mc: 7660, metal: 45000, battery: null, cpu: 8, gpu: 0, price: 2299 },
 
-  // iMac Pro 2017
-{ category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 8-core', gen: 'Xeon', year: 2017, sc: 1305, mc: 7369, metal: 55000, battery: null, cpu: 8, gpu: 0, price: 4999 },
-{ category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 10-core', gen: 'Xeon', year: 2017, sc: 1342, mc: 8059, metal: 62000, battery: null, cpu: 10, gpu: 0, price: 5499 },
-{ category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 14-core', gen: 'Xeon', year: 2017, sc: 1358, mc: 9021, metal: 70000, battery: null, cpu: 14, gpu: 0, price: 6499 },
-{ category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 18-core', gen: 'Xeon', year: 2017, sc: 1355, mc: 9912, metal: 75000, battery: null, cpu: 18, gpu: 0, price: 9999 },
+  // iMac Pro (corrected scores)
+  { category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 8-core', gen: 'Xeon', year: 2017, sc: 1305, mc: 7369, metal: 55000, battery: null, cpu: 8, gpu: 0, price: 4999 },
+  { category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 10-core', gen: 'Xeon', year: 2017, sc: 1342, mc: 8059, metal: 62000, battery: null, cpu: 10, gpu: 0, price: 5499 },
+  { category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 14-core', gen: 'Xeon', year: 2017, sc: 1358, mc: 9021, metal: 70000, battery: null, cpu: 14, gpu: 0, price: 6499 },
+  { category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 18-core', gen: 'Xeon', year: 2017, sc: 1355, mc: 9912, metal: 75000, battery: null, cpu: 18, gpu: 0, price: 9999 },
 
   // Mac Studio
   { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M1 Max', gen: 'M1', year: 2022, sc: 2419, mc: 12658, metal: 106622, battery: null, cpu: 10, gpu: 24, price: 1999 },
@@ -522,7 +550,7 @@ const MACS = [
   { category: 'Mac Pro', model: 'Mac Pro', type: 'Desktop', chip: 'M2 Ultra 60-core', gen: 'M2', year: 2023, sc: 2778, mc: 21395, metal: 205010, battery: null, cpu: 24, gpu: 60, price: 7199 },
   { category: 'Mac Pro', model: 'Mac Pro', type: 'Desktop', chip: 'M2 Ultra', gen: 'M2', year: 2023, sc: 2778, mc: 21395, metal: 225761, battery: null, cpu: 24, gpu: 76, price: 7199 },
 
-  // iPads (unchanged)
+  // iPads
   { category: 'iPad Pro', model: 'iPad Pro 13"', type: 'iPad', chip: 'M5', gen: 'M5', year: 2025, sc: 4144, mc: 15700, metal: 74318, battery: 10, cpu: 10, gpu: 10, price: null },
   { category: 'iPad Pro', model: 'iPad Pro 11"', type: 'iPad', chip: 'M5', gen: 'M5', year: 2025, sc: 4137, mc: 15540, metal: 74437, battery: 10, cpu: 10, gpu: 10, price: null },
   { category: 'iPad Pro', model: 'iPad Pro 13"', type: 'iPad', chip: 'M4', gen: 'M4', year: 2024, sc: 3706, mc: 13813, metal: 54534, battery: 10, cpu: 10, gpu: 10, price: null },
@@ -604,25 +632,44 @@ function buildCustomSelects() {
             idx: globalIdx,
             text: `${chipLabel}${cores} (${m.year})`,
             model: m,
-            isNew: !!m.isNew
+            isNew: !!m.isNew,
+            searchText: `${m.model} ${m.chip} ${m.year} ${m.category} ${m.type}`.toLowerCase()
           };
         })
       });
     });
   });
+
   ['a', 'b'].forEach(side => {
     const dropdown = document.getElementById(`dropdown-${side}`);
     dropdown.innerHTML = '';
+
+    // Search box
+    const searchWrap = document.createElement('div');
+    searchWrap.className = 'dropdown-search';
+    const searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.placeholder = 'Search models, chips, years…';
+    searchInput.autocomplete = 'off';
+    searchInput.addEventListener('input', () => filterDropdown(side, searchInput.value));
+    searchInput.addEventListener('click', e => e.stopPropagation());
+    searchWrap.appendChild(searchInput);
+    dropdown.appendChild(searchWrap);
+
     groups.forEach(group => {
       const cat = document.createElement('div');
       cat.className = 'custom-select-category';
       cat.textContent = group.label;
+      cat.dataset.group = group.label;
       dropdown.appendChild(cat);
+
       group.options.forEach(opt => {
         const el = document.createElement('div');
         el.className = 'custom-select-option';
         el.dataset.idx = opt.idx;
         el.dataset.side = side;
+        el.dataset.search = opt.searchText;
+        el.dataset.group = group.label;
         el.innerHTML = opt.text + (opt.isNew ? ' <span class="new-badge">New</span>' : '');
         el.addEventListener('click', () => selectOption(side, opt.idx, opt.text));
         dropdown.appendChild(el);
@@ -631,11 +678,45 @@ function buildCustomSelects() {
   });
 }
 
+function filterDropdown(side, query) {
+  const q = query.trim().toLowerCase();
+  const dropdown = document.getElementById(`dropdown-${side}`);
+  const options = dropdown.querySelectorAll('.custom-select-option');
+  const categories = dropdown.querySelectorAll('.custom-select-category');
+
+  const visibleGroups = new Set();
+
+  options.forEach(opt => {
+    const match = !q || opt.dataset.search.includes(q);
+    opt.classList.toggle('hidden', !match);
+    if (match) visibleGroups.add(opt.dataset.group);
+  });
+
+  categories.forEach(cat => {
+    cat.classList.toggle('hidden', !visibleGroups.has(cat.dataset.group));
+  });
+}
+
 function toggleDropdown(side) {
   const select = document.getElementById(`select-${side}`);
   const isOpen = select.classList.contains('open');
-  document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('open'));
-  if (!isOpen) select.classList.add('open');
+  document.querySelectorAll('.custom-select').forEach(s => {
+    s.classList.remove('open');
+    // clear search when closing
+    const input = s.querySelector('.dropdown-search input');
+    if (input) {
+      input.value = '';
+      filterDropdown(s.id === 'select-a' ? 'a' : 'b', '');
+    }
+  });
+  if (!isOpen) {
+    select.classList.add('open');
+    // focus search
+    setTimeout(() => {
+      const input = select.querySelector('.dropdown-search input');
+      if (input) input.focus();
+    }, 50);
+  }
 }
 
 function selectOption(side, idx, text) {
@@ -690,15 +771,23 @@ document.getElementById('trigger-b').addEventListener('click', (e) => {
   toggleDropdown('b');
 });
 document.addEventListener('click', () => {
-  document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('open'));
+  document.querySelectorAll('.custom-select').forEach(s => {
+    s.classList.remove('open');
+    const input = s.querySelector('.dropdown-search input');
+    if (input) {
+      input.value = '';
+      filterDropdown(s.id === 'select-a' ? 'a' : 'b', '');
+    }
+  });
 });
 document.querySelectorAll('.custom-select-dropdown').forEach(d => {
   d.addEventListener('click', e => e.stopPropagation());
 });
+
 document.addEventListener('keydown', (e) => {
   const openSelect = document.querySelector('.custom-select.open');
   if (!openSelect) return;
-  const options = [...openSelect.querySelectorAll('.custom-select-option')];
+  const options = [...openSelect.querySelectorAll('.custom-select-option:not(.hidden)')];
   const current = openSelect.querySelector('.custom-select-option.highlighted') ||
                   openSelect.querySelector('.custom-select-option.selected');
   let idx = current ? options.indexOf(current) : -1;
