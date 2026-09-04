@@ -267,7 +267,7 @@
       justify-content: center;
       flex-wrap: wrap;
     }
-    .btn-compare, .btn-reset, .btn-copy {
+    .btn-reset, .btn-copy {
       padding: 12px 28px;
       border: none;
       border-radius: 12px;
@@ -276,12 +276,6 @@
       cursor: pointer;
       transition: opacity 0.2s, background 0.2s;
     }
-    .btn-compare {
-      background: var(--accent);
-      color: #fff;
-    }
-    .btn-compare:disabled { opacity: 0.3; cursor: not-allowed; }
-    .btn-compare:not(:disabled):hover { opacity: 0.85; }
     .btn-reset {
       background: var(--surface3);
       color: var(--text);
@@ -467,17 +461,88 @@
       .selector-bar { grid-template-columns: 1fr; gap: 0; }
       .selector-card:first-child { border-radius: 16px 16px 0 0; }
       .selector-card:last-child  { border-radius: 0 0 16px 16px; }
-      .vs-divider { min-height: 36px; border-top: none; border-bottom: none;
-                    border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
-      .mac-headers  { grid-template-columns: 1fr; }
-      .metric-row   { grid-template-columns: 1fr; }
-      .mac-header:first-child  { border-right: none; border-bottom: 1px solid var(--border); }
-      .mac-header:last-child   { border-left: none; }
-      .metric-cell:first-child { border-right: none; border-bottom: 1px solid var(--border); }
-      .metric-cell:last-child  { border-left: none; text-align: left; }
-      .vs-mid, .metric-mid { display: none; }
+      .vs-divider {
+        min-height: 36px;
+        border-top: none;
+        border-bottom: none;
+        border-left: 1px solid var(--border);
+        border-right: 1px solid var(--border);
+      }
+
+      /* Stacked sticky headers with visible VS divider */
+      .mac-headers {
+        grid-template-columns: 1fr;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+      .mac-header {
+        padding: 16px 20px 14px;
+      }
+      .mac-header:first-child {
+        border-right: none;
+        border-bottom: none;
+      }
+      .mac-header:last-child {
+        border-left: none;
+        border-top: none;
+      }
+      .vs-mid {
+        display: flex;
+        min-height: 28px;
+        padding: 4px 0;
+        font-size: 11px;
+        border-left: none;
+        border-right: none;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        background: var(--surface3);
+      }
+
+      /* Metric rows: label on top, then side-by-side A | B */
+      .metric-row {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+          "label label"
+          "a     b";
+        gap: 0;
+      }
+      .metric-mid {
+        display: block;
+        grid-area: label;
+        padding: 12px 20px 0;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--muted);
+        background: transparent;
+        border: none;
+        text-align: left;
+        line-height: 1.3;
+      }
+      .metric-cell:first-child {
+        grid-area: a;
+        border-right: 1px solid var(--border);
+        border-bottom: none;
+        padding: 8px 16px 16px 20px;
+      }
+      .metric-cell:last-child {
+        grid-area: b;
+        border-left: none;
+        text-align: left;
+        padding: 8px 20px 16px 16px;
+      }
+      /* Hide the duplicate labels that sit inside each metric-cell on mobile */
+      .metric-cell .metric-label {
+        display: none;
+      }
+      .metric-score {
+        font-size: 24px;
+      }
+
       .chart-columns { grid-template-columns: 1fr; }
       .mac-name { font-size: 16px; }
+      .mac-header-accent { height: 2px; }
     }
   </style>
 </head>
@@ -519,14 +584,13 @@
   </div>
 </div>
 <div class="compare-btn-wrap">
-  <button class="btn-compare" id="btn-compare" disabled onclick="renderComparison()">Compare →</button>
   <button class="btn-reset" id="btn-reset" onclick="resetComparison()">Reset</button>
   <button class="btn-copy" id="btn-copy" onclick="copyShareLink()">Copy shareable link</button>
 </div>
 <div class="hint" id="hint">
   <div class="hint-icon">⚡</div>
   <div class="hint-title">Select two devices to compare</div>
-  <p>Choose from MacBook Air, MacBook Pro, Mac mini, iMac, iMac Pro, Mac Studio, Mac Pro, MacBook Neo, iPad Pro, iPad Air, iPad mini or iPad. View real Geekbench 6 single-core, multi-core and Metal scores plus battery life estimates.</p>
+  <p>Choose any MacBook, Mac mini, iMac, Mac Studio, Mac Pro or iPad. The comparison updates instantly with Geekbench 6 single-core, multi-core and Metal scores plus battery life estimates.</p>
 </div>
 <div class="compare-panel" id="compare-panel">
   <div class="compare-inner">
@@ -831,7 +895,11 @@ function selectOption(side, idx, text) {
   });
   document.getElementById(`select-${side}`).classList.remove('open');
   updatePreview(side, idx);
-  updateCompareButton();
+
+  // Live comparison: render as soon as both devices are selected
+  if (selectedA !== null && selectedB !== null) {
+    renderComparison();
+  }
 }
 
 function updatePreview(side, idx) {
@@ -853,10 +921,6 @@ function updatePreview(side, idx) {
   `;
   preview.classList.add('visible');
   card.classList.add('has-selection');
-}
-
-function updateCompareButton() {
-  document.getElementById('btn-compare').disabled = !(selectedA !== null && selectedB !== null);
 }
 
 function updateURL() {
@@ -913,7 +977,6 @@ function resetComparison() {
   document.getElementById('btn-copy').classList.remove('visible', 'copied');
   document.getElementById('btn-copy').textContent = 'Copy shareable link';
 
-  updateCompareButton();
   clearURL();
   document.title = 'Apple Silicon Geekbench 6 Comparison – MacBook, Mac mini, iMac & iPad Scores';
 
