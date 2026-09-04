@@ -471,9 +471,9 @@
         border-right: 1px solid var(--border);
       }
 
-      /* Stacked sticky headers with visible VS divider */
+      /* Keep comparison headers side-by-side on mobile */
       .mac-headers {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 40px 1fr;
         position: sticky;
         top: 0;
         z-index: 50;
@@ -482,22 +482,22 @@
         padding: 16px 20px 14px;
       }
       .mac-header:first-child {
-        border-right: none;
+        border-right: 1px solid var(--border);
         border-bottom: none;
       }
       .mac-header:last-child {
-        border-left: none;
+        border-left: 1px solid var(--border);
         border-top: none;
       }
       .vs-mid {
         display: flex;
         min-height: 28px;
         padding: 4px 0;
-        font-size: 11px;
+        font-size: 10px;
         border-left: none;
         border-right: none;
-        border-top: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
+        border-top: none;
+        border-bottom: none;
         background: var(--surface3);
       }
 
