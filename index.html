@@ -264,13 +264,21 @@
       border-radius: 20px;
       overflow: hidden;
     }
+
+    /* ===== STICKY HEADER ===== */
     .mac-headers {
       display: grid;
       grid-template-columns: 1fr 60px 1fr;
       border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--surface);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.35);
     }
+
     .mac-header {
-      padding: 24px 28px 20px;
+      padding: 20px 28px 18px;
       position: relative;
     }
     .mac-header:first-child { border-right: 1px solid var(--border); }
@@ -278,7 +286,7 @@
     .mac-header-accent {
       position: absolute; top: 0; left: 0; right: 0; height: 3px;
     }
-    .mac-name { font-size: 20px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+    .mac-name { font-size: 18px; font-weight: 800; line-height: 1.2; margin-bottom: 8px; }
     .mac-badges { display: flex; flex-wrap: wrap; gap: 6px; }
     .chip-badge {
       display: inline-flex; align-items: center;
@@ -415,6 +423,7 @@
       .metric-cell:last-child  { border-left: none; text-align: left; }
       .vs-mid, .metric-mid { display: none; }
       .chart-columns { grid-template-columns: 1fr; }
+      .mac-name { font-size: 16px; }
     }
   </style>
 </head>
@@ -830,32 +839,23 @@ function resetComparison() {
   selectedA = null;
   selectedB = null;
 
-  // Reset triggers
   document.getElementById('trigger-a').textContent = 'Choose a Mac or iPad';
   document.getElementById('trigger-b').textContent = 'Choose a Mac or iPad';
 
-  // Clear selected states
   document.querySelectorAll('.custom-select-option').forEach(el => el.classList.remove('selected'));
 
-  // Hide previews
   updatePreview('a', null);
   updatePreview('b', null);
 
-  // Hide comparison + show hint
   document.getElementById('compare-panel').classList.remove('visible');
   document.getElementById('hint').style.display = 'block';
 
-  // Hide copy button
   document.getElementById('btn-copy').classList.remove('visible', 'copied');
   document.getElementById('btn-copy').textContent = 'Copy shareable link';
 
-  // Disable compare button
   updateCompareButton();
-
-  // Clear URL
   clearURL();
 
-  // Destroy charts
   if (chartSC) { chartSC.destroy(); chartSC = null; }
   if (chartMC) { chartMC.destroy(); chartMC = null; }
 }
@@ -933,10 +933,7 @@ function renderComparison() {
   document.getElementById('hint').style.display = 'none';
   document.getElementById('compare-panel').classList.add('visible');
 
-  // Show copy button
   document.getElementById('btn-copy').classList.add('visible');
-
-  // Update the shareable URL
   updateURL();
 
   document.getElementById('mac-headers').innerHTML = `
