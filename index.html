@@ -3,7 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Apple Silicon Mac – Geekbench 6 Comparison</title>
+
+  <!-- Primary SEO -->
+  <title>Apple Silicon Geekbench 6 Comparison – MacBook, Mac mini, iMac &amp; iPad Scores</title>
+  <meta name="description" content="Compare Geekbench 6 single-core, multi-core and Metal GPU scores for every Apple Silicon Mac and iPad. Side-by-side M1–M5, A-series chips, battery life and launch prices. Updated September 2026." />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <link rel="canonical" href="https://geekmac.cc/" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="GeekMac" />
+  <meta property="og:title" content="Apple Silicon Geekbench 6 Comparison Tool" />
+  <meta property="og:description" content="Pick any two Macs or iPads and compare real Geekbench 6 scores, Metal GPU performance, battery life and launch prices side by side." />
+  <meta property="og:url" content="https://geekmac.cc/" />
+  <meta property="og:image" content="https://geekmac.cc/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="en_GB" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Apple Silicon Geekbench 6 Comparison" />
+  <meta name="twitter:description" content="Side-by-side Geekbench 6 scores for MacBook Air/Pro, Mac mini, Mac Studio, iMac, Mac Pro and every iPad." />
+  <meta name="twitter:image" content="https://geekmac.cc/og-image.png" />
+
+  <!-- Additional -->
+  <meta name="theme-color" content="#000000" />
+  <meta name="author" content="GeekMac" />
+  <meta name="keywords" content="Geekbench 6, Apple Silicon, MacBook comparison, M4 vs M5, Mac mini scores, iPad Pro Geekbench, Metal GPU benchmark" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "GeekMac – Apple Silicon Geekbench 6 Comparison",
+    "alternateName": "GeekMac",
+    "url": "https://geekmac.cc/",
+    "description": "Interactive side-by-side Geekbench 6 single-core, multi-core and Metal score comparison for MacBooks, Mac mini, iMac, Mac Studio, Mac Pro and iPads. Includes battery life and launch prices.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "GBP"
+    },
+    "dateModified": "2026-09-04",
+    "creator": {
+      "@type": "Organization",
+      "name": "GeekMac",
+      "url": "https://geekmac.cc/"
+    }
+  }
+  </script>
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -428,10 +482,16 @@
   </style>
 </head>
 <body>
+<noscript>
+  <div style="max-width:900px;margin:40px auto;padding:24px;background:#1a1a1f;border:1px solid #2e2e3a;border-radius:16px;color:#f0f0f5;font-family:system-ui,sans-serif;">
+    <h2 style="margin-bottom:12px;">Apple Silicon Geekbench 6 Comparison</h2>
+    <p style="color:#8888a0;line-height:1.6;">This tool lets you compare Geekbench 6 single-core, multi-core and Metal GPU scores for MacBook Air, MacBook Pro, Mac mini, iMac, Mac Studio, Mac Pro and every recent iPad. JavaScript is required for the interactive comparison. Please enable JavaScript or visit <a href="https://geekmac.cc/" style="color:#93c5fd;">geekmac.cc</a>.</p>
+  </div>
+</noscript>
 <header>
-  <div class="eyebrow">Apple Silicon</div>
-  <h1>iPad & Mac Geekbench 6 Comparison</h1>
-  <p>Pick two devices to compare side by side — performance, battery, and more.</p>
+  <div class="eyebrow">Apple Silicon · Geekbench 6</div>
+  <h1>Mac &amp; iPad Geekbench 6 Comparison</h1>
+  <p>Compare single-core, multi-core and Metal GPU scores for every MacBook, Mac mini, iMac, Mac Studio, Mac Pro and iPad. Side-by-side performance, battery life and launch prices.</p>
 </header>
 <div class="selector-bar">
   <div class="selector-card" id="card-a">
@@ -466,7 +526,7 @@
 <div class="hint" id="hint">
   <div class="hint-icon">⚡</div>
   <div class="hint-title">Select two devices to compare</div>
-  <p>Choose from MacBook Air, MacBook Pro, Mac mini, iMac, iMac Pro, Mac Studio, Mac Pro, the new MacBook Neo, iPad Pro, iPad Air, iPad mini, or iPad.</p>
+  <p>Choose from MacBook Air, MacBook Pro, Mac mini, iMac, iMac Pro, Mac Studio, Mac Pro, MacBook Neo, iPad Pro, iPad Air, iPad mini or iPad. View real Geekbench 6 single-core, multi-core and Metal scores plus battery life estimates.</p>
 </div>
 <div class="compare-panel" id="compare-panel">
   <div class="compare-inner">
@@ -488,11 +548,11 @@
   </div>
 </div>
 <footer>
-  Geekbench 6 CPU benchmark scores sourced from <a href="https://browser.geekbench.com" target="_blank" rel="noopener noreferrer">Geekbench Browser</a> and public benchmark databases. Scores represent
-  typical results; individual results may vary. Battery life figures are <a href="https://www.apple.com/uk/batteries/" target="_blank" rel="noopener noreferrer">Apple video streaming estimates</a>.
-  Last updated September 2026.
-  <br><br>
-  <img src="https://hits.sh/YOUR-USERNAME.github.io/YOUR-REPO-NAME.svg?style=flat-square&label=views&color=3b82f6" alt="Views">
+  <p>Geekbench 6 CPU and Metal GPU benchmark scores sourced from <a href="https://browser.geekbench.com" target="_blank" rel="noopener noreferrer">Geekbench Browser</a> and public databases. Scores are typical results and may vary. Battery life figures are <a href="https://www.apple.com/uk/batteries/" target="_blank" rel="noopener noreferrer">Apple video streaming estimates</a>.</p>
+  <p>Compare Apple Silicon MacBooks, Mac mini, iMac, Mac Studio, Mac Pro and iPads — M1, M2, M3, M4, M5 and A-series chips. Last updated September 2026.</p>
+  <p><a href="https://geekmac.cc/">geekmac.cc</a> · Free Mac &amp; iPad Geekbench comparison tool</p>
+  <br>
+  <img src="https://hits.sh/geekmac.cc.svg?style=flat-square&label=views&color=3b82f6" alt="Page views counter for geekmac.cc" width="100" height="20">
 </footer>
 
 <script>
@@ -855,6 +915,7 @@ function resetComparison() {
 
   updateCompareButton();
   clearURL();
+  document.title = 'Apple Silicon Geekbench 6 Comparison – MacBook, Mac mini, iMac & iPad Scores';
 
   if (chartSC) { chartSC.destroy(); chartSC = null; }
   if (chartMC) { chartMC.destroy(); chartMC = null; }
@@ -935,6 +996,9 @@ function renderComparison() {
 
   document.getElementById('btn-copy').classList.add('visible');
   updateURL();
+
+  // Dynamic title for better shareability & SEO of comparison pages
+  document.title = `${a.model} (${a.chip}) vs ${b.model} (${b.chip}) – Geekbench 6 | GeekMac`;
 
   document.getElementById('mac-headers').innerHTML = `
     <div class="mac-header">
