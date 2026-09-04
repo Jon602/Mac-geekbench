@@ -208,15 +208,45 @@
     .compare-btn-wrap {
       max-width: 900px; margin: 16px auto 0; padding: 0 24px;
       text-align: center;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-compare, .btn-reset, .btn-copy {
+      padding: 12px 28px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s, background 0.2s;
     }
     .btn-compare {
-      padding: 12px 36px;
-      background: var(--accent); border: none; border-radius: 12px;
-      color: #fff; font-size: 14px; font-weight: 700;
-      cursor: pointer; transition: opacity 0.2s;
+      background: var(--accent);
+      color: #fff;
     }
     .btn-compare:disabled { opacity: 0.3; cursor: not-allowed; }
     .btn-compare:not(:disabled):hover { opacity: 0.85; }
+    .btn-reset {
+      background: var(--surface3);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-reset:hover { background: var(--surface2); }
+    .btn-copy {
+      background: rgba(59,130,246,0.15);
+      color: #93c5fd;
+      border: 1px solid rgba(59,130,246,0.3);
+      display: none;
+    }
+    .btn-copy.visible { display: inline-block; }
+    .btn-copy:hover { background: rgba(59,130,246,0.25); }
+    .btn-copy.copied {
+      background: rgba(74,222,128,0.15);
+      color: #4ade80;
+      border-color: rgba(74,222,128,0.3);
+    }
     .hint {
       max-width: 900px; margin: 48px auto; padding: 0 24px;
       text-align: center; color: var(--muted); font-size: 14px;
@@ -421,6 +451,8 @@
 </div>
 <div class="compare-btn-wrap">
   <button class="btn-compare" id="btn-compare" disabled onclick="renderComparison()">Compare →</button>
+  <button class="btn-reset" id="btn-reset" onclick="resetComparison()">Reset</button>
+  <button class="btn-copy" id="btn-copy" onclick="copyShareLink()">Copy shareable link</button>
 </div>
 <div class="hint" id="hint">
   <div class="hint-icon">⚡</div>
@@ -530,7 +562,7 @@ const MACS = [
   { category: 'iMac', model: 'iMac 27"', type: 'Desktop', chip: 'Intel Core i5', gen: 'i5', year: 2020, sc: 1509, mc: 6080, metal: 32000, battery: null, cpu: 6, gpu: 0, price: 1799 },
   { category: 'iMac', model: 'iMac 27"', type: 'Desktop', chip: 'Intel Core i7', gen: 'i7', year: 2020, sc: 1600, mc: 7660, metal: 45000, battery: null, cpu: 8, gpu: 0, price: 2299 },
 
-  // iMac Pro (corrected scores)
+  // iMac Pro
   { category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 8-core', gen: 'Xeon', year: 2017, sc: 1305, mc: 7369, metal: 55000, battery: null, cpu: 8, gpu: 0, price: 4999 },
   { category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 10-core', gen: 'Xeon', year: 2017, sc: 1342, mc: 8059, metal: 62000, battery: null, cpu: 10, gpu: 0, price: 5499 },
   { category: 'iMac Pro', model: 'iMac Pro 27"', type: 'Desktop', chip: 'Intel Xeon W 14-core', gen: 'Xeon', year: 2017, sc: 1358, mc: 9021, metal: 70000, battery: null, cpu: 14, gpu: 0, price: 6499 },
@@ -766,6 +798,13 @@ function updateURL() {
   history.replaceState(null, '', url);
 }
 
+function clearURL() {
+  const url = new URL(window.location);
+  url.searchParams.delete('a');
+  url.searchParams.delete('b');
+  history.replaceState(null, '', url);
+}
+
 function loadFromURL() {
   const params = new URLSearchParams(window.location.search);
   const a = params.get('a');
@@ -777,17 +816,63 @@ function loadFromURL() {
 
   if (isNaN(idxA) || isNaN(idxB) || idxA < 0 || idxB < 0 || idxA >= MACS.length || idxB >= MACS.length) return;
 
-  // Find the display text for each
   const getText = (idx) => {
     const m = MACS[idx];
-    const chipBase = m.chip.replace(/\s+\d+-core$/i, '');
-    // Simple version for auto-load
     return `${m.chip} (${m.year})`;
   };
 
   selectOption('a', idxA, getText(idxA));
   selectOption('b', idxB, getText(idxB));
   renderComparison();
+}
+
+function resetComparison() {
+  selectedA = null;
+  selectedB = null;
+
+  // Reset triggers
+  document.getElementById('trigger-a').textContent = 'Choose a Mac or iPad';
+  document.getElementById('trigger-b').textContent = 'Choose a Mac or iPad';
+
+  // Clear selected states
+  document.querySelectorAll('.custom-select-option').forEach(el => el.classList.remove('selected'));
+
+  // Hide previews
+  updatePreview('a', null);
+  updatePreview('b', null);
+
+  // Hide comparison + show hint
+  document.getElementById('compare-panel').classList.remove('visible');
+  document.getElementById('hint').style.display = 'block';
+
+  // Hide copy button
+  document.getElementById('btn-copy').classList.remove('visible', 'copied');
+  document.getElementById('btn-copy').textContent = 'Copy shareable link';
+
+  // Disable compare button
+  updateCompareButton();
+
+  // Clear URL
+  clearURL();
+
+  // Destroy charts
+  if (chartSC) { chartSC.destroy(); chartSC = null; }
+  if (chartMC) { chartMC.destroy(); chartMC = null; }
+}
+
+function copyShareLink() {
+  const url = window.location.href;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.getElementById('btn-copy');
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy shareable link';
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(() => {
+    alert('Could not copy link. Please copy it from the address bar.');
+  });
 }
 
 document.getElementById('trigger-a').addEventListener('click', (e) => {
@@ -847,6 +932,9 @@ function renderComparison() {
   const b = MACS[selectedB];
   document.getElementById('hint').style.display = 'none';
   document.getElementById('compare-panel').classList.add('visible');
+
+  // Show copy button
+  document.getElementById('btn-copy').classList.add('visible');
 
   // Update the shareable URL
   updateURL();
@@ -1007,7 +1095,7 @@ function renderCharts(a, b) {
 }
 
 buildCustomSelects();
-loadFromURL(); // Load comparison from URL if present
+loadFromURL();
 </script>
 </body>
 </html>
