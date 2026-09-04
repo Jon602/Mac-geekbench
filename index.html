@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
   <!-- Primary SEO -->
   <title>Apple Silicon Geekbench 6 Comparison – MacBook, Mac mini, iMac &amp; iPad Scores</title>
@@ -58,7 +58,6 @@
   }
   </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -79,51 +78,54 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      overflow-x: hidden;
     }
     header {
       background: #000000;
       border-bottom: 1px solid var(--border);
-      padding: 36px 24px 28px;
+      padding: 28px 16px 20px;
       text-align: center;
     }
     header .eyebrow {
       font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--muted); margin-bottom: 10px;
+      color: var(--muted); margin-bottom: 8px;
     }
     header h1 {
-      font-size: clamp(22px, 4vw, 38px); font-weight: 700;
+      font-size: clamp(20px, 4vw, 38px); font-weight: 700;
       background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text; margin-bottom: 8px;
     }
-    header p { color: var(--muted); font-size: 14px; }
+    header p { color: var(--muted); font-size: 13px; }
+    
     .selector-bar {
       display: grid;
-      grid-template-columns: 1fr 60px 1fr;
+      grid-template-columns: 1fr 40px 1fr;
       gap: 0;
       max-width: 900px;
-      margin: 32px auto 0;
-      padding: 0 24px;
+      margin: 20px auto 0;
+      padding: 0 12px;
       align-items: start;
     }
     .selector-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
+      border-radius: 14px;
+      padding: 12px;
       transition: border-color 0.2s;
       position: relative;
+      min-width: 0;
     }
     .selector-card.has-selection { border-color: #3b82f644; }
-    .selector-card:first-child { border-radius: 16px 0 0 16px; }
-    .selector-card:last-child  { border-radius: 0 16px 16px 0; }
+    .selector-card:first-child { border-radius: 14px 0 0 14px; }
+    .selector-card:last-child  { border-radius: 0 14px 14px 0; }
     .selector-label {
-      font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px;
-      color: var(--muted); margin-bottom: 10px;
-      display: flex; align-items: center; gap: 8px;
+      font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--muted); margin-bottom: 8px;
+      display: flex; align-items: center; gap: 6px;
     }
     .selector-dot {
-      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+      width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
     }
     .custom-select {
       position: relative;
@@ -134,9 +136,9 @@
       background: var(--surface2);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 10px 36px 10px 14px;
-      border-radius: 10px;
-      font-size: 14px;
+      padding: 8px 28px 8px 10px;
+      border-radius: 8px;
+      font-size: 12.5px;
       cursor: pointer;
       text-align: left;
       transition: border-color 0.2s;
@@ -152,14 +154,14 @@
     .custom-select-trigger::after {
       content: '';
       position: absolute;
-      right: 14px;
+      right: 10px;
       top: 50%;
       transform: translateY(-50%);
       width: 0;
       height: 0;
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-top: 6px solid var(--muted);
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--muted);
       transition: transform 0.2s;
     }
     .custom-select.open .custom-select-trigger::after {
@@ -173,7 +175,7 @@
       background: var(--surface2);
       border: 1px solid var(--border);
       border-radius: 12px;
-      max-height: 380px;
+      max-height: 320px;
       overflow-y: auto;
       z-index: 100;
       display: none;
@@ -186,7 +188,7 @@
       position: sticky;
       top: 0;
       background: var(--surface2);
-      padding: 10px 12px;
+      padding: 8px;
       border-bottom: 1px solid var(--border);
       z-index: 2;
     }
@@ -195,9 +197,9 @@
       background: var(--surface3);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
       outline: none;
     }
     .dropdown-search input:focus {
@@ -207,8 +209,8 @@
       color: var(--muted);
     }
     .custom-select-category {
-      padding: 8px 14px 4px;
-      font-size: 11px;
+      padding: 6px 10px 4px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -216,8 +218,8 @@
       background: rgba(255,255,255,0.03);
     }
     .custom-select-option {
-      padding: 9px 14px;
-      font-size: 13.5px;
+      padding: 8px 10px;
+      font-size: 12.5px;
       cursor: pointer;
       color: var(--text);
       transition: background 0.15s;
@@ -236,41 +238,41 @@
       display: none;
     }
     .selector-preview {
-      margin-top: 12px;
-      padding: 10px 12px;
+      margin-top: 8px;
+      padding: 8px 10px;
       background: var(--surface2);
-      border-radius: 10px;
+      border-radius: 8px;
       display: none;
     }
     .selector-preview.visible { display: block; }
-    .preview-model { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-    .preview-chip { font-size: 12px; color: var(--muted); }
+    .preview-model { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+    .preview-chip { font-size: 11px; color: var(--muted); }
     .preview-scores {
-      display: flex; gap: 16px; margin-top: 8px;
-      font-size: 12px; color: var(--muted);
+      display: flex; gap: 12px; margin-top: 6px;
+      font-size: 11px; color: var(--muted);
     }
     .preview-score-val { font-weight: 700; color: var(--text); margin-right: 2px; }
     .vs-divider {
       display: flex; align-items: center; justify-content: center;
-      height: 100%; min-height: 80px;
-      font-size: 12px; font-weight: 800; color: var(--muted);
-      letter-spacing: 2px; text-transform: uppercase;
+      height: 100%; min-height: 60px;
+      font-size: 10px; font-weight: 800; color: var(--muted);
+      letter-spacing: 1px; text-transform: uppercase;
       background: var(--surface3);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
     .compare-btn-wrap {
-      max-width: 900px; margin: 16px auto 0; padding: 0 24px;
+      max-width: 900px; margin: 16px auto 0; padding: 0 12px;
       text-align: center;
       display: flex;
-      gap: 12px;
+      gap: 10px;
       justify-content: center;
       flex-wrap: wrap;
     }
     .btn-reset, .btn-copy {
-      padding: 12px 28px;
-      border-radius: 12px;
-      font-size: 14px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 13px;
       font-weight: 700;
       cursor: pointer;
       transition: opacity 0.2s, background 0.2s;
@@ -298,27 +300,28 @@
       border-color: rgba(74,222,128,0.3);
     }
     .hint {
-      max-width: 900px; margin: 48px auto; padding: 0 24px;
-      text-align: center; color: var(--muted); font-size: 14px;
+      max-width: 900px; margin: 32px auto; padding: 0 16px;
+      text-align: center; color: var(--muted); font-size: 13px;
     }
-    .hint-icon { font-size: 40px; margin-bottom: 12px; }
-    .hint-title { font-size: 18px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .hint-icon { font-size: 32px; margin-bottom: 8px; }
+    .hint-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    
     .compare-panel {
-      max-width: 900px; margin: 32px auto 48px; padding: 0 24px;
+      max-width: 900px; margin: 24px auto 36px; padding: 0 8px;
       display: none;
     }
     .compare-panel.visible { display: block; }
     .compare-inner {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      overflow: visible;
+      border-radius: 16px;
+      overflow: hidden;
     }
 
-    /* ===== STICKY HEADER ===== */
+    /* ===== STICKY HEADER & RESPONSIVE GRID ===== */
     .mac-headers {
       display: grid;
-      grid-template-columns: 1fr 60px 1fr;
+      grid-template-columns: 1fr 32px 1fr;
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
@@ -328,22 +331,39 @@
     }
 
     .mac-header {
-      padding: 20px 28px 18px;
+      padding: 12px 10px;
       position: relative;
+      min-width: 0;
     }
     .mac-header:first-child { border-right: 1px solid var(--border); }
-    .mac-header:last-child  { border-left: 1px solid var(--border); }
+    .mac-header:last-child  { border-left: 1px solid var(--border); text-align: right; }
     .mac-header-accent {
       position: absolute; top: 0; left: 0; right: 0; height: 3px;
     }
-    .mac-name { font-size: 18px; font-weight: 800; line-height: 1.2; margin-bottom: 8px; }
-    .mac-badges { display: flex; flex-wrap: wrap; gap: 6px; }
-    .chip-badge {
+    .mac-name { 
+      font-size: clamp(13px, 3.8vw, 18px); 
+      font-weight: 800; 
+      line-height: 1.2; 
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mac-badges { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 4px; 
+    }
+    .mac-header:last-child .mac-badges {
+      justify-content: flex-end;
+    }
+    .chip-badge, .type-badge, .year-badge, .price-badge, .new-badge {
       display: inline-flex; align-items: center;
-      padding: 3px 10px; border-radius: 20px;
-      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+      padding: 2px 6px; border-radius: 4px;
+      font-size: 10px; font-weight: 700;
       white-space: nowrap;
     }
+    .chip-badge { text-transform: uppercase; letter-spacing: 0.3px; border-radius: 12px; }
     .chip-M1  { background: rgba(99,102,241,.2);  color: #a5b4fc; border: 1px solid rgba(99,102,241,.3); }
     .chip-M2  { background: rgba(59,130,246,.2);  color: #93c5fd; border: 1px solid rgba(59,130,246,.3); }
     .chip-M3  { background: rgba(14,165,233,.2);  color: #7dd3fc; border: 1px solid rgba(14,165,233,.3); }
@@ -354,211 +374,150 @@
     .chip-i7  { background: rgba(168,85,247,.2);  color: #d8b4fe; border: 1px solid rgba(168,85,247,.35); }
     .chip-i9  { background: rgba(239,68,68,.2);   color: #fca5a5; border: 1px solid rgba(239,68,68,.35); }
     .chip-Xeon{ background: rgba(234,179,8,.2);   color: #fde047; border: 1px solid rgba(234,179,8,.35); }
-    .type-badge {
-      display: inline-block; padding: 3px 9px; border-radius: 6px;
-      font-size: 11px; font-weight: 600;
-    }
+    
     .type-Laptop  { background: rgba(59,130,246,.15); color: #93c5fd; }
     .type-Desktop { background: rgba(139,92,246,.15); color: #c4b5fd; }
     .type-iPad    { background: rgba(236,72,153,.15); color: #f9a8d4; }
-    .year-badge {
-      display: inline-block;
-      padding: 3px 9px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      background: rgba(99, 102, 241, 0.18);
-      color: #a5b4fc;
-      border: 1px solid rgba(99, 102, 241, 0.3);
-    }
-    .price-badge {
-      display: inline-block;
-      padding: 3px 9px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      background: rgba(59, 130, 246, 0.15);
-      color: #93c5fd;
-      border: 1px solid rgba(59, 130, 246, 0.3);
-    }
-    .price-badge.unknown {
-      background: rgba(100, 116, 139, 0.15);
-      color: #94a3b8;
-      border: 1px solid rgba(100, 116, 139, 0.25);
-    }
-    .new-badge {
-      display: inline-block; padding: 2px 8px; border-radius: 20px;
-      background: rgba(236,72,153,.2); color: #f9a8d4;
-      border: 1px solid rgba(236,72,153,.3);
-      font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
-    }
+    
+    .year-badge { background: rgba(99,102,241,0.18); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3); }
+    .price-badge { background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
+    .price-badge.unknown { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.25); }
+    .new-badge { background: rgba(236,72,153,.2); color: #f9a8d4; border: 1px solid rgba(236,72,153,.3); letter-spacing: .3px; text-transform: uppercase; }
+
     .vs-mid {
       display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 800; color: var(--muted);
-      letter-spacing: 2px; background: var(--surface2);
+      font-size: 10px; font-weight: 800; color: var(--muted);
+      letter-spacing: 1px; background: var(--surface2);
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
     }
+    
     .metric-row {
       display: grid;
-      grid-template-columns: 1fr 60px 1fr;
+      grid-template-columns: 1fr 32px 1fr;
       border-top: 1px solid var(--border);
     }
     .metric-cell {
-      padding: 18px 28px;
+      padding: 12px 10px;
       position: relative;
+      min-width: 0;
     }
     .metric-cell:first-child { border-right: 1px solid var(--border); }
     .metric-cell:last-child  { border-left: 1px solid var(--border); text-align: right; }
     .metric-label {
-      font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
-      color: var(--muted); margin-bottom: 8px;
+      font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px;
+      color: var(--muted); margin-bottom: 4px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
     .metric-score {
-      font-size: 32px; font-weight: 800; font-variant-numeric: tabular-nums;
-      line-height: 1; margin-bottom: 8px;
+      font-size: clamp(18px, 5.5vw, 32px); 
+      font-weight: 800; 
+      font-variant-numeric: tabular-nums;
+      line-height: 1; margin-bottom: 6px;
     }
     .metric-score.winner { color: var(--win); }
     .metric-score.loser  { color: var(--muted); }
     .metric-score.tied   { color: var(--text); }
     .metric-bar-wrap {
-      height: 5px; background: var(--border); border-radius: 3px;
+      height: 4px; background: var(--border); border-radius: 2px;
       overflow: hidden; margin-bottom: 6px;
     }
-    .metric-bar { height: 100%; border-radius: 3px; transition: width .5s ease; }
+    .metric-bar { height: 100%; border-radius: 2px; transition: width .5s ease; }
     .metric-diff {
-      display: inline-block; padding: 2px 8px; border-radius: 20px;
-      font-size: 11px; font-weight: 700;
+      display: inline-block; padding: 1px 6px; border-radius: 12px;
+      font-size: 10px; font-weight: 700;
     }
     .metric-diff.faster { background: rgba(74,222,128,.15); color: var(--win); }
     .metric-diff.slower { background: rgba(248,113,113,.15); color: var(--lose); }
     .metric-diff.tied   { background: rgba(148,163,184,.1);  color: var(--muted); }
+    
     .metric-mid {
       display: flex; align-items: center; justify-content: center;
-      font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
+      font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px;
       color: var(--muted); background: var(--surface2);
       border-left: 1px solid var(--border);
       border-right: 1px solid var(--border);
-      padding: 4px;
+      padding: 2px;
       text-align: center;
-      line-height: 1.4;
+      line-height: 1.2;
+      word-break: break-word;
     }
-    .chart-section {
-      padding: 24px 28px;
+
+    /* Practical Insights Section replacing charts */
+    .insights-section {
+      padding: 16px 12px;
       border-top: 1px solid var(--border);
       background: var(--surface2);
     }
-    .chart-title { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 16px; }
-    .chart-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .chart-col-title { font-size: 12px; font-weight: 600; color: var(--muted); text-align: center; margin-bottom: 8px; }
-    .chart-col canvas { max-height: 180px; }
+    .insights-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--muted); margin-bottom: 12px;
+    }
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+    .insight-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .insight-card-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .insight-card-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .insight-card-desc {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.35;
+    }
+    .verdict-box {
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 10px;
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: var(--text);
+    }
+
     footer {
-      text-align: center; padding: 24px;
+      text-align: center; padding: 20px 12px;
       border-top: 1px solid var(--border);
-      color: var(--muted); font-size: 12.5px; line-height: 1.8;
+      color: var(--muted); font-size: 11.5px; line-height: 1.6;
     }
     footer a { color: #7878c0; text-decoration: none; }
     footer a:hover { text-decoration: underline; }
-    @media (max-width: 640px) {
+
+    @media (max-width: 480px) {
       .selector-bar {
-        grid-template-columns: 1fr;
-        gap: 0;
+        grid-template-columns: 1fr 24px 1fr;
+        padding: 0 4px;
       }
-      .selector-card:first-child {
-        border-radius: 16px 16px 0 0;
+      .selector-card { padding: 8px; }
+      .custom-select-trigger { padding: 6px 20px 6px 8px; font-size: 11.5px; }
+      .custom-select-trigger::after { right: 6px; }
+      .vs-divider { min-height: 40px; font-size: 9px; }
+      .mac-headers, .metric-row { grid-template-columns: 1fr 20px 1fr; }
+      .vs-mid, .metric-mid { font-size: 7.5px; }
+      .mac-header { padding: 10px 6px; }
+      .metric-cell { padding: 10px 6px; }
+      .metric-label { font-size: 8px; }
+      .chip-badge, .type-badge, .year-badge, .price-badge, .new-badge {
+        font-size: 9px; padding: 1px 4px;
       }
-      .selector-card:last-child {
-        border-radius: 0 0 16px 16px;
-      }
-      .vs-divider {
-        min-height: 36px;
-        border-top: none;
-        border-bottom: none;
-        border-left: 1px solid var(--border);
-        border-right: 1px solid var(--border);
-      }
-
-      /* Side-by-side sticky headers on mobile */
-      .mac-headers {
-        grid-template-columns: 1fr 28px 1fr;
-        position: sticky;
-        top: 0;
-        z-index: 50;
-      }
-      .mac-header {
-        padding: 12px 10px 12px;
-      }
-      .mac-header:first-child {
-        border-right: none;
-        border-bottom: none;
-      }
-      .mac-header:last-child {
-        border-left: none;
-        border-top: none;
-        text-align: right;
-      }
-      .mac-header:last-child .mac-badges {
-        justify-content: flex-end;
-      }
-      .vs-mid {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100%;
-        padding: 0;
-        font-size: 10px;
-        letter-spacing: 1px;
-        border-left: 1px solid var(--border);
-        border-right: 1px solid var(--border);
-        border-top: none;
-        border-bottom: none;
-        background: var(--surface2);
-      }
-
-      /* Metric rows: label on top, then side-by-side A | B */
-      .metric-row {
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas:
-          "label label"
-          "a     b";
-        gap: 0;
-      }
-      .metric-mid {
-        display: block;
-        grid-area: label;
-        padding: 12px 20px 0;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: var(--muted);
-        background: transparent;
-        border: none;
-        text-align: left;
-        line-height: 1.3;
-      }
-      .metric-cell:first-child {
-        grid-area: a;
-        border-right: 1px solid var(--border);
-        border-bottom: none;
-        padding: 8px 16px 16px 20px;
-      }
-      .metric-cell:last-child {
-        grid-area: b;
-        border-left: none;
-        text-align: left;
-        padding: 8px 20px 16px 16px;
-      }
-      /* Hide the duplicate labels that sit inside each metric-cell on mobile */
-      .metric-cell .metric-label {
-        display: none;
-      }
-      .metric-score {
-        font-size: 24px;
-      }
-
-      .chart-columns { grid-template-columns: 1fr; }
-      .mac-name { font-size: 14px; }
-      .mac-header-accent { height: 2px; }
     }
   </style>
 </head>
@@ -572,7 +531,7 @@
 <header>
   <div class="eyebrow">Apple Silicon · Geekbench 6</div>
   <h1>Mac &amp; iPad Geekbench 6 Comparison</h1>
-  <p>Compare single-core, multi-core and Metal GPU scores for every MacBook, Mac mini, iMac, Mac Studio, Mac Pro and iPad. Side-by-side performance, battery life and launch prices.</p>
+  <p>Compare single-core, multi-core and Metal GPU scores for every MacBook, Mac mini, iMac, Mac Studio, Mac Pro and iPad.</p>
 </header>
 <div class="selector-bar">
   <div class="selector-card" id="card-a">
@@ -581,7 +540,7 @@
       Device 1
     </div>
     <div class="custom-select" id="select-a">
-      <button type="button" class="custom-select-trigger" id="trigger-a">Choose a Mac or iPad</button>
+      <button type="button" class="custom-select-trigger" id="trigger-a">Choose device</button>
       <div class="custom-select-dropdown" id="dropdown-a"></div>
     </div>
     <div class="selector-preview" id="preview-a"></div>
@@ -593,7 +552,7 @@
       Device 2
     </div>
     <div class="custom-select" id="select-b">
-      <button type="button" class="custom-select-trigger" id="trigger-b">Choose a Mac or iPad</button>
+      <button type="button" class="custom-select-trigger" id="trigger-b">Choose device</button>
       <div class="custom-select-dropdown" id="dropdown-b"></div>
     </div>
     <div class="selector-preview" id="preview-b"></div>
@@ -618,31 +577,23 @@
 <div class="hint" id="hint">
   <div class="hint-icon">⚡</div>
   <div class="hint-title">Select two devices to compare</div>
-  <p>Choose any MacBook, Mac mini, iMac, Mac Studio, Mac Pro or iPad. The comparison updates instantly with Geekbench 6 single-core, multi-core and Metal scores plus battery life estimates.</p>
+  <p>Choose any Mac or iPad to compare Geekbench 6 single-core, multi-core and Metal scores side by side.</p>
 </div>
 <div class="compare-panel" id="compare-panel">
   <div class="compare-inner">
     <div class="mac-headers" id="mac-headers"></div>
     <div id="metric-rows"></div>
-    <div class="chart-section">
-      <div class="chart-title">Score Overview</div>
-      <div class="chart-columns">
-        <div class="chart-col">
-          <div class="chart-col-title">Single-Core</div>
-          <canvas id="cmp-chart-sc"></canvas>
-        </div>
-        <div class="chart-col">
-          <div class="chart-col-title">Multi-Core</div>
-          <canvas id="cmp-chart-mc"></canvas>
-        </div>
-      </div>
+    
+    <div class="insights-section">
+      <div class="insights-title">Performance &amp; Value Insights</div>
+      <div class="insights-grid" id="insights-grid"></div>
+      <div class="verdict-box" id="verdict-box"></div>
     </div>
   </div>
 </div>
 <footer>
-  <p>Geekbench 6 CPU and Metal GPU benchmark scores sourced from <a href="https://browser.geekbench.com" target="_blank" rel="noopener noreferrer">Geekbench Browser</a> and public databases. Scores are typical results and may vary. Battery life figures are <a href="https://www.apple.com/uk/batteries/" target="_blank" rel="noopener noreferrer">Apple video streaming estimates</a>.</p>
-  <p>Compare Apple Silicon MacBooks, Mac mini, iMac, Mac Studio, Mac Pro and iPads — M1, M2, M3, M4, M5 and A-series chips. Last updated September 2026.</p>
-  <p><a href="https://geekmac.cc/">geekmac.cc</a> · Free Mac &amp; iPad Geekbench comparison tool</p>
+  <p>Geekbench 6 scores sourced from <a href="https://browser.geekbench.com" target="_blank" rel="noopener noreferrer">Geekbench Browser</a>. Battery life figures are <a href="https://www.apple.com/uk/batteries/" target="_blank" rel="noopener noreferrer">Apple estimates</a>.</p>
+  <p><a href="https://geekmac.cc/">geekmac.cc</a> · Free Apple Silicon comparison tool</p>
   <br>
   <img src="https://hits.sh/geekmac.cc.svg?style=flat-square&label=views&color=3b82f6" alt="Page views counter for geekmac.cc" width="100" height="20">
 </footer>
@@ -791,8 +742,6 @@ const A_COLOR = '#3b82f6';
 const B_COLOR = '#f59e0b';
 let selectedA = null;
 let selectedB = null;
-let chartSC = null;
-let chartMC = null;
 
 function buildCustomSelects() {
   const chipBase = chip => chip.replace(/\s+\d+-core$/i, '');
@@ -841,7 +790,7 @@ function buildCustomSelects() {
     searchWrap.className = 'dropdown-search';
     const searchInput = document.createElement('input');
     searchInput.type = 'text';
-    searchInput.placeholder = 'Search models, chips, years…';
+    searchInput.placeholder = 'Search models…';
     searchInput.autocomplete = 'off';
     searchInput.addEventListener('input', () => filterDropdown(side, searchInput.value));
     searchInput.addEventListener('click', e => e.stopPropagation());
@@ -924,7 +873,6 @@ function selectOption(side, idx, text) {
   document.getElementById(`select-${side}`).classList.remove('open');
   updatePreview(side, idx);
 
-  // Live comparison: render as soon as both devices are selected
   if (selectedA !== null && selectedB !== null) {
     renderComparison();
   }
@@ -999,8 +947,8 @@ function resetComparison() {
   selectedA = null;
   selectedB = null;
 
-  document.getElementById('trigger-a').textContent = 'Choose a Mac or iPad';
-  document.getElementById('trigger-b').textContent = 'Choose a Mac or iPad';
+  document.getElementById('trigger-a').textContent = 'Choose device';
+  document.getElementById('trigger-b').textContent = 'Choose device';
 
   document.querySelectorAll('.custom-select-option').forEach(el => el.classList.remove('selected'));
 
@@ -1015,9 +963,6 @@ function resetComparison() {
 
   clearURL();
   document.title = 'Apple Silicon Geekbench 6 Comparison – MacBook, Mac mini, iMac & iPad Scores';
-
-  if (chartSC) { chartSC.destroy(); chartSC = null; }
-  if (chartMC) { chartMC.destroy(); chartMC = null; }
 }
 
 function copyShareLink() {
@@ -1031,7 +976,7 @@ function copyShareLink() {
       btn.classList.remove('copied');
     }, 2000);
   }).catch(() => {
-    alert('Could not copy link. Please copy it from the address bar.');
+    alert('Could not copy link.');
   });
 }
 
@@ -1096,7 +1041,6 @@ function renderComparison() {
   document.getElementById('btn-copy').classList.add('visible');
   updateURL();
 
-  // Dynamic title for better shareability & SEO of comparison pages
   document.title = `${a.model} (${a.chip}) vs ${b.model} (${b.chip}) – Geekbench 6 | GeekMac`;
 
   document.getElementById('mac-headers').innerHTML = `
@@ -1108,8 +1052,8 @@ function renderComparison() {
         <span class="type-badge type-${a.type}">${a.type}</span>
         <span class="year-badge">${a.year}</span>
         ${a.price 
-          ? `<span class="price-badge">Launch price £${a.price.toLocaleString()}</span>` 
-          : `<span class="price-badge unknown">Launch price unknown</span>`}
+          ? `<span class="price-badge">£${a.price.toLocaleString()}</span>` 
+          : `<span class="price-badge unknown">N/A</span>`}
         ${a.isNew ? '<span class="new-badge">New</span>' : ''}
       </div>
     </div>
@@ -1122,20 +1066,22 @@ function renderComparison() {
         <span class="type-badge type-${b.type}">${b.type}</span>
         <span class="year-badge">${b.year}</span>
         ${b.price 
-          ? `<span class="price-badge">Launch price £${b.price.toLocaleString()}</span>` 
-          : `<span class="price-badge unknown">Launch price unknown</span>`}
+          ? `<span class="price-badge">£${b.price.toLocaleString()}</span>` 
+          : `<span class="price-badge unknown">N/A</span>`}
         ${b.isNew ? '<span class="new-badge">New</span>' : ''}
       </div>
     </div>
   `;
+
   const metrics = [
     { key: 'sc',     label: 'Single-Core' },
     { key: 'mc',     label: 'Multi-Core' },
     { key: 'metal',  label: 'Metal GPU' },
-    { key: 'battery',label: 'Battery (hrs)' },
+    { key: 'battery',label: 'Battery' },
     { key: 'cpu',    label: 'CPU Cores' },
     { key: 'gpu',    label: 'GPU Cores' },
   ];
+
   const rowsEl = document.getElementById('metric-rows');
   rowsEl.innerHTML = '';
   metrics.forEach(met => {
@@ -1201,57 +1147,67 @@ function renderComparison() {
       </div>
     `;
   });
-  renderCharts(a, b);
+
+  renderInsights(a, b);
 }
 
-function renderCharts(a, b) {
-  if (chartSC) chartSC.destroy();
-  if (chartMC) chartMC.destroy();
-  const commonOpts = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: { callbacks: { label: ctx => ctx.raw.toLocaleString() } }
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-        ticks: { color: '#8888a0', font: { size: 11 } },
-        grid: { color: '#2e2e3a' }
-      },
-      x: {
-        ticks: { color: '#8888a0', font: { size: 11 } },
-        grid: { display: false }
-      }
-    }
-  };
-  chartSC = new Chart(document.getElementById('cmp-chart-sc'), {
-    type: 'bar',
-    data: {
-      labels: [a.model, b.model],
-      datasets: [{
-        data: [a.sc, b.sc],
-        backgroundColor: [A_COLOR, B_COLOR],
-        borderRadius: 6,
-        barThickness: 36
-      }]
-    },
-    options: commonOpts
-  });
-  chartMC = new Chart(document.getElementById('cmp-chart-mc'), {
-    type: 'bar',
-    data: {
-      labels: [a.model, b.model],
-      datasets: [{
-        data: [a.mc, b.mc],
-        backgroundColor: [A_COLOR, B_COLOR],
-        borderRadius: 6,
-        barThickness: 36
-      }]
-    },
-    options: commonOpts
-  });
+function renderInsights(a, b) {
+  const grid = document.getElementById('insights-grid');
+  const verdict = document.getElementById('verdict-box');
+
+  const valA = a.price ? (a.mc / a.price).toFixed(1) : null;
+  const valB = b.price ? (b.mc / b.price).toFixed(1) : null;
+
+  let valueHtml = '';
+  if (valA && valB) {
+    const winner = parseFloat(valA) > parseFloat(valB) ? a.model : b.model;
+    valueHtml = `
+      <div class="insight-card">
+        <div class="insight-card-title">Value Efficiency (MC Pts / £)</div>
+        <div class="insight-card-value">${a.model}: ${valA} | ${b.model}: ${valB}</div>
+        <div class="insight-card-desc"><strong>${winner}</strong> provides higher multi-core score output per pound spent at launch.</div>
+      </div>
+    `;
+  } else {
+    valueHtml = `
+      <div class="insight-card">
+        <div class="insight-card-title">Value Efficiency</div>
+        <div class="insight-card-value">Partial pricing available</div>
+        <div class="insight-card-desc">Comparison based on pure compute metrics.</div>
+      </div>
+    `;
+  }
+
+  const renderSpeedup = (Math.max(a.mc, b.mc) / Math.min(a.mc, b.mc)).toFixed(2);
+  const fasterDevice = a.mc > b.mc ? a.model : b.model;
+  const renderHtml = `
+    <div class="insight-card">
+      <div class="insight-card-title">Multi-Core Processing</div>
+      <div class="insight-card-value">~${renderSpeedup}x Speed Ratio</div>
+      <div class="insight-card-desc"><strong>${fasterDevice}</strong> leads processing heavy multi-threaded tasks.</div>
+    </div>
+  `;
+
+  const gpuSpeedup = (Math.max(a.metal, b.metal) / Math.min(a.metal, b.metal)).toFixed(2);
+  const fasterGpu = a.metal > b.metal ? a.model : b.model;
+  const gpuHtml = `
+    <div class="insight-card">
+      <div class="insight-card-title">Metal Graphics Compute</div>
+      <div class="insight-card-value">~${gpuSpeedup}x GPU Power</div>
+      <div class="insight-card-desc"><strong>${fasterGpu}</strong> offers higher performance for rendering and games.</div>
+    </div>
+  `;
+
+  grid.innerHTML = valueHtml + renderHtml + gpuHtml;
+
+  const mcDiff = Math.abs(((a.mc - b.mc) / Math.min(a.mc, b.mc)) * 100).toFixed(0);
+  if (mcDiff < 10) {
+    verdict.innerHTML = `<strong>Verdict:</strong> Performance is roughly equivalent (&lt;10% difference). Base your decision on form factor and budget.`;
+  } else if (a.mc > b.mc) {
+    verdict.innerHTML = `<strong>Verdict:</strong> The <strong>${a.model} (${a.chip})</strong> leads by ~${mcDiff}% in multi-core performance over the ${b.model} (${b.chip}).`;
+  } else {
+    verdict.innerHTML = `<strong>Verdict:</strong> The <strong>${b.model} (${b.chip})</strong> leads by ~${mcDiff}% in multi-core performance over the ${a.model} (${a.chip}).`;
+  }
 }
 
 buildCustomSelects();
