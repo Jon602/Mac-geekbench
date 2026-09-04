@@ -644,7 +644,6 @@ function buildCustomSelects() {
     const dropdown = document.getElementById(`dropdown-${side}`);
     dropdown.innerHTML = '';
 
-    // Search box
     const searchWrap = document.createElement('div');
     searchWrap.className = 'dropdown-search';
     const searchInput = document.createElement('input');
@@ -683,7 +682,6 @@ function filterDropdown(side, query) {
   const dropdown = document.getElementById(`dropdown-${side}`);
   const options = dropdown.querySelectorAll('.custom-select-option');
   const categories = dropdown.querySelectorAll('.custom-select-category');
-
   const visibleGroups = new Set();
 
   options.forEach(opt => {
@@ -702,7 +700,6 @@ function toggleDropdown(side) {
   const isOpen = select.classList.contains('open');
   document.querySelectorAll('.custom-select').forEach(s => {
     s.classList.remove('open');
-    // clear search when closing
     const input = s.querySelector('.dropdown-search input');
     if (input) {
       input.value = '';
@@ -711,7 +708,6 @@ function toggleDropdown(side) {
   });
   if (!isOpen) {
     select.classList.add('open');
-    // focus search
     setTimeout(() => {
       const input = select.querySelector('.dropdown-search input');
       if (input) input.focus();
@@ -760,6 +756,38 @@ function updatePreview(side, idx) {
 
 function updateCompareButton() {
   document.getElementById('btn-compare').disabled = !(selectedA !== null && selectedB !== null);
+}
+
+function updateURL() {
+  if (selectedA === null || selectedB === null) return;
+  const url = new URL(window.location);
+  url.searchParams.set('a', selectedA);
+  url.searchParams.set('b', selectedB);
+  history.replaceState(null, '', url);
+}
+
+function loadFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const a = params.get('a');
+  const b = params.get('b');
+  if (a === null || b === null) return;
+
+  const idxA = parseInt(a, 10);
+  const idxB = parseInt(b, 10);
+
+  if (isNaN(idxA) || isNaN(idxB) || idxA < 0 || idxB < 0 || idxA >= MACS.length || idxB >= MACS.length) return;
+
+  // Find the display text for each
+  const getText = (idx) => {
+    const m = MACS[idx];
+    const chipBase = m.chip.replace(/\s+\d+-core$/i, '');
+    // Simple version for auto-load
+    return `${m.chip} (${m.year})`;
+  };
+
+  selectOption('a', idxA, getText(idxA));
+  selectOption('b', idxB, getText(idxB));
+  renderComparison();
 }
 
 document.getElementById('trigger-a').addEventListener('click', (e) => {
@@ -819,6 +847,10 @@ function renderComparison() {
   const b = MACS[selectedB];
   document.getElementById('hint').style.display = 'none';
   document.getElementById('compare-panel').classList.add('visible');
+
+  // Update the shareable URL
+  updateURL();
+
   document.getElementById('mac-headers').innerHTML = `
     <div class="mac-header">
       <div class="mac-header-accent" style="background:${A_COLOR}"></div>
@@ -975,6 +1007,7 @@ function renderCharts(a, b) {
 }
 
 buildCustomSelects();
+loadFromURL(); // Load comparison from URL if present
 </script>
 </body>
 </html>
