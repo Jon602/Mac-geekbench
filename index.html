@@ -243,16 +243,15 @@
       display: none;
     }
     .selector-preview.visible { display: block; }
-    .preview-model { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
-    .preview-chip { font-size: 11px; color: var(--muted); }
-    .preview-scores {
-      display: flex; gap: 12px; margin-top: 6px;
-      font-size: 11px; color: var(--muted);
+    .preview-model { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+    .preview-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
     }
-    .preview-score-val { font-weight: 700; color: var(--text); margin-right: 2px; }
     /* VS divider removed – 10px gap used instead */
     .compare-btn-wrap {
-      max-width: 900px; margin: 16px auto 0; padding: 0 12px;
+      max-width: 900px; margin: 50px auto 0; padding: 0 12px;
       text-align: center;
       display: flex;
       gap: 10px;
@@ -261,6 +260,9 @@
     }
     .btn-reset, .btn-copy {
       padding: 10px 20px;
+      min-width: 130px;
+      height: 42px;
+      box-sizing: border-box;
       border-radius: 10px;
       font-size: 13px;
       font-weight: 700;
@@ -290,14 +292,14 @@
       border-color: rgba(74,222,128,0.3);
     }
     .hint {
-      max-width: 900px; margin: 32px auto; padding: 0 16px;
+      max-width: 900px; margin: 50px auto; padding: 0 16px;
       text-align: center; color: var(--muted); font-size: 13px;
     }
     .hint-icon { font-size: 32px; margin-bottom: 8px; }
     .hint-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
     
     .compare-panel {
-      max-width: 900px; margin: 24px auto 36px; padding: 0 12px;
+      max-width: 900px; margin: 50px auto 36px; padding: 0 12px;
       display: none;
     }
     .compare-panel.visible { display: block; }
@@ -329,10 +331,12 @@
       border: 1px solid #3b82f644;
       border-bottom: none;
       border-radius: 14px 14px 0 0;
+      overflow: hidden;
     }
     .mac-header:last-child { text-align: right; }
     .mac-header-accent {
       position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      border-radius: 14px 14px 0 0;
     }
     .mac-name { 
       font-size: clamp(13px, 3.8vw, 18px); 
@@ -357,7 +361,7 @@
       font-size: 10px; font-weight: 700;
       white-space: nowrap;
     }
-    .chip-badge { text-transform: uppercase; letter-spacing: 0.3px; border-radius: 12px; }
+    .chip-badge { text-transform: uppercase; letter-spacing: 0.3px; }
     .chip-M1  { background: rgba(99,102,241,.2);  color: #a5b4fc; border: 1px solid rgba(99,102,241,.3); }
     .chip-M2  { background: rgba(59,130,246,.2);  color: #93c5fd; border: 1px solid rgba(59,130,246,.3); }
     .chip-M3  { background: rgba(14,165,233,.2);  color: #7dd3fc; border: 1px solid rgba(14,165,233,.3); }
@@ -875,10 +879,9 @@ function updatePreview(side, idx) {
   const m = MACS[idx];
   preview.innerHTML = `
     <div class="preview-model">${m.model}</div>
-    <div class="preview-chip">${m.chip} · ${m.year}</div>
-    <div class="preview-scores">
-      <span><span class="preview-score-val">${m.sc.toLocaleString()}</span> SC</span>
-      <span><span class="preview-score-val">${m.mc.toLocaleString()}</span> MC</span>
+    <div class="preview-badges">
+      <span class="chip-badge chip-${m.gen}">${m.chip}</span>
+      <span class="year-badge">${m.year}</span>
     </div>
   `;
   preview.classList.add('visible');
@@ -1035,7 +1038,6 @@ function renderComparison() {
       <div class="mac-name">${a.model}</div>
       <div class="mac-badges">
         <span class="chip-badge chip-${a.gen}">${a.chip}</span>
-        <span class="type-badge type-${a.type}">${a.type}</span>
         <span class="year-badge">${a.year}</span>
         ${a.price 
           ? `<span class="price-badge">£${a.price.toLocaleString()}</span>` 
@@ -1048,7 +1050,6 @@ function renderComparison() {
       <div class="mac-name">${b.model}</div>
       <div class="mac-badges">
         <span class="chip-badge chip-${b.gen}">${b.chip}</span>
-        <span class="type-badge type-${b.type}">${b.type}</span>
         <span class="year-badge">${b.year}</span>
         ${b.price 
           ? `<span class="price-badge">£${b.price.toLocaleString()}</span>` 
