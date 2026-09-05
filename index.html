@@ -100,8 +100,8 @@
     
     .selector-bar {
       display: grid;
-      grid-template-columns: 1fr 40px 1fr;
-      gap: 0;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
       max-width: 900px;
       margin: 20px auto 0;
       padding: 0 12px;
@@ -117,8 +117,6 @@
       min-width: 0;
     }
     .selector-card.has-selection { border-color: #3b82f644; }
-    .selector-card:first-child { border-radius: 14px 0 0 14px; }
-    .selector-card:last-child  { border-radius: 0 14px 14px 0; }
     .selector-label {
       font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
       color: var(--muted); margin-bottom: 8px;
@@ -252,15 +250,7 @@
       font-size: 11px; color: var(--muted);
     }
     .preview-score-val { font-weight: 700; color: var(--text); margin-right: 2px; }
-    .vs-divider {
-      display: flex; align-items: center; justify-content: center;
-      height: 100%; min-height: 60px;
-      font-size: 10px; font-weight: 800; color: var(--muted);
-      letter-spacing: 1px; text-transform: uppercase;
-      background: var(--surface3);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-    }
+    /* VS divider removed – 10px gap used instead */
     .compare-btn-wrap {
       max-width: 900px; margin: 16px auto 0; padding: 0 12px;
       text-align: center;
@@ -307,36 +297,40 @@
     .hint-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
     
     .compare-panel {
-      max-width: 900px; margin: 24px auto 36px; padding: 0 8px;
+      max-width: 900px; margin: 24px auto 36px; padding: 0 12px;
       display: none;
     }
     .compare-panel.visible { display: block; }
     .compare-inner {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
+      background: transparent;
+      border: none;
+      border-radius: 0;
     }
 
     /* ===== STICKY HEADER & RESPONSIVE GRID ===== */
     .mac-headers {
       display: grid;
-      grid-template-columns: 1fr 32px 1fr;
-      border-bottom: 1px solid var(--border);
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      border-bottom: none;
       position: sticky;
       top: 0;
       z-index: 50;
-      background: var(--surface);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.35);
-      border-radius: 16px 16px 0 0;
+      background: var(--bg);
+      box-shadow: none;
+      border-radius: 0;
     }
 
     .mac-header {
       padding: 12px 10px;
       position: relative;
       min-width: 0;
+      background: var(--surface);
+      border: 1px solid #3b82f644;
+      border-bottom: none;
+      border-radius: 14px 14px 0 0;
     }
-    .mac-header:first-child { border-right: 1px solid var(--border); }
-    .mac-header:last-child  { border-left: 1px solid var(--border); text-align: right; }
+    .mac-header:last-child { text-align: right; }
     .mac-header-accent {
       position: absolute; top: 0; left: 0; right: 0; height: 3px;
     }
@@ -384,26 +378,28 @@
     .price-badge.unknown { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.25); }
     .new-badge { background: rgba(236,72,153,.2); color: #f9a8d4; border: 1px solid rgba(236,72,153,.3); letter-spacing: .3px; text-transform: uppercase; }
 
-    .vs-mid {
-      display: flex; align-items: center; justify-content: center;
-      font-size: 10px; font-weight: 800; color: var(--muted);
-      letter-spacing: 1px; background: var(--surface2);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-    }
+    /* vs-mid removed – 10px gap used instead */
     
     .metric-row {
       display: grid;
-      grid-template-columns: 1fr 32px 1fr;
-      border-top: 1px solid var(--border);
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      border-top: none;
+      background: var(--bg);
     }
     .metric-cell {
       padding: 12px 10px;
       position: relative;
       min-width: 0;
+      background: var(--surface);
+      border-left: 1px solid #3b82f644;
+      border-right: 1px solid #3b82f644;
+      border-bottom: 1px solid #3b82f644;
     }
-    .metric-cell:first-child { border-right: 1px solid var(--border); }
-    .metric-cell:last-child  { border-left: 1px solid var(--border); text-align: right; }
+    .metric-cell:last-child { text-align: right; }
+    #metric-rows .metric-row:last-child .metric-cell {
+      border-radius: 0 0 14px 14px;
+    }
     .metric-label {
       font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px;
       color: var(--muted); margin-bottom: 4px;
@@ -431,23 +427,15 @@
     .metric-diff.slower { background: rgba(248,113,113,.15); color: var(--lose); }
     .metric-diff.tied   { background: rgba(148,163,184,.1);  color: var(--muted); }
     
-    .metric-mid {
-      display: flex; align-items: center; justify-content: center;
-      font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px;
-      color: var(--muted); background: var(--surface2);
-      border-left: 1px solid var(--border);
-      border-right: 1px solid var(--border);
-      padding: 2px;
-      text-align: center;
-      line-height: 1.2;
-      word-break: break-word;
-    }
+    /* metric-mid removed – 10px gap used instead */
 
     /* Practical Insights Section replacing charts */
     .insights-section {
+      margin-top: 10px;
       padding: 16px 12px;
-      border-top: 1px solid var(--border);
-      background: var(--surface2);
+      border: 1px solid #3b82f644;
+      border-radius: 14px;
+      background: var(--surface);
     }
     .insights-title {
       font-size: 11px; font-weight: 700; text-transform: uppercase;
@@ -503,15 +491,14 @@
 
     @media (max-width: 480px) {
       .selector-bar {
-        grid-template-columns: 1fr 24px 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
         padding: 0 4px;
       }
       .selector-card { padding: 8px; }
       .custom-select-trigger { padding: 6px 20px 6px 8px; font-size: 11.5px; }
       .custom-select-trigger::after { right: 6px; }
-      .vs-divider { min-height: 40px; font-size: 9px; }
-      .mac-headers, .metric-row { grid-template-columns: 1fr 20px 1fr; }
-      .vs-mid, .metric-mid { font-size: 7.5px; }
+      .mac-headers, .metric-row { grid-template-columns: 1fr 1fr; gap: 10px; }
       .mac-header { padding: 10px 6px; }
       .metric-cell { padding: 10px 6px; }
       .metric-label { font-size: 8px; }
@@ -545,7 +532,6 @@
     </div>
     <div class="selector-preview" id="preview-a"></div>
   </div>
-  <div class="vs-divider">VS</div>
   <div class="selector-card" id="card-b">
     <div class="selector-label">
       <div class="selector-dot" style="background:#f59e0b"></div>
@@ -1057,7 +1043,6 @@ function renderComparison() {
         ${a.isNew ? '<span class="new-badge">New</span>' : ''}
       </div>
     </div>
-    <div class="vs-mid">VS</div>
     <div class="mac-header">
       <div class="mac-header-accent" style="background:${B_COLOR}"></div>
       <div class="mac-name">${b.model}</div>
@@ -1096,7 +1081,6 @@ function renderComparison() {
             <div class="metric-label">${met.label}</div>
             <div class="metric-score tied">${displayA}</div>
           </div>
-          <div class="metric-mid"></div>
           <div class="metric-cell">
             <div class="metric-label">${met.label}</div>
             <div class="metric-score tied">${displayB}</div>
@@ -1135,7 +1119,6 @@ function renderComparison() {
           </div>
           ${diffA}
         </div>
-        <div class="metric-mid"></div>
         <div class="metric-cell">
           <div class="metric-label">${met.label}</div>
           <div class="metric-score ${classB}">${displayB}</div>
