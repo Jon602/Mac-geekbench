@@ -932,10 +932,15 @@ function updatePreview(side, idx) {
     return;
   }
   const m = MACS[idx];
+  const coreBadges = `
+      <span class="chip-badge chip-${m.gen}">${m.cpu}-core CPU</span>
+      ${m.gpu ? `<span class="chip-badge chip-${m.gen}">${m.gpu}-core GPU</span>` : ''}
+  `;
   preview.innerHTML = `
     <div class="preview-model">${m.model}</div>
     <div class="preview-badges">
       <span class="chip-badge chip-${m.gen}">${m.chip}</span>
+      ${coreBadges}
       <span class="year-badge">${m.year}</span>
     </div>
   `;
@@ -1096,6 +1101,8 @@ function renderComparison() {
       <div class="mac-name">${a.model}</div>
       <div class="mac-badges">
         <span class="chip-badge chip-${a.gen}">${a.chip}</span>
+        <span class="chip-badge chip-${a.gen}">${a.cpu}-core CPU</span>
+        ${a.gpu ? `<span class="chip-badge chip-${a.gen}">${a.gpu}-core GPU</span>` : ''}
         <span class="year-badge">${a.year}</span>
         ${a.price 
           ? `<span class="price-badge">£${a.price.toLocaleString()}</span>` 
@@ -1107,6 +1114,8 @@ function renderComparison() {
       <div class="mac-name">${b.model}</div>
       <div class="mac-badges">
         <span class="chip-badge chip-${b.gen}">${b.chip}</span>
+        <span class="chip-badge chip-${b.gen}">${b.cpu}-core CPU</span>
+        ${b.gpu ? `<span class="chip-badge chip-${b.gen}">${b.gpu}-core GPU</span>` : ''}
         <span class="year-badge">${b.year}</span>
         ${b.price 
           ? `<span class="price-badge">£${b.price.toLocaleString()}</span>` 
