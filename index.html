@@ -83,8 +83,12 @@
     header {
       background: #000000;
       border-bottom: 1px solid var(--border);
-      padding: 48px 16px 20px;
+      padding: 28px 16px 20px;
       text-align: center;
+    }
+    header .eyebrow {
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 8px;
     }
     header h1 {
       font-size: clamp(20px, 4vw, 38px); font-weight: 700;
@@ -189,12 +193,16 @@
       border-bottom: 1px solid var(--border);
       z-index: 2;
     }
+    .dropdown-search-inner {
+      position: relative;
+      width: 100%;
+    }
     .dropdown-search input {
       width: 100%;
       background: var(--surface3);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 6px 10px;
+      padding: 6px 28px 6px 10px;
       border-radius: 6px;
       font-size: 12px;
       outline: none;
@@ -204,6 +212,32 @@
     }
     .dropdown-search input::placeholder {
       color: var(--muted);
+    }
+    .dropdown-search-clear {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      padding: 0;
+    }
+    .dropdown-search-clear:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.1);
+    }
+    .dropdown-search-clear.visible {
+      display: flex;
     }
     .custom-select-category {
       padding: 6px 10px 4px;
@@ -354,7 +388,7 @@
     .mac-header:last-child .mac-badges {
       justify-content: flex-end;
     }
-    .chip-badge, .type-badge, .year-badge, .price-badge, .new-badge, .cpu-badge, .gpu-badge {
+    .chip-badge, .type-badge, .year-badge, .price-badge, .new-badge {
       display: inline-flex; align-items: center;
       padding: 2px 6px; border-radius: 4px;
       font-size: 10px; font-weight: 700;
@@ -380,8 +414,6 @@
     .price-badge { background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
     .price-badge.unknown { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.25); }
     .new-badge { background: rgba(236,72,153,.2); color: #f9a8d4; border: 1px solid rgba(236,72,153,.3); letter-spacing: .3px; text-transform: uppercase; }
-    .cpu-badge { background: rgba(34,197,94,0.15); color: #86efac; border: 1px solid rgba(34,197,94,0.3); }
-    .gpu-badge { background: rgba(168,85,247,0.15); color: #d8b4fe; border: 1px solid rgba(168,85,247,0.3); }
 
     /* vs-mid removed – 10px gap used instead */
     
@@ -507,7 +539,7 @@
       .mac-header { padding: 10px 6px; }
       .metric-cell { padding: 10px 6px; }
       .metric-label { font-size: 8px; }
-      .chip-badge, .type-badge, .year-badge, .price-badge, .new-badge, .cpu-badge, .gpu-badge {
+      .chip-badge, .type-badge, .year-badge, .price-badge, .new-badge {
         font-size: 9px; padding: 1px 4px;
       }
     }
@@ -521,8 +553,9 @@
   </div>
 </noscript>
 <header>
+  <div class="eyebrow">APPLE SILICON  ·  INTEL  ·  GEEKBENCH 6</div>
   <h1>Mac &amp; iPad Geekbench 6 Comparison</h1>
-  <p>SINGLE-CORE · MULTI-CORE · METAL · APPLE SILICON · INTEL</p>
+  <p>SINGLE-CORE · MULTI-CORE · METAL</p>
   <p>IMAC · IMAC PRO · MACBOOK AIR · MACBOOK PRO · IPAD · MAC MINI · MAC STUDIO · MAC PRO</p>
 </header>
 <div class="selector-bar">
@@ -779,13 +812,32 @@ function buildCustomSelects() {
 
     const searchWrap = document.createElement('div');
     searchWrap.className = 'dropdown-search';
+    const searchInner = document.createElement('div');
+    searchInner.className = 'dropdown-search-inner';
     const searchInput = document.createElement('input');
     searchInput.type = 'text';
     searchInput.placeholder = 'Search models…';
     searchInput.autocomplete = 'off';
-    searchInput.addEventListener('input', () => filterDropdown(side, searchInput.value));
+    const clearBtn = document.createElement('button');
+    clearBtn.type = 'button';
+    clearBtn.className = 'dropdown-search-clear';
+    clearBtn.setAttribute('aria-label', 'Clear search');
+    clearBtn.innerHTML = '×';
+    clearBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      searchInput.value = '';
+      clearBtn.classList.remove('visible');
+      filterDropdown(side, '');
+      searchInput.focus();
+    });
+    searchInput.addEventListener('input', () => {
+      filterDropdown(side, searchInput.value);
+      clearBtn.classList.toggle('visible', searchInput.value.length > 0);
+    });
     searchInput.addEventListener('click', e => e.stopPropagation());
-    searchWrap.appendChild(searchInput);
+    searchInner.appendChild(searchInput);
+    searchInner.appendChild(clearBtn);
+    searchWrap.appendChild(searchInner);
     dropdown.appendChild(searchWrap);
 
     groups.forEach(group => {
@@ -837,6 +889,8 @@ function toggleDropdown(side) {
     if (input) {
       input.value = '';
       filterDropdown(s.id === 'select-a' ? 'a' : 'b', '');
+      const clearBtn = s.querySelector('.dropdown-search-clear');
+      if (clearBtn) clearBtn.classList.remove('visible');
     }
   });
   if (!isOpen) {
@@ -883,8 +937,6 @@ function updatePreview(side, idx) {
     <div class="preview-badges">
       <span class="chip-badge chip-${m.gen}">${m.chip}</span>
       <span class="year-badge">${m.year}</span>
-      ${m.cpu ? `<span class="cpu-badge">${m.cpu}-core CPU</span>` : ''}
-      ${m.gpu ? `<span class="gpu-badge">${m.gpu}-core GPU</span>` : ''}
     </div>
   `;
   preview.classList.add('visible');
@@ -987,6 +1039,8 @@ document.addEventListener('click', () => {
     if (input) {
       input.value = '';
       filterDropdown(s.id === 'select-a' ? 'a' : 'b', '');
+      const clearBtn = s.querySelector('.dropdown-search-clear');
+      if (clearBtn) clearBtn.classList.remove('visible');
     }
   });
 });
@@ -1046,8 +1100,6 @@ function renderComparison() {
           ? `<span class="price-badge">£${a.price.toLocaleString()}</span>` 
           : `<span class="price-badge unknown">N/A</span>`}
         ${a.isNew ? '<span class="new-badge">New</span>' : ''}
-        ${a.cpu ? `<span class="cpu-badge">${a.cpu}-core CPU</span>` : ''}
-        ${a.gpu ? `<span class="gpu-badge">${a.gpu}-core GPU</span>` : ''}
       </div>
     </div>
     <div class="mac-header">
@@ -1060,8 +1112,6 @@ function renderComparison() {
           ? `<span class="price-badge">£${b.price.toLocaleString()}</span>` 
           : `<span class="price-badge unknown">N/A</span>`}
         ${b.isNew ? '<span class="new-badge">New</span>' : ''}
-        ${b.cpu ? `<span class="cpu-badge">${b.cpu}-core CPU</span>` : ''}
-        ${b.gpu ? `<span class="gpu-badge">${b.gpu}-core GPU</span>` : ''}
       </div>
     </div>
   `;
@@ -1102,10 +1152,7 @@ function renderComparison() {
     const pctB = (vb / max) * 100;
     let classA = 'tied', classB = 'tied';
     let diffA = '', diffB = '';
-    const pctDiff = Math.min(va, vb) > 0 ? (Math.abs(va - vb) / Math.min(va, vb)) * 100 : 0;
-    if (pctDiff < 3) {
-      diffA = diffB = `<span class="metric-diff tied">Tied</span>`;
-    } else if (va > vb) {
+    if (va > vb) {
       classA = 'winner'; classB = 'loser';
       const pct = ((va - vb) / vb * 100).toFixed(1);
       diffA = `<span class="metric-diff faster">+${pct}%</span>`;
@@ -1115,6 +1162,8 @@ function renderComparison() {
       const pct = ((vb - va) / va * 100).toFixed(1);
       diffB = `<span class="metric-diff faster">+${pct}%</span>`;
       diffA = `<span class="metric-diff slower">−${pct}%</span>`;
+    } else {
+      diffA = diffB = `<span class="metric-diff tied">Tied</span>`;
     }
     const displayA = met.key === 'battery' ? va + 'h' : va.toLocaleString();
     const displayB = met.key === 'battery' ? vb + 'h' : vb.toLocaleString();
