@@ -106,7 +106,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 10px;
       max-width: 900px;
-      margin: 20px auto 0;
+      margin: 60px auto 0;
       padding: 0 12px;
       align-items: start;
     }
@@ -309,7 +309,9 @@
       background: rgba(248,113,113,0.15);
       color: #fca5a5;
       border: 1px solid rgba(248,113,113,0.3);
+      display: none;
     }
+    .btn-reset.visible { display: inline-flex; }
     .btn-reset:hover { background: rgba(248,113,113,0.25); }
     .btn-copy {
       background: rgba(59,130,246,0.15);
@@ -328,7 +330,7 @@
       max-width: 900px; margin: 50px auto; padding: 0 16px;
       text-align: center; color: var(--muted); font-size: 13px;
     }
-    .hint-icon { font-size: 32px; margin-bottom: 32px; }
+    .hint-icon { font-size: 32px; margin-bottom: 32px; transform: translateY(-30px); }
     .hint-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 12px; }
     
     .compare-panel {
@@ -1008,6 +1010,7 @@ function resetComparison() {
 
   document.getElementById('btn-copy').classList.remove('visible', 'copied');
   document.getElementById('btn-copy').innerHTML = getCopyButtonInnerHTML('Copy link');
+  document.getElementById('btn-reset').classList.remove('visible');
 
   clearURL();
   document.title = 'Apple Silicon Geekbench 6 Comparison – MacBook, Mac mini, iMac & iPad Scores';
@@ -1089,6 +1092,7 @@ function renderComparison() {
   document.getElementById('compare-panel').classList.add('visible');
 
   document.getElementById('btn-copy').classList.add('visible');
+  document.getElementById('btn-reset').classList.add('visible');
   updateURL();
 
   document.title = `${a.model} (${a.chip}) vs ${b.model} (${b.chip}) – Geekbench 6 | GeekMac`;
