@@ -369,10 +369,6 @@
       overflow: hidden;
     }
     .mac-header:last-child { text-align: right; }
-    .mac-header-accent {
-      position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      border-radius: 14px 14px 0 0;
-    }
     .mac-name { 
       font-size: clamp(13px, 3.8vw, 18px); 
       font-weight: 800; 
@@ -563,7 +559,7 @@
 <div class="selector-bar">
   <div class="selector-card" id="card-a">
     <div class="selector-label">
-      <div class="selector-dot" style="background:#3b82f6"></div>
+      <div class="selector-dot" style="background:#7878c0"></div>
       Device 1
     </div>
     <div class="custom-select" id="select-a">
@@ -574,7 +570,7 @@
   </div>
   <div class="selector-card" id="card-b">
     <div class="selector-label">
-      <div class="selector-dot" style="background:#f59e0b"></div>
+      <div class="selector-dot" style="background:#7878c0"></div>
       Device 2
     </div>
     <div class="custom-select" id="select-b">
@@ -768,8 +764,6 @@ const CATEGORY_ORDER = [
   'iPad Pro','iPad Air','iPad mini','iPad'
 ];
 
-const A_COLOR = '#3b82f6';
-const B_COLOR = '#f59e0b';
 let selectedA = null;
 let selectedB = null;
 
@@ -1099,7 +1093,6 @@ function renderComparison() {
 
   document.getElementById('mac-headers').innerHTML = `
     <div class="mac-header">
-      <div class="mac-header-accent" style="background:${A_COLOR}"></div>
       <div class="mac-name">${a.model}</div>
       <div class="mac-badges">
         <span class="chip-badge chip-${a.gen}">${a.chip}</span>
@@ -1111,7 +1104,6 @@ function renderComparison() {
       </div>
     </div>
     <div class="mac-header">
-      <div class="mac-header-accent" style="background:${B_COLOR}"></div>
       <div class="mac-name">${b.model}</div>
       <div class="mac-badges">
         <span class="chip-badge chip-${b.gen}">${b.chip}</span>
@@ -1173,6 +1165,9 @@ function renderComparison() {
     } else {
       diffA = diffB = `<span class="metric-diff tied">Tied</span>`;
     }
+    const barColor = cls => cls === 'winner' ? 'rgba(74,222,128,0.55)' : cls === 'loser' ? 'rgba(248,113,113,0.55)' : 'rgba(255,255,255,0.55)';
+    const barColorA = barColor(classA);
+    const barColorB = barColor(classB);
     const displayA = met.key === 'battery' ? va + 'h' : va.toLocaleString();
     const displayB = met.key === 'battery' ? vb + 'h' : vb.toLocaleString();
     rowsEl.innerHTML += `
@@ -1181,7 +1176,7 @@ function renderComparison() {
           <div class="metric-label">${met.label}</div>
           <div class="metric-score ${classA}">${displayA}</div>
           <div class="metric-bar-wrap">
-            <div class="metric-bar" style="width:${pctA}%; background:${A_COLOR}"></div>
+            <div class="metric-bar" style="width:${pctA}%; background:${barColorA}"></div>
           </div>
           ${diffA}
         </div>
@@ -1189,7 +1184,7 @@ function renderComparison() {
           <div class="metric-label">${met.label}</div>
           <div class="metric-score ${classB}">${displayB}</div>
           <div class="metric-bar-wrap">
-            <div class="metric-bar" style="width:${pctB}%; background:${B_COLOR}; margin-left:auto"></div>
+            <div class="metric-bar" style="width:${pctB}%; background:${barColorB}; margin-left:auto"></div>
           </div>
           ${diffB}
         </div>
