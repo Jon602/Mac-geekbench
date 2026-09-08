@@ -1243,8 +1243,6 @@ function renderComparison() {
 
     const max = Math.max(...vals) || 1;
     const maxCount = vals.filter(v => v === max).length;
-    const sortedDesc = [...vals].sort((x, y) => y - x);
-    const runnerUp = sortedDesc[1] ?? sortedDesc[0];
     const barColor = cls => cls === 'winner' ? 'rgba(74,222,128,0.55)' : cls === 'loser' ? 'rgba(248,113,113,0.55)' : 'rgba(255,255,255,0.55)';
 
     rowsEl.innerHTML += `
@@ -1252,18 +1250,18 @@ function renderComparison() {
         ${devices.map((d, i) => {
           const v = vals[i];
           const pct = (v / max) * 100;
+          const isCoreCount = met.key === 'cpu' || met.key === 'gpu';
           let cls, diff;
           if (maxCount > 1 && v === max) {
             cls = 'tied';
-            diff = `<span class="metric-diff tied">Tied</span>`;
+            diff = isCoreCount ? '' : `<span class="metric-diff tied">Tied</span>`;
           } else if (v === max) {
             cls = 'winner';
-            const pctLead = runnerUp > 0 ? ((max - runnerUp) / runnerUp * 100).toFixed(1) : '0.0';
-            diff = `<span class="metric-diff faster">+${pctLead}%</span>`;
+            diff = isCoreCount ? '' : `<span class="metric-diff faster">🏆 Winner</span>`;
           } else {
             cls = 'loser';
-            const pctLag = v > 0 ? ((max - v) / v * 100).toFixed(1) : '0.0';
-            diff = `<span class="metric-diff slower">−${pctLag}%</span>`;
+            const pctHigher = v > 0 ? ((max - v) / v * 100).toFixed(1) : '0.0';
+            diff = isCoreCount ? '' : `<span class="metric-diff slower">Winner is ${pctHigher}% higher</span>`;
           }
           const display = met.key === 'battery' ? v + 'h' : v.toLocaleString();
           return `
