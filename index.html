@@ -125,14 +125,11 @@
     .selector-card.has-selection { border-color: #3b82f644; }
     .add-device-btn, .remove-device-btn {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 6px;
+      right: 6px;
       width: 22px;
       height: 22px;
       border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--surface2);
-      color: var(--muted);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -141,10 +138,25 @@
       padding: 0;
       z-index: 2;
     }
-    .add-device-btn:hover, .remove-device-btn:hover {
-      background: rgba(120,120,192,0.18);
-      color: #a5a5d6;
-      border-color: #7878c0;
+    .add-device-btn {
+      background: rgba(74,222,128,.2);
+      color: var(--win);
+      border: 1px solid rgba(74,222,128,.3);
+    }
+    .add-device-btn:hover {
+      background: rgba(74,222,128,.32);
+      color: var(--win);
+      border-color: rgba(74,222,128,.5);
+    }
+    .remove-device-btn {
+      background: rgba(248,113,113,.2);
+      color: var(--lose);
+      border: 1px solid rgba(248,113,113,.3);
+    }
+    .remove-device-btn:hover {
+      background: rgba(248,113,113,.32);
+      color: var(--lose);
+      border-color: rgba(248,113,113,.5);
     }
     .selector-label {
       font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
@@ -639,7 +651,7 @@
   </button>
 </div>
 <div class="hint" id="hint">
-  <div class="hint-title">Select two devices to compare</div>
+  <div class="hint-title">Select devices to compare</div>
 </div>
 <div class="compare-panel" id="compare-panel">
   <div class="compare-inner">
