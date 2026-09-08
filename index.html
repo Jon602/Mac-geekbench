@@ -120,6 +120,29 @@
       min-width: 0;
     }
     .selector-card.has-selection { border-color: #3b82f644; }
+    .add-device-btn, .remove-device-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      padding: 0;
+      z-index: 2;
+    }
+    .add-device-btn:hover, .remove-device-btn:hover {
+      background: rgba(120,120,192,0.18);
+      color: #a5a5d6;
+      border-color: #7878c0;
+    }
     .selector-label {
       font-size: 10px; text-transform: uppercase; letter-spacing: 1px;
       color: var(--muted); margin-bottom: 8px;
@@ -367,24 +390,19 @@
       border-bottom: none;
       border-radius: 14px 14px 0 0;
       overflow: hidden;
+      container-type: inline-size;
     }
-    .mac-header:last-child { text-align: right; }
+    .mac-header:last-child { }
     .mac-name { 
-      font-size: clamp(13px, 3.8vw, 18px); 
+      font-size: clamp(11px, 5cqw, 18px); 
       font-weight: 800; 
       line-height: 1.2; 
       margin-bottom: 6px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     .mac-badges { 
       display: flex; 
       flex-wrap: wrap; 
       gap: 4px; 
-    }
-    .mac-header:last-child .mac-badges {
-      justify-content: flex-end;
     }
     .chip-badge, .type-badge, .year-badge, .price-badge, .new-badge {
       display: inline-flex; align-items: center;
@@ -431,7 +449,6 @@
       border-right: 1px solid #3b82f644;
       border-bottom: 1px solid #3b82f644;
     }
-    .metric-cell:last-child { text-align: right; }
     #metric-rows .metric-row:last-child .metric-cell {
       border-radius: 0 0 14px 14px;
     }
@@ -531,6 +548,7 @@
         padding: 0 4px;
       }
       .selector-card { padding: 8px; }
+      .add-device-btn, .remove-device-btn { width: 20px; height: 20px; top: 6px; right: 6px; }
       .custom-select-trigger { padding: 6px 20px 6px 8px; font-size: 11.5px; }
       .custom-select-trigger::after { right: 6px; }
       .mac-headers, .metric-row { grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -556,7 +574,7 @@
   <p>SINGLE-CORE · MULTI-CORE · METAL</p>
   <p>IMAC · IMAC PRO · MACBOOK AIR · MACBOOK PRO · IPAD · MAC MINI · MAC STUDIO · MAC PRO</p>
 </header>
-<div class="selector-bar">
+<div class="selector-bar" id="selector-bar">
   <div class="selector-card" id="card-a">
     <div class="selector-label">
       <div class="selector-dot" style="background:#7878c0"></div>
@@ -569,6 +587,11 @@
     <div class="selector-preview" id="preview-a"></div>
   </div>
   <div class="selector-card" id="card-b">
+    <button type="button" class="add-device-btn" id="btn-add-device" onclick="addThirdDevice()" aria-label="Add a third device to compare" title="Compare a third device">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M5 12h14"></path>
+      </svg>
+    </button>
     <div class="selector-label">
       <div class="selector-dot" style="background:#7878c0"></div>
       Device 2
@@ -578,6 +601,22 @@
       <div class="custom-select-dropdown" id="dropdown-b"></div>
     </div>
     <div class="selector-preview" id="preview-b"></div>
+  </div>
+  <div class="selector-card" id="card-c" style="display:none;">
+    <button type="button" class="remove-device-btn" id="btn-remove-device" onclick="removeThirdDevice()" aria-label="Remove third device" title="Remove third device">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 6 6 18M6 6l12 12"></path>
+      </svg>
+    </button>
+    <div class="selector-label">
+      <div class="selector-dot" style="background:#7878c0"></div>
+      Device 3
+    </div>
+    <div class="custom-select" id="select-c">
+      <button type="button" class="custom-select-trigger" id="trigger-c">Choose device</button>
+      <div class="custom-select-dropdown" id="dropdown-c"></div>
+    </div>
+    <div class="selector-preview" id="preview-c"></div>
   </div>
 </div>
 <div class="compare-btn-wrap">
@@ -766,6 +805,8 @@ const CATEGORY_ORDER = [
 
 let selectedA = null;
 let selectedB = null;
+let selectedC = null;
+let thirdActive = false;
 
 function buildCustomSelects() {
   const chipBase = chip => chip.replace(/\s+\d+-core$/i, '');
@@ -806,7 +847,7 @@ function buildCustomSelects() {
     });
   });
 
-  ['a', 'b'].forEach(side => {
+  ['a', 'b', 'c'].forEach(side => {
     const dropdown = document.getElementById(`dropdown-${side}`);
     dropdown.innerHTML = '';
 
@@ -888,7 +929,7 @@ function toggleDropdown(side) {
     const input = s.querySelector('.dropdown-search input');
     if (input) {
       input.value = '';
-      filterDropdown(s.id === 'select-a' ? 'a' : 'b', '');
+      filterDropdown(s.id.replace('select-', ''), '');
       const clearBtn = s.querySelector('.dropdown-search-clear');
       if (clearBtn) clearBtn.classList.remove('visible');
     }
@@ -911,7 +952,8 @@ function selectOption(side, idx, text) {
     trigger.textContent = text;
   }
   if (side === 'a') selectedA = idx;
-  else selectedB = idx;
+  else if (side === 'b') selectedB = idx;
+  else selectedC = idx;
   document.querySelectorAll(`#dropdown-${side} .custom-select-option`).forEach(el => {
     el.classList.toggle('selected', +el.dataset.idx === idx);
   });
@@ -953,6 +995,11 @@ function updateURL() {
   const url = new URL(window.location);
   url.searchParams.set('a', selectedA);
   url.searchParams.set('b', selectedB);
+  if (thirdActive && selectedC !== null) {
+    url.searchParams.set('c', selectedC);
+  } else {
+    url.searchParams.delete('c');
+  }
   history.replaceState(null, '', url);
 }
 
@@ -960,6 +1007,7 @@ function clearURL() {
   const url = new URL(window.location);
   url.searchParams.delete('a');
   url.searchParams.delete('b');
+  url.searchParams.delete('c');
   history.replaceState(null, '', url);
 }
 
@@ -967,6 +1015,7 @@ function loadFromURL() {
   const params = new URLSearchParams(window.location.search);
   const a = params.get('a');
   const b = params.get('b');
+  const c = params.get('c');
   if (a === null || b === null) return;
 
   const idxA = parseInt(a, 10);
@@ -981,6 +1030,15 @@ function loadFromURL() {
 
   selectOption('a', idxA, getText(idxA));
   selectOption('b', idxB, getText(idxB));
+
+  if (c !== null) {
+    const idxC = parseInt(c, 10);
+    if (!isNaN(idxC) && idxC >= 0 && idxC < MACS.length) {
+      addThirdDevice();
+      selectOption('c', idxC, getText(idxC));
+    }
+  }
+
   renderComparison();
 }
 
@@ -992,17 +1050,44 @@ function getCopyButtonInnerHTML(text) {
     </svg>`;
 }
 
+function addThirdDevice() {
+  thirdActive = true;
+  document.getElementById('card-c').style.display = '';
+  document.getElementById('btn-add-device').style.display = 'none';
+  document.getElementById('selector-bar').style.gridTemplateColumns = 'repeat(3, 1fr)';
+  if (selectedA !== null && selectedB !== null) {
+    renderComparison();
+  }
+}
+
+function removeThirdDevice() {
+  thirdActive = false;
+  selectedC = null;
+  document.getElementById('trigger-c').textContent = 'Choose device';
+  document.querySelectorAll('#dropdown-c .custom-select-option').forEach(el => el.classList.remove('selected'));
+  updatePreview('c', null);
+  document.getElementById('card-c').style.display = 'none';
+  document.getElementById('btn-add-device').style.display = '';
+  document.getElementById('selector-bar').style.gridTemplateColumns = '1fr 1fr';
+  if (selectedA !== null && selectedB !== null) {
+    renderComparison();
+  }
+}
+
 function resetComparison() {
   selectedA = null;
   selectedB = null;
+  selectedC = null;
 
   document.getElementById('trigger-a').textContent = 'Choose device';
   document.getElementById('trigger-b').textContent = 'Choose device';
+  document.getElementById('trigger-c').textContent = 'Choose device';
 
   document.querySelectorAll('.custom-select-option').forEach(el => el.classList.remove('selected'));
 
   updatePreview('a', null);
   updatePreview('b', null);
+  updatePreview('c', null);
 
   document.getElementById('compare-panel').classList.remove('visible');
   document.getElementById('hint').style.display = 'block';
@@ -1010,6 +1095,11 @@ function resetComparison() {
   document.getElementById('btn-copy').classList.remove('visible', 'copied');
   document.getElementById('btn-copy').innerHTML = getCopyButtonInnerHTML('Copy link');
   document.getElementById('btn-reset').classList.remove('visible');
+
+  thirdActive = false;
+  document.getElementById('card-c').style.display = 'none';
+  document.getElementById('btn-add-device').style.display = '';
+  document.getElementById('selector-bar').style.gridTemplateColumns = '1fr 1fr';
 
   clearURL();
   document.title = 'Apple Silicon Geekbench 6 Comparison – MacBook, Mac mini, iMac & iPad Scores';
@@ -1038,13 +1128,17 @@ document.getElementById('trigger-b').addEventListener('click', (e) => {
   e.stopPropagation();
   toggleDropdown('b');
 });
+document.getElementById('trigger-c').addEventListener('click', (e) => {
+  e.stopPropagation();
+  toggleDropdown('c');
+});
 document.addEventListener('click', () => {
   document.querySelectorAll('.custom-select').forEach(s => {
     s.classList.remove('open');
     const input = s.querySelector('.dropdown-search input');
     if (input) {
       input.value = '';
-      filterDropdown(s.id === 'select-a' ? 'a' : 'b', '');
+      filterDropdown(s.id.replace('select-', ''), '');
       const clearBtn = s.querySelector('.dropdown-search-clear');
       if (clearBtn) clearBtn.classList.remove('visible');
     }
@@ -1085,8 +1179,12 @@ document.addEventListener('keydown', (e) => {
 });
 
 function renderComparison() {
-  const a = MACS[selectedA];
-  const b = MACS[selectedB];
+  const devices = [];
+  if (selectedA !== null) devices.push(MACS[selectedA]);
+  if (selectedB !== null) devices.push(MACS[selectedB]);
+  if (thirdActive && selectedC !== null) devices.push(MACS[selectedC]);
+  if (devices.length < 2) return;
+
   document.getElementById('hint').style.display = 'none';
   document.getElementById('compare-panel').classList.add('visible');
 
@@ -1094,36 +1192,26 @@ function renderComparison() {
   document.getElementById('btn-reset').classList.add('visible');
   updateURL();
 
-  document.title = `${a.model} (${a.chip}) vs ${b.model} (${b.chip}) – Geekbench 6 | GeekMac`;
+  document.title = devices.map(d => `${d.model} (${d.chip})`).join(' vs ') + ' – Geekbench 6 | GeekMac';
 
-  document.getElementById('mac-headers').innerHTML = `
+  const cols = devices.length;
+  const headersEl = document.getElementById('mac-headers');
+  headersEl.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  headersEl.innerHTML = devices.map(d => `
     <div class="mac-header">
-      <div class="mac-name">${a.model}</div>
+      <div class="mac-name">${d.model}</div>
       <div class="mac-badges">
-        <span class="chip-badge chip-${a.gen}">${a.chip}</span>
-        <span class="chip-badge chip-${a.gen}">${a.cpu}-core CPU</span>
-        ${a.gpu ? `<span class="chip-badge chip-${a.gen}">${a.gpu}-core GPU</span>` : ''}
-        <span class="year-badge">${a.year}</span>
-        ${a.price 
-          ? `<span class="price-badge">£${a.price.toLocaleString()}</span>` 
+        <span class="chip-badge chip-${d.gen}">${d.chip}</span>
+        <span class="chip-badge chip-${d.gen}">${d.cpu}-core CPU</span>
+        ${d.gpu ? `<span class="chip-badge chip-${d.gen}">${d.gpu}-core GPU</span>` : ''}
+        <span class="year-badge">${d.year}</span>
+        ${d.price
+          ? `<span class="price-badge">£${d.price.toLocaleString()}</span>`
           : `<span class="price-badge unknown">N/A</span>`}
-        ${a.isNew ? '<span class="new-badge">New</span>' : ''}
+        ${d.isNew ? '<span class="new-badge">New</span>' : ''}
       </div>
     </div>
-    <div class="mac-header">
-      <div class="mac-name">${b.model}</div>
-      <div class="mac-badges">
-        <span class="chip-badge chip-${b.gen}">${b.chip}</span>
-        <span class="chip-badge chip-${b.gen}">${b.cpu}-core CPU</span>
-        ${b.gpu ? `<span class="chip-badge chip-${b.gen}">${b.gpu}-core GPU</span>` : ''}
-        <span class="year-badge">${b.year}</span>
-        ${b.price 
-          ? `<span class="price-badge">£${b.price.toLocaleString()}</span>` 
-          : `<span class="price-badge unknown">N/A</span>`}
-        ${b.isNew ? '<span class="new-badge">New</span>' : ''}
-      </div>
-    </div>
-  `;
+  `).join('');
 
   const metrics = [
     { key: 'sc',     label: 'Single-Core' },
@@ -1137,88 +1225,80 @@ function renderComparison() {
   const rowsEl = document.getElementById('metric-rows');
   rowsEl.innerHTML = '';
   metrics.forEach(met => {
-    const va = a[met.key];
-    const vb = b[met.key];
-    if (met.key === 'battery' && (va === null || vb === null)) {
-      const displayA = va === null ? '—' : va + 'h';
-      const displayB = vb === null ? '—' : vb + 'h';
+    const vals = devices.map(d => d[met.key]);
+
+    if (met.key === 'battery' && vals.some(v => v === null)) {
       rowsEl.innerHTML += `
-        <div class="metric-row">
-          <div class="metric-cell">
-            <div class="metric-label">${met.label}</div>
-            <div class="metric-score tied">${displayA}</div>
-          </div>
-          <div class="metric-cell">
-            <div class="metric-label">${met.label}</div>
-            <div class="metric-score tied">${displayB}</div>
-          </div>
+        <div class="metric-row" style="grid-template-columns: repeat(${cols}, 1fr)">
+          ${devices.map((d, i) => `
+            <div class="metric-cell">
+              <div class="metric-label">${met.label}</div>
+              <div class="metric-score tied">${vals[i] === null ? '—' : vals[i] + 'h'}</div>
+            </div>
+          `).join('')}
         </div>
       `;
       return;
     }
-    const max = Math.max(va, vb) || 1;
-    const pctA = (va / max) * 100;
-    const pctB = (vb / max) * 100;
-    let classA = 'tied', classB = 'tied';
-    let diffA = '', diffB = '';
-    if (va > vb) {
-      classA = 'winner'; classB = 'loser';
-      const pct = ((va - vb) / vb * 100).toFixed(1);
-      diffA = `<span class="metric-diff faster">+${pct}%</span>`;
-      diffB = `<span class="metric-diff slower">−${pct}%</span>`;
-    } else if (vb > va) {
-      classB = 'winner'; classA = 'loser';
-      const pct = ((vb - va) / va * 100).toFixed(1);
-      diffB = `<span class="metric-diff faster">+${pct}%</span>`;
-      diffA = `<span class="metric-diff slower">−${pct}%</span>`;
-    } else {
-      diffA = diffB = `<span class="metric-diff tied">Tied</span>`;
-    }
+
+    const max = Math.max(...vals) || 1;
+    const maxCount = vals.filter(v => v === max).length;
+    const sortedDesc = [...vals].sort((x, y) => y - x);
+    const runnerUp = sortedDesc[1] ?? sortedDesc[0];
     const barColor = cls => cls === 'winner' ? 'rgba(74,222,128,0.55)' : cls === 'loser' ? 'rgba(248,113,113,0.55)' : 'rgba(255,255,255,0.55)';
-    const barColorA = barColor(classA);
-    const barColorB = barColor(classB);
-    const displayA = met.key === 'battery' ? va + 'h' : va.toLocaleString();
-    const displayB = met.key === 'battery' ? vb + 'h' : vb.toLocaleString();
+
     rowsEl.innerHTML += `
-      <div class="metric-row">
-        <div class="metric-cell">
-          <div class="metric-label">${met.label}</div>
-          <div class="metric-score ${classA}">${displayA}</div>
-          <div class="metric-bar-wrap">
-            <div class="metric-bar" style="width:${pctA}%; background:${barColorA}"></div>
-          </div>
-          ${diffA}
-        </div>
-        <div class="metric-cell">
-          <div class="metric-label">${met.label}</div>
-          <div class="metric-score ${classB}">${displayB}</div>
-          <div class="metric-bar-wrap">
-            <div class="metric-bar" style="width:${pctB}%; background:${barColorB}; margin-left:auto"></div>
-          </div>
-          ${diffB}
-        </div>
+      <div class="metric-row" style="grid-template-columns: repeat(${cols}, 1fr)">
+        ${devices.map((d, i) => {
+          const v = vals[i];
+          const pct = (v / max) * 100;
+          let cls, diff;
+          if (maxCount > 1 && v === max) {
+            cls = 'tied';
+            diff = `<span class="metric-diff tied">Tied</span>`;
+          } else if (v === max) {
+            cls = 'winner';
+            const pctLead = runnerUp > 0 ? ((max - runnerUp) / runnerUp * 100).toFixed(1) : '0.0';
+            diff = `<span class="metric-diff faster">+${pctLead}%</span>`;
+          } else {
+            cls = 'loser';
+            const pctLag = v > 0 ? ((max - v) / v * 100).toFixed(1) : '0.0';
+            diff = `<span class="metric-diff slower">−${pctLag}%</span>`;
+          }
+          const display = met.key === 'battery' ? v + 'h' : v.toLocaleString();
+          return `
+            <div class="metric-cell">
+              <div class="metric-label">${met.label}</div>
+              <div class="metric-score ${cls}">${display}</div>
+              <div class="metric-bar-wrap">
+                <div class="metric-bar" style="width:${pct}%; background:${barColor(cls)};"></div>
+              </div>
+              ${diff}
+            </div>
+          `;
+        }).join('')}
       </div>
     `;
   });
 
-  renderInsights(a, b);
+  renderInsights(devices);
 }
 
-function renderInsights(a, b) {
+function renderInsights(devices) {
   const grid = document.getElementById('insights-grid');
   const verdict = document.getElementById('verdict-box');
 
-  const valA = a.price ? (a.mc / a.price).toFixed(1) : null;
-  const valB = b.price ? (b.mc / b.price).toFixed(1) : null;
-
-  let valueHtml = '';
-  if (valA && valB) {
-    const winner = parseFloat(valA) > parseFloat(valB) ? a.model : b.model;
+  const priced = devices.filter(d => d.price);
+  let valueHtml;
+  if (priced.length >= 2) {
+    const vals = priced.map(d => ({ d, val: parseFloat((d.mc / d.price).toFixed(1)) }));
+    const best = vals.reduce((x, y) => (y.val > x.val ? y : x));
+    const valueList = vals.map(v => `${v.d.model}: ${v.val}`).join(' | ');
     valueHtml = `
       <div class="insight-card">
         <div class="insight-card-title">Value Efficiency (MC Pts / £)</div>
-        <div class="insight-card-value">${a.model}: ${valA} | ${b.model}: ${valB}</div>
-        <div class="insight-card-desc"><strong>${winner}</strong> provides higher multi-core score output per pound spent at launch.</div>
+        <div class="insight-card-value">${valueList}</div>
+        <div class="insight-card-desc"><strong>${best.d.model}</strong> provides the highest multi-core score output per pound spent at launch.</div>
       </div>
     `;
   } else {
@@ -1231,8 +1311,10 @@ function renderInsights(a, b) {
     `;
   }
 
-  const renderSpeedup = (Math.max(a.mc, b.mc) / Math.min(a.mc, b.mc)).toFixed(2);
-  const fasterDevice = a.mc > b.mc ? a.model : b.model;
+  const mcVals = devices.map(d => d.mc);
+  const mcMax = Math.max(...mcVals), mcMin = Math.min(...mcVals);
+  const renderSpeedup = (mcMax / mcMin).toFixed(2);
+  const fasterDevice = devices.find(d => d.mc === mcMax).model;
   const renderHtml = `
     <div class="insight-card">
       <div class="insight-card-title">Multi-Core Processing</div>
@@ -1241,8 +1323,10 @@ function renderInsights(a, b) {
     </div>
   `;
 
-  const gpuSpeedup = (Math.max(a.metal, b.metal) / Math.min(a.metal, b.metal)).toFixed(2);
-  const fasterGpu = a.metal > b.metal ? a.model : b.model;
+  const metalVals = devices.map(d => d.metal);
+  const metalMax = Math.max(...metalVals), metalMin = Math.min(...metalVals);
+  const gpuSpeedup = (metalMax / metalMin).toFixed(2);
+  const fasterGpu = devices.find(d => d.metal === metalMax).model;
   const gpuHtml = `
     <div class="insight-card">
       <div class="insight-card-title">Metal Graphics Compute</div>
@@ -1253,13 +1337,15 @@ function renderInsights(a, b) {
 
   grid.innerHTML = valueHtml + renderHtml + gpuHtml;
 
-  const mcDiff = Math.abs(((a.mc - b.mc) / Math.min(a.mc, b.mc)) * 100).toFixed(0);
+  const sortedByMc = [...devices].sort((x, y) => y.mc - x.mc);
+  const top = sortedByMc[0];
+  const second = sortedByMc[1];
+  const mcDiff = Math.abs(((top.mc - second.mc) / second.mc) * 100).toFixed(0);
   if (mcDiff < 10) {
-    verdict.innerHTML = `<strong>Verdict:</strong> Performance is roughly equivalent (&lt;10% difference). Base your decision on form factor and budget.`;
-  } else if (a.mc > b.mc) {
-    verdict.innerHTML = `<strong>Verdict:</strong> The <strong>${a.model} (${a.chip})</strong> leads by ~${mcDiff}% in multi-core performance over the ${b.model} (${b.chip}).`;
+    verdict.innerHTML = `<strong>Verdict:</strong> Performance is roughly equivalent among the leaders (&lt;10% difference). Base your decision on form factor and budget.`;
   } else {
-    verdict.innerHTML = `<strong>Verdict:</strong> The <strong>${b.model} (${b.chip})</strong> leads by ~${mcDiff}% in multi-core performance over the ${a.model} (${a.chip}).`;
+    const margin = devices.length > 2 ? ` over the next closest, the ${second.model} (${second.chip})` : ` over the ${second.model} (${second.chip})`;
+    verdict.innerHTML = `<strong>Verdict:</strong> The <strong>${top.model} (${top.chip})</strong> leads by ~${mcDiff}% in multi-core performance${margin}.`;
   }
 }
 
