@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+
   <!-- Primary SEO -->
   <title>Apple Silicon Geekbench 6 Comparison – MacBook, Mac mini, iMac &amp; iPad Scores</title>
   <meta name="description" content="Compare Geekbench 6 single-core, multi-core and Metal GPU scores for every Apple Silicon Mac and iPad. Side-by-side M1–M5, A-series chips, battery life and launch prices. Updated September 2026." />
@@ -322,7 +325,6 @@
       flex-wrap: wrap;
       gap: 4px;
     }
-    /* VS divider removed – 10px gap used instead */
     .compare-btn-wrap {
       max-width: 900px; margin: 50px auto 0; padding: 0 12px;
       text-align: center;
@@ -384,7 +386,6 @@
       border-radius: 0;
     }
 
-    /* ===== STICKY HEADER & RESPONSIVE GRID ===== */
     .mac-headers {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -409,7 +410,6 @@
       overflow: hidden;
       container-type: inline-size;
     }
-    .mac-header:last-child { }
     .mac-name { 
       font-size: clamp(11px, 5cqw, 18px); 
       font-weight: 800; 
@@ -448,8 +448,6 @@
     .price-badge.unknown { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.25); }
     .new-badge { background: rgba(236,72,153,.2); color: #f9a8d4; border: 1px solid rgba(236,72,153,.3); letter-spacing: .3px; text-transform: uppercase; }
 
-    /* vs-mid removed – 10px gap used instead */
-    
     .metric-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -495,10 +493,7 @@
     .metric-diff.faster { background: rgba(74,222,128,.15); color: var(--win); }
     .metric-diff.slower { background: rgba(248,113,113,.15); color: var(--lose); }
     .metric-diff.tied   { background: rgba(148,163,184,.1);  color: var(--muted); }
-    
-    /* metric-mid removed – 10px gap used instead */
 
-    /* Practical Insights Section replacing charts */
     .insights-section {
       margin-top: 10px;
       padding: 16px 12px;
