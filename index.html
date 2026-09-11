@@ -60,6 +60,54 @@
     }
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Geekbench 6?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Geekbench 6 is a cross-platform benchmarking tool from Primate Labs that measures processor and graphics performance using real-world workloads, such as image processing, machine learning and encryption tasks, rather than synthetic maths loops. Because it runs the same tests on macOS, iOS, Windows and Android, it's one of the few ways to compare an iPad, MacBook and PC on a level footing."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is single-core score?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Single-core score reflects how fast one CPU core can work through a task on its own. It's the best indicator of everyday responsiveness: app launches, scrolling, web browsing and lightly threaded software all lean heavily on single-core speed, so this number matters most for how \"snappy\" a device feels."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is multi-core score?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Multi-core score measures performance when a workload is spread across every available CPU core at once. It's the number to watch for heavier tasks like exporting video, compiling code or batch photo editing, and it scales with core count, so chips with more cores tend to pull ahead here even if their single-core speed is similar."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is Metal score?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Metal score comes from Geekbench's GPU compute benchmark, run through Apple's Metal graphics API. It measures how quickly the graphics chip handles parallel workloads such as image filters, video processing and on-device machine learning, and it's a useful stand-in for gaming and creative-app graphics performance, separate from raw CPU power."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the history of Apple Silicon?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Apple began its transition away from Intel processors in November 2020 with the M1 chip, bringing the same ARM-based, unified-memory architecture used in iPhone and iPad A-series chips to the Mac. This traded the traditional split of separate CPU, GPU and RAM for a single chip with shared high-bandwidth memory and dedicated efficiency and performance cores, dramatically improving performance-per-watt. Since then, the lineup has grown through the M2, M3, M4 and now M5 generations, alongside Pro, Max and Ultra variants for higher-end machines, while the A-series has continued to power iPad and, more recently, entry-level MacBook hardware."
+        }
+      }
+    ]
+  }
+  </script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -553,6 +601,44 @@
     footer a { color: #7878c0; text-decoration: none; }
     footer a:hover { text-decoration: underline; }
 
+    .info-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 63px 16px 36px;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+    .info-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .info-card-body {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .info-card.info-card-wide {
+      grid-column: 1 / -1;
+    }
+    .bottom-divider {
+      border-top: 1px solid var(--border);
+    }
+    .page-counter {
+      text-align: center;
+      padding: 16px 12px 24px;
+    }
+
     @media (max-width: 480px) {
       .selector-bar {
         grid-template-columns: 1fr 1fr;
@@ -648,7 +734,6 @@
   </button>
 </div>
 <div class="hint" id="hint">
-  <div class="hint-title">Select devices to compare</div>
 </div>
 <div class="compare-panel" id="compare-panel">
   <div class="compare-inner">
@@ -662,12 +747,38 @@
     </div>
   </div>
 </div>
+<div class="bottom-divider"></div>
+<section class="info-section">
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-title">What is Geekbench 6?</div>
+      <div class="info-card-body">Geekbench 6 is a cross-platform benchmarking tool from Primate Labs that measures processor and graphics performance using real-world workloads, such as image processing, machine learning and encryption tasks, rather than synthetic maths loops. Because it runs the same tests on macOS, iOS, Windows and Android, it's one of the few ways to compare an iPad, MacBook and PC on a level footing.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">What is single-core score?</div>
+      <div class="info-card-body">Single-core score reflects how fast one CPU core can work through a task on its own. It's the best indicator of everyday responsiveness: app launches, scrolling, web browsing and lightly threaded software all lean heavily on single-core speed, so this number matters most for how "snappy" a device feels.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">What is multi-core score?</div>
+      <div class="info-card-body">Multi-core score measures performance when a workload is spread across every available CPU core at once. It's the number to watch for heavier tasks like exporting video, compiling code or batch photo editing, and it scales with core count, so chips with more cores tend to pull ahead here even if their single-core speed is similar.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">What is Metal score?</div>
+      <div class="info-card-body">The Metal score comes from Geekbench's GPU compute benchmark, run through Apple's Metal graphics API. It measures how quickly the graphics chip handles parallel workloads such as image filters, video processing and on-device machine learning, and it's a useful stand-in for gaming and creative-app graphics performance, separate from raw CPU power.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-title">History of Apple Silicon</div>
+      <div class="info-card-body">Apple began its transition away from Intel processors in November 2020 with the M1 chip, bringing the same ARM-based, unified-memory architecture used in iPhone and iPad A-series chips to the Mac. This traded the traditional split of separate CPU, GPU and RAM for a single chip with shared high-bandwidth memory and dedicated efficiency and performance cores, dramatically improving performance-per-watt. Since then, the lineup has grown through the M2, M3, M4 and now M5 generations, alongside Pro, Max and Ultra variants for higher-end machines, while the A-series has continued to power iPad and, more recently, entry-level MacBook hardware.</div>
+    </div>
+  </div>
+</section>
 <footer>
   <p>Geekbench 6 scores sourced from <a href="https://browser.geekbench.com" target="_blank" rel="noopener noreferrer">Geekbench Browser</a>. Battery life figures are <a href="https://www.apple.com/uk/batteries/" target="_blank" rel="noopener noreferrer">Apple estimates</a>.</p>
   <p><a href="https://geekmac.cc/">geekmac.cc</a> · Free Apple Silicon comparison tool</p>
-  <br>
-  <img src="https://hits.sh/geekmac.cc.svg?style=flat-square&label=views&color=3b82f6" alt="Page views counter for geekmac.cc" width="100" height="20">
 </footer>
+<div class="page-counter">
+  <img src="https://hits.sh/geekmac.cc.svg?style=flat-square&label=views&color=3b82f6" alt="Page views counter for geekmac.cc" width="100" height="20">
+</div>
 
 <script>
 const MACS = [
