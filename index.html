@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-83X8Y0CNRJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-83X8Y0CNRJ');
-</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
@@ -643,9 +634,110 @@
     .bottom-divider {
       border-top: 1px solid var(--border);
     }
+    .site-nav-bar {
+      max-width: 900px;
+      margin: 40px auto 0;
+      padding: 0 16px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .nav-btn {
+      padding: 10px 20px;
+      min-width: 130px;
+      height: 42px;
+      box-sizing: border-box;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s, background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-btn svg { margin-left: 6px; vertical-align: middle; }
+    .nav-btn-compare {
+      background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3);
+    }
+    .nav-btn-compare:hover { background: rgba(59,130,246,0.25); }
+    .nav-btn-sc {
+      background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3);
+    }
+    .nav-btn-sc:hover { background: rgba(99,102,241,0.25); }
+    .nav-btn-mc {
+      background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3);
+    }
+    .nav-btn-mc:hover { background: rgba(16,185,129,0.25); }
+    .nav-btn-metal {
+      background: rgba(245,158,11,0.15); color: #fde68a; border: 1px solid rgba(245,158,11,0.3);
+    }
+    .nav-btn-metal:hover { background: rgba(245,158,11,0.25); }
+    .nav-btn.active { opacity: 1; box-shadow: inset 0 0 0 1px currentColor; }
+    .nav-btn:not(.active) { opacity: 0.85; }
     .page-counter {
       text-align: center;
       padding: 16px 12px 24px;
+    }
+
+    .leaderboard-section {
+      max-width: 900px;
+      margin: 40px auto 0;
+      padding: 0 16px;
+    }
+    .leaderboard-intro {
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      max-width: 640px;
+      margin: 0 auto 24px;
+      line-height: 1.6;
+    }
+    .leaderboard-list {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .lb-row {
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .lb-row:last-child { border-bottom: none; }
+    .lb-rank {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--muted);
+      text-align: center;
+    }
+    .lb-row:nth-child(1) .lb-rank { color: #fde68a; }
+    .lb-row:nth-child(2) .lb-rank { color: #e5e7eb; }
+    .lb-row:nth-child(3) .lb-rank { color: #fca5a5; }
+    .lb-info { min-width: 0; }
+    .lb-name { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
+    .lb-badges { display: flex; flex-wrap: wrap; gap: 4px; }
+    .lb-score-wrap { text-align: right; min-width: 108px; }
+    .lb-score { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+    .lb-bar-wrap {
+      width: 108px;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+    .lb-bar { height: 100%; border-radius: 3px; }
+    @media (max-width: 560px) {
+      .lb-row { grid-template-columns: 28px 1fr auto; gap: 8px; padding: 10px 10px; }
+      .lb-name { font-size: 12.5px; }
+      .lb-score { font-size: 14px; }
+      .lb-score-wrap { min-width: 78px; }
+      .lb-bar-wrap { width: 78px; }
     }
 
     @media (max-width: 480px) {
@@ -757,6 +849,37 @@
   </div>
 </div>
 <div class="bottom-divider"></div>
+<nav class="site-nav-bar">
+  <a class="nav-btn nav-btn-compare active" href="index.html">
+    Compare
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 3 4 7l4 4"></path><path d="M4 7h16"></path>
+      <path d="m16 21 4-4-4-4"></path><path d="M20 17H4"></path>
+    </svg>
+  </a>
+  <a class="nav-btn nav-btn-sc" href="single-core.html">
+    Single-core
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="2.5" fill="currentColor" stroke="none"></circle>
+    </svg>
+  </a>
+  <a class="nav-btn nav-btn-mc" href="multi-core.html">
+    Multi-core
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3" width="8" height="8" rx="1.5"></rect>
+      <rect x="13" y="3" width="8" height="8" rx="1.5"></rect>
+      <rect x="3" y="13" width="8" height="8" rx="1.5"></rect>
+      <rect x="13" y="13" width="8" height="8" rx="1.5"></rect>
+    </svg>
+  </a>
+  <a class="nav-btn nav-btn-metal" href="metal.html">
+    Metal
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="6" y="6" width="12" height="12" rx="1.5"></rect>
+      <path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"></path>
+    </svg>
+  </a>
+</nav>
 <section class="info-section">
   <div class="info-grid">
     <div class="info-card">
@@ -785,7 +908,9 @@
   <p>Geekbench 6 scores sourced from <a href="https://browser.geekbench.com" target="_blank" rel="noopener noreferrer">Geekbench Browser</a>. Battery life figures are <a href="https://www.apple.com/uk/batteries/" target="_blank" rel="noopener noreferrer">Apple estimates</a>.</p>
   <p><a href="https://geekmac.cc/">geekmac.cc</a> · Free Apple Silicon comparison tool</p>
 </footer>
-
+<div class="page-counter">
+  <img src="https://hits.sh/geekmac.cc.svg?style=flat-square&label=views&color=3b82f6" alt="Page views counter for geekmac.cc" width="100" height="20">
+</div>
 
 <script>
 const MACS = [
