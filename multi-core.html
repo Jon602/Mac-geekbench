@@ -2147,8 +2147,6 @@
     .nav-btn-metal:hover { background: rgba(245,158,11,0.25); }
     .nav-btn.active { opacity: 1; box-shadow: inset 0 0 0 1px currentColor; }
     .nav-btn:not(.active) { opacity: 0.85; }
-    
-
     .leaderboard-section {
       max-width: 900px;
       margin: 40px auto 0;
@@ -2228,6 +2226,69 @@
   </style>
 
   </style>
+  <style>
+    .lb-filter-wrap {
+      max-width: 900px;
+      margin: 0 auto 16px;
+      padding: 0 16px;
+      position: relative;
+    }
+    .lb-filter-icon {
+      position: absolute;
+      left: 32px;
+      top: 18px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+    .lb-filter-input {
+      width: 100%;
+      box-sizing: border-box;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 14px;
+      font-family: inherit;
+      padding: 12px 44px 12px 42px;
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .lb-filter-input:focus { border-color: rgba(59,130,246,0.5); }
+    .lb-filter-input::placeholder { color: var(--muted); }
+    .lb-filter-clear {
+      position: absolute;
+      right: 24px;
+      top: 10px;
+      width: 24px;
+      height: 24px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0;
+    }
+    .lb-filter-clear:hover { color: var(--text); background: rgba(255,255,255,0.08); }
+    .lb-filter-clear.lb-show { display: flex; }
+    .lb-filter-count {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+      text-align: right;
+    }
+    .lb-row.lb-hidden { display: none; }
+    .lb-no-results {
+      display: none;
+      padding: 32px 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .lb-no-results.lb-show { display: block; }
+  </style>
 </head>
 <body>
 <header>
@@ -2268,8 +2329,16 @@
   </a></nav>
 <section class="leaderboard-section">
   <p class="leaderboard-intro">Every Mac and iPad ranked by Geekbench 6 multi-core score, highest first. Multi-core performance matters most for heavier tasks like exporting video, compiling code or batch photo editing.</p>
-  <div class="leaderboard-list">
-    <div class="lb-row">
+  <div class="lb-filter-wrap">
+    <svg class="lb-filter-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+    <input type="text" class="lb-filter-input" id="lb-filter" placeholder="Filter by model, chip or type… e.g. &quot;mini&quot;, &quot;M5&quot;, &quot;iPad&quot;" aria-label="Filter devices by model, chip or type" autocomplete="off">
+    <button type="button" class="lb-filter-clear" id="lb-filter-clear" aria-label="Clear search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+    </button>
+    <div class="lb-filter-count" id="lb-filter-count" aria-live="polite">Showing all 109 devices</div>
+  </div>
+  <div class="leaderboard-list" id="lb-list">
+    <div class="lb-row" data-search="macbook pro 14&quot; m5 max laptop 2026 macbook pro">
       <div class="lb-rank">1</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M5 Max)</span></div>
@@ -2282,7 +2351,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:100%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 16&quot; m5 max laptop 2026 macbook pro">
       <div class="lb-rank">2</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 16" <span style="color:var(--muted); font-weight:600;">(M5 Max)</span></div>
@@ -2295,7 +2364,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:97.47379736629938%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m5 pro laptop 2026 macbook pro">
       <div class="lb-rank">3</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M5 Pro)</span></div>
@@ -2308,7 +2377,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:96.38202096210696%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 16&quot; m5 pro laptop 2026 macbook pro">
       <div class="lb-rank">4</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 16" <span style="color:var(--muted); font-weight:600;">(M5 Pro)</span></div>
@@ -2321,7 +2390,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:94.59486697124429%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac studio m3 ultra desktop 2025 mac studio">
       <div class="lb-rank">5</div>
       <div class="lb-info">
         <div class="lb-name">Mac Studio <span style="color:var(--muted); font-weight:600;">(M3 Ultra)</span></div>
@@ -2334,7 +2403,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:93.20411179790379%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac studio m3 ultra 28-core desktop 2025 mac studio">
       <div class="lb-rank">6</div>
       <div class="lb-info">
         <div class="lb-name">Mac Studio <span style="color:var(--muted); font-weight:600;">(M3 Ultra 28-core)</span></div>
@@ -2347,7 +2416,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:89.25356087073368%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac studio m4 max desktop 2025 mac studio">
       <div class="lb-rank">7</div>
       <div class="lb-info">
         <div class="lb-name">Mac Studio <span style="color:var(--muted); font-weight:600;">(M4 Max)</span></div>
@@ -2360,7 +2429,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:87.97366299381886%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 16&quot; m4 max laptop 2024 macbook pro">
       <div class="lb-rank">8</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 16" <span style="color:var(--muted); font-weight:600;">(M4 Max)</span></div>
@@ -2373,7 +2442,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:86.40486428379468%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac studio m4 max desktop 2025 mac studio">
       <div class="lb-rank">9</div>
       <div class="lb-info">
         <div class="lb-name">Mac Studio <span style="color:var(--muted); font-weight:600;">(M4 Max)</span></div>
@@ -2386,7 +2455,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:79.23609244826659%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m4 max laptop 2024 macbook pro">
       <div class="lb-rank">10</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M4 Max)</span></div>
@@ -2399,7 +2468,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:77.56651437785541%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 16&quot; m4 pro laptop 2024 macbook pro">
       <div class="lb-rank">11</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 16" <span style="color:var(--muted); font-weight:600;">(M4 Pro)</span></div>
@@ -2412,7 +2481,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:75.64498790647676%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m4 pro laptop 2024 macbook pro">
       <div class="lb-rank">12</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M4 Pro)</span></div>
@@ -2425,7 +2494,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:75.38296156947058%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac mini m4 pro desktop 2024 mac mini">
       <div class="lb-rank">13</div>
       <div class="lb-info">
         <div class="lb-name">Mac mini <span style="color:var(--muted); font-weight:600;">(M4 Pro)</span></div>
@@ -2438,7 +2507,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:75.30233808116098%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac studio m2 ultra desktop 2023 mac studio">
       <div class="lb-rank">14</div>
       <div class="lb-info">
         <div class="lb-name">Mac Studio <span style="color:var(--muted); font-weight:600;">(M2 Ultra)</span></div>
@@ -2451,7 +2520,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:71.93294813222252%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac pro m2 ultra 60-core desktop 2023 mac pro">
       <div class="lb-rank">15</div>
       <div class="lb-info">
         <div class="lb-name">Mac Pro <span style="color:var(--muted); font-weight:600;">(M2 Ultra 60-core)</span></div>
@@ -2464,7 +2533,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:71.87248051599032%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac pro m2 ultra desktop 2023 mac pro">
       <div class="lb-rank">16</div>
       <div class="lb-info">
         <div class="lb-name">Mac Pro <span style="color:var(--muted); font-weight:600;">(M2 Ultra)</span></div>
@@ -2477,7 +2546,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:71.87248051599032%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 16&quot; m3 max laptop 2023 macbook pro">
       <div class="lb-rank">17</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 16" <span style="color:var(--muted); font-weight:600;">(M3 Max)</span></div>
@@ -2490,7 +2559,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:70.42797635044343%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac mini m4 pro 12-core desktop 2024 mac mini">
       <div class="lb-rank">18</div>
       <div class="lb-info">
         <div class="lb-name">Mac mini <span style="color:var(--muted); font-weight:600;">(M4 Pro 12-core)</span></div>
@@ -2503,7 +2572,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:68.20075248589089%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m4 pro 12-core laptop 2024 macbook pro">
       <div class="lb-rank">19</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M4 Pro 12-core)</span></div>
@@ -2516,7 +2585,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:68.19739317387798%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m3 max laptop 2023 macbook pro">
       <div class="lb-rank">20</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M3 Max)</span></div>
@@ -2529,7 +2598,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:63.615291588282716%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac studio m1 ultra desktop 2022 mac studio">
       <div class="lb-rank">21</div>
       <div class="lb-info">
         <div class="lb-name">Mac Studio <span style="color:var(--muted); font-weight:600;">(M1 Ultra)</span></div>
@@ -2542,7 +2611,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:61.95915076592314%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m5 laptop 2025 macbook pro">
       <div class="lb-rank">22</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M5)</span></div>
@@ -2555,7 +2624,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:58.63679118516528%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook air 13&quot; m5 laptop 2026 macbook air">
       <div class="lb-rank">23</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Air 13" <span style="color:var(--muted); font-weight:600;">(M5)</span></div>
@@ -2568,7 +2637,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:57.09822628325719%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook air 15&quot; m5 laptop 2026 macbook air">
       <div class="lb-rank">24</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Air 15" <span style="color:var(--muted); font-weight:600;">(M5)</span></div>
@@ -2581,7 +2650,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:56.916823434560605%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 13&quot; m5 ipad 2025 ipad pro">
       <div class="lb-rank">25</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 13" <span style="color:var(--muted); font-weight:600;">(M5)</span></div>
@@ -2594,7 +2663,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:52.741198602526204%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 11&quot; m5 ipad 2025 ipad pro">
       <div class="lb-rank">26</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 11" <span style="color:var(--muted); font-weight:600;">(M5)</span></div>
@@ -2607,7 +2676,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:52.20370868046225%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 16&quot; m3 pro laptop 2023 macbook pro">
       <div class="lb-rank">27</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 16" <span style="color:var(--muted); font-weight:600;">(M3 Pro)</span></div>
@@ -2620,7 +2689,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:51.23622682074711%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m4 laptop 2024 macbook pro">
       <div class="lb-rank">28</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M4)</span></div>
@@ -2633,7 +2702,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:50.134372480515985%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac studio m2 max desktop 2023 mac studio">
       <div class="lb-rank">29</div>
       <div class="lb-info">
         <div class="lb-name">Mac Studio <span style="color:var(--muted); font-weight:600;">(M2 Max)</span></div>
@@ -2646,7 +2715,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:50.11085729642569%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook air 13&quot; m4 laptop 2025 macbook air">
       <div class="lb-rank">30</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Air 13" <span style="color:var(--muted); font-weight:600;">(M4)</span></div>
@@ -2659,7 +2728,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:49.54985219027143%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m2 max laptop 2023 macbook pro">
       <div class="lb-rank">31</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M2 Max)</span></div>
@@ -2672,7 +2741,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:49.543133566245636%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 16&quot; m2 max laptop 2023 macbook pro">
       <div class="lb-rank">32</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 16" <span style="color:var(--muted); font-weight:600;">(M2 Max)</span></div>
@@ -2685,7 +2754,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:49.543133566245636%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook air 15&quot; m4 laptop 2025 macbook air">
       <div class="lb-rank">33</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Air 15" <span style="color:var(--muted); font-weight:600;">(M4)</span></div>
@@ -2698,7 +2767,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:49.432276269819944%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac mini m4 desktop 2024 mac mini">
       <div class="lb-rank">34</div>
       <div class="lb-info">
         <div class="lb-name">Mac mini <span style="color:var(--muted); font-weight:600;">(M4)</span></div>
@@ -2711,7 +2780,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:49.40204246170384%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="imac 24&quot; m4 desktop 2024 imac">
       <div class="lb-rank">35</div>
       <div class="lb-info">
         <div class="lb-name">iMac 24" <span style="color:var(--muted); font-weight:600;">(M4)</span></div>
@@ -2724,7 +2793,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:49.29118516527815%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac mini m2 pro desktop 2023 mac mini">
       <div class="lb-rank">36</div>
       <div class="lb-info">
         <div class="lb-name">Mac mini <span style="color:var(--muted); font-weight:600;">(M2 Pro)</span></div>
@@ -2737,7 +2806,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:48.925020155872076%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m2 pro laptop 2023 macbook pro">
       <div class="lb-rank">37</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M2 Pro)</span></div>
@@ -2750,7 +2819,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:48.5722923945176%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 16&quot; m2 pro laptop 2023 macbook pro">
       <div class="lb-rank">38</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 16" <span style="color:var(--muted); font-weight:600;">(M2 Pro)</span></div>
@@ -2763,7 +2832,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:48.243079817253424%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m3 pro laptop 2023 macbook pro">
       <div class="lb-rank">39</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M3 Pro)</span></div>
@@ -2776,7 +2845,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:47.12778822897071%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 13&quot; m4 ipad 2024 ipad pro">
       <div class="lb-rank">40</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 13" <span style="color:var(--muted); font-weight:600;">(M4)</span></div>
@@ -2789,7 +2858,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:46.40217683418436%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="imac 24&quot; m4 8-core desktop 2024 imac">
       <div class="lb-rank">41</div>
       <div class="lb-info">
         <div class="lb-name">iMac 24" <span style="color:var(--muted); font-weight:600;">(M4 8-core)</span></div>
@@ -2802,7 +2871,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:45.770626175759205%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 11&quot; m4 ipad 2024 ipad pro">
       <div class="lb-rank">42</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 11" <span style="color:var(--muted); font-weight:600;">(M4)</span></div>
@@ -2815,7 +2884,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:45.602660575114214%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac studio m1 max desktop 2022 mac studio">
       <div class="lb-rank">43</div>
       <div class="lb-info">
         <div class="lb-name">Mac Studio <span style="color:var(--muted); font-weight:600;">(M1 Max)</span></div>
@@ -2828,7 +2897,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:42.52217145928514%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac mini m2 pro 10-core desktop 2023 mac mini">
       <div class="lb-rank">44</div>
       <div class="lb-info">
         <div class="lb-name">Mac mini <span style="color:var(--muted); font-weight:600;">(M2 Pro 10-core)</span></div>
@@ -2841,7 +2910,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:41.82007524858909%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m2 pro 10-core laptop 2023 macbook pro">
       <div class="lb-rank">45</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M2 Pro 10-core)</span></div>
@@ -2854,7 +2923,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:41.511018543402315%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m1 pro laptop 2021 macbook pro">
       <div class="lb-rank">46</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M1 Pro)</span></div>
@@ -2867,7 +2936,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:41.48750335931201%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m1 max laptop 2021 macbook pro">
       <div class="lb-rank">47</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M1 Max)</span></div>
@@ -2880,7 +2949,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:41.48750335931201%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 16&quot; m1 pro laptop 2021 macbook pro">
       <div class="lb-rank">48</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 16" <span style="color:var(--muted); font-weight:600;">(M1 Pro)</span></div>
@@ -2893,7 +2962,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:41.21203977425424%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 16&quot; m1 max laptop 2021 macbook pro">
       <div class="lb-rank">49</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 16" <span style="color:var(--muted); font-weight:600;">(M1 Max)</span></div>
@@ -2906,7 +2975,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:41.21203977425424%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad air 11&quot; m3 ipad 2025 ipad air">
       <div class="lb-rank">50</div>
       <div class="lb-info">
         <div class="lb-name">iPad Air 11" <span style="color:var(--muted); font-weight:600;">(M3)</span></div>
@@ -2919,7 +2988,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:39.29387261488847%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad air 13&quot; m3 ipad 2025 ipad air">
       <div class="lb-rank">51</div>
       <div class="lb-info">
         <div class="lb-name">iPad Air 13" <span style="color:var(--muted); font-weight:600;">(M3)</span></div>
@@ -2932,7 +3001,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:39.25356087073367%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="imac 24&quot; m3 desktop 2023 imac">
       <div class="lb-rank">52</div>
       <div class="lb-info">
         <div class="lb-name">iMac 24" <span style="color:var(--muted); font-weight:600;">(M3)</span></div>
@@ -2945,7 +3014,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:39.21660843859178%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="imac 24&quot; m3 8-core desktop 2023 imac">
       <div class="lb-rank">53</div>
       <div class="lb-info">
         <div class="lb-name">iMac 24" <span style="color:var(--muted); font-weight:600;">(M3 8-core)</span></div>
@@ -2958,7 +3027,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:39.19309325450148%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook air 13&quot; m3 laptop 2024 macbook air">
       <div class="lb-rank">54</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Air 13" <span style="color:var(--muted); font-weight:600;">(M3)</span></div>
@@ -2971,7 +3040,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:38.74294544477291%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook air 15&quot; m3 laptop 2024 macbook air">
       <div class="lb-rank">55</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Air 15" <span style="color:var(--muted); font-weight:600;">(M3)</span></div>
@@ -2984,7 +3053,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:38.74294544477291%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m3 laptop 2023 macbook pro">
       <div class="lb-rank">56</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M3)</span></div>
@@ -2997,7 +3066,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:38.74294544477291%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 14&quot; m1 pro 8-core laptop 2021 macbook pro">
       <div class="lb-rank">57</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 14" <span style="color:var(--muted); font-weight:600;">(M1 Pro 8-core)</span></div>
@@ -3010,7 +3079,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:34.6647406611126%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="imac pro 27&quot; intel xeon w 18-core desktop 2017 imac pro">
       <div class="lb-rank">58</div>
       <div class="lb-info">
         <div class="lb-name">iMac Pro 27" <span style="color:var(--muted); font-weight:600;">(Intel Xeon W 18-core)</span></div>
@@ -3023,7 +3092,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:33.2975006718624%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 12.9&quot; m2 ipad 2022 ipad pro">
       <div class="lb-rank">59</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 12.9" <span style="color:var(--muted); font-weight:600;">(M2)</span></div>
@@ -3036,7 +3105,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:33.23703305563021%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad air 13&quot; m2 ipad 2024 ipad air">
       <div class="lb-rank">60</div>
       <div class="lb-info">
         <div class="lb-name">iPad Air 13" <span style="color:var(--muted); font-weight:600;">(M2)</span></div>
@@ -3049,7 +3118,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:33.09930126310132%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad air 11&quot; m2 ipad 2024 ipad air">
       <div class="lb-rank">61</div>
       <div class="lb-info">
         <div class="lb-name">iPad Air 11" <span style="color:var(--muted); font-weight:600;">(M2)</span></div>
@@ -3062,7 +3131,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:33.035474334856225%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 11&quot; m2 ipad 2022 ipad pro">
       <div class="lb-rank">62</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 11" <span style="color:var(--muted); font-weight:600;">(M2)</span></div>
@@ -3075,7 +3144,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:32.958210158559524%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac mini m2 desktop 2023 mac mini">
       <div class="lb-rank">63</div>
       <div class="lb-info">
         <div class="lb-name">Mac mini <span style="color:var(--muted); font-weight:600;">(M2)</span></div>
@@ -3088,7 +3157,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:32.87758667024993%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook air 15&quot; m2 laptop 2023 macbook air">
       <div class="lb-rank">64</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Air 15" <span style="color:var(--muted); font-weight:600;">(M2)</span></div>
@@ -3101,7 +3170,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:32.61556033324376%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook air 13&quot; m2 laptop 2022 macbook air">
       <div class="lb-rank">65</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Air 13" <span style="color:var(--muted); font-weight:600;">(M2)</span></div>
@@ -3114,7 +3183,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:32.47782854071486%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 13&quot; m2 laptop 2022 macbook pro">
       <div class="lb-rank">66</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 13" <span style="color:var(--muted); font-weight:600;">(M2)</span></div>
@@ -3127,7 +3196,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:32.400564364418166%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="imac pro 27&quot; intel xeon w 14-core desktop 2017 imac pro">
       <div class="lb-rank">67</div>
       <div class="lb-info">
         <div class="lb-name">iMac Pro 27" <span style="color:var(--muted); font-weight:600;">(Intel Xeon W 14-core)</span></div>
@@ -3140,7 +3209,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:30.304353668368716%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook neo 13&quot; a18 pro laptop 2026 macbook neo">
       <div class="lb-rank">68</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Neo 13" <span style="color:var(--muted); font-weight:600;">(A18 Pro)</span></div>
@@ -3153,7 +3222,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:29.04461166353131%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac mini m1 desktop 2020 mac mini">
       <div class="lb-rank">69</div>
       <div class="lb-info">
         <div class="lb-name">Mac mini <span style="color:var(--muted); font-weight:600;">(M1)</span></div>
@@ -3166,7 +3235,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:28.359312012899757%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 12.9&quot; m1 ipad 2021 ipad pro">
       <div class="lb-rank">70</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 12.9" <span style="color:var(--muted); font-weight:600;">(M1)</span></div>
@@ -3179,7 +3248,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:28.21486159634507%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="imac 24&quot; m1 desktop 2021 imac">
       <div class="lb-rank">71</div>
       <div class="lb-info">
         <div class="lb-name">iMac 24" <span style="color:var(--muted); font-weight:600;">(M1)</span></div>
@@ -3192,7 +3261,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:28.10736361193228%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 11&quot; m1 ipad 2021 ipad pro">
       <div class="lb-rank">72</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 11" <span style="color:var(--muted); font-weight:600;">(M1)</span></div>
@@ -3205,7 +3274,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:28.05025530771298%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook air 13&quot; m1 laptop 2020 macbook air">
       <div class="lb-rank">73</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Air 13" <span style="color:var(--muted); font-weight:600;">(M1)</span></div>
@@ -3218,7 +3287,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:28.03009943563558%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad air m1 ipad 2022 ipad air">
       <div class="lb-rank">74</div>
       <div class="lb-info">
         <div class="lb-name">iPad Air <span style="color:var(--muted); font-weight:600;">(M1)</span></div>
@@ -3231,7 +3300,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:27.875571083042196%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="macbook pro 13&quot; m1 laptop 2020 macbook pro">
       <div class="lb-rank">75</div>
       <div class="lb-info">
         <div class="lb-name">MacBook Pro 13" <span style="color:var(--muted); font-weight:600;">(M1)</span></div>
@@ -3244,7 +3313,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:27.51612469766192%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="imac pro 27&quot; intel xeon w 10-core desktop 2017 imac pro">
       <div class="lb-rank">76</div>
       <div class="lb-info">
         <div class="lb-name">iMac Pro 27" <span style="color:var(--muted); font-weight:600;">(Intel Xeon W 10-core)</span></div>
@@ -3257,7 +3326,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:27.07269551195915%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="imac 27&quot; intel core i7 desktop 2020 imac">
       <div class="lb-rank">77</div>
       <div class="lb-info">
         <div class="lb-name">iMac 27" <span style="color:var(--muted); font-weight:600;">(Intel Core i7)</span></div>
@@ -3270,7 +3339,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:25.73233001881215%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="imac pro 27&quot; intel xeon w 8-core desktop 2017 imac pro">
       <div class="lb-rank">78</div>
       <div class="lb-info">
         <div class="lb-name">iMac Pro 27" <span style="color:var(--muted); font-weight:600;">(Intel Xeon W 8-core)</span></div>
@@ -3283,7 +3352,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:24.754770223058316%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad mini a17 pro ipad 2024 ipad mini">
       <div class="lb-rank">79</div>
       <div class="lb-info">
         <div class="lb-name">iPad mini <span style="color:var(--muted); font-weight:600;">(A17 Pro)</span></div>
@@ -3296,7 +3365,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:24.28782585326525%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="imac 27&quot; intel core i5 desktop 2020 imac">
       <div class="lb-rank">80</div>
       <div class="lb-info">
         <div class="lb-name">iMac 27" <span style="color:var(--muted); font-weight:600;">(Intel Core i5)</span></div>
@@ -3309,7 +3378,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:20.42461703843053%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad a16 ipad 2025 ipad">
       <div class="lb-rank">81</div>
       <div class="lb-info">
         <div class="lb-name">iPad <span style="color:var(--muted); font-weight:600;">(A16)</span></div>
@@ -3322,7 +3391,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:20.357430798172533%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac mini intel core i7 desktop 2018 mac mini">
       <div class="lb-rank">82</div>
       <div class="lb-info">
         <div class="lb-name">Mac mini <span style="color:var(--muted); font-weight:600;">(Intel Core i7)</span></div>
@@ -3335,7 +3404,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:18.671056167696857%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad mini a15 ipad 2021 ipad mini">
       <div class="lb-rank">83</div>
       <div class="lb-info">
         <div class="lb-name">iPad mini <span style="color:var(--muted); font-weight:600;">(A15)</span></div>
@@ -3348,7 +3417,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:18.015990325181402%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad air a14 ipad 2020 ipad air">
       <div class="lb-rank">84</div>
       <div class="lb-info">
         <div class="lb-name">iPad Air <span style="color:var(--muted); font-weight:600;">(A14)</span></div>
@@ -3361,7 +3430,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:16.776404192421392%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac mini intel core i5 desktop 2018 mac mini">
       <div class="lb-rank">85</div>
       <div class="lb-info">
         <div class="lb-name">Mac mini <span style="color:var(--muted); font-weight:600;">(Intel Core i5)</span></div>
@@ -3374,7 +3443,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:16.447191615157216%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="imac 27&quot; intel core i7 desktop 2017 imac">
       <div class="lb-rank">86</div>
       <div class="lb-info">
         <div class="lb-name">iMac 27" <span style="color:var(--muted); font-weight:600;">(Intel Core i7)</span></div>
@@ -3387,7 +3456,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:16.040714861596346%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad a14 ipad 2022 ipad">
       <div class="lb-rank">87</div>
       <div class="lb-info">
         <div class="lb-name">iPad <span style="color:var(--muted); font-weight:600;">(A14)</span></div>
@@ -3400,7 +3469,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:15.872749260951357%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 12.9&quot; a12z ipad 2020 ipad pro">
       <div class="lb-rank">88</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 12.9" <span style="color:var(--muted); font-weight:600;">(A12Z)</span></div>
@@ -3413,7 +3482,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:15.68126847621607%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 11&quot; a12z ipad 2020 ipad pro">
       <div class="lb-rank">89</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 11" <span style="color:var(--muted); font-weight:600;">(A12Z)</span></div>
@@ -3426,7 +3495,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:15.620800859983873%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 11&quot; a12x ipad 2018 ipad pro">
       <div class="lb-rank">90</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 11" <span style="color:var(--muted); font-weight:600;">(A12X)</span></div>
@@ -3439,7 +3508,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:15.375571083042194%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 12.9&quot; a12x ipad 2018 ipad pro">
       <div class="lb-rank">91</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 12.9" <span style="color:var(--muted); font-weight:600;">(A12X)</span></div>
@@ -3452,7 +3521,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:15.029561945713517%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad a13 ipad 2021 ipad">
       <div class="lb-rank">92</div>
       <div class="lb-info">
         <div class="lb-name">iPad <span style="color:var(--muted); font-weight:600;">(A13)</span></div>
@@ -3465,7 +3534,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:12.926632625638268%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="imac 27&quot; intel core i5 desktop 2017 imac">
       <div class="lb-rank">93</div>
       <div class="lb-info">
         <div class="lb-name">iMac 27" <span style="color:var(--muted); font-weight:600;">(Intel Core i5)</span></div>
@@ -3478,7 +3547,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:12.130475678581027%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac mini intel core i3 desktop 2018 mac mini">
       <div class="lb-rank">94</div>
       <div class="lb-info">
         <div class="lb-name">Mac mini <span style="color:var(--muted); font-weight:600;">(Intel Core i3)</span></div>
@@ -3491,7 +3560,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:12.056570814297233%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad air a12 ipad 2019 ipad air">
       <div class="lb-rank">95</div>
       <div class="lb-info">
         <div class="lb-name">iPad Air <span style="color:var(--muted); font-weight:600;">(A12)</span></div>
@@ -3504,7 +3573,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:9.889814565976888%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad mini a12 ipad 2019 ipad mini">
       <div class="lb-rank">96</div>
       <div class="lb-info">
         <div class="lb-name">iPad mini <span style="color:var(--muted); font-weight:600;">(A12)</span></div>
@@ -3517,7 +3586,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:9.674818597151305%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad a12 ipad 2020 ipad">
       <div class="lb-rank">97</div>
       <div class="lb-info">
         <div class="lb-name">iPad <span style="color:var(--muted); font-weight:600;">(A12)</span></div>
@@ -3530,7 +3599,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:9.409432948132222%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac mini intel core i7 desktop 2012 mac mini">
       <div class="lb-rank">98</div>
       <div class="lb-info">
         <div class="lb-name">Mac mini <span style="color:var(--muted); font-weight:600;">(Intel Core i7)</span></div>
@@ -3543,7 +3612,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:7.90782047836603%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 12.9&quot; a10x ipad 2017 ipad pro">
       <div class="lb-rank">99</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 12.9" <span style="color:var(--muted); font-weight:600;">(A10X)</span></div>
@@ -3556,7 +3625,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:7.592045149153454%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 10.5&quot; a10x ipad 2017 ipad pro">
       <div class="lb-rank">100</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 10.5" <span style="color:var(--muted); font-weight:600;">(A10X)</span></div>
@@ -3569,7 +3638,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:7.427438860521366%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac mini intel core i5 desktop 2014 mac mini">
       <div class="lb-rank">101</div>
       <div class="lb-info">
         <div class="lb-name">Mac mini <span style="color:var(--muted); font-weight:600;">(Intel Core i5)</span></div>
@@ -3582,7 +3651,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:5.935904326793873%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad a10 ipad 2019 ipad">
       <div class="lb-rank">102</div>
       <div class="lb-info">
         <div class="lb-name">iPad <span style="color:var(--muted); font-weight:600;">(A10)</span></div>
@@ -3595,7 +3664,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:4.622413329750067%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 12.9&quot; a9x ipad 2015 ipad pro">
       <div class="lb-rank">103</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 12.9" <span style="color:var(--muted); font-weight:600;">(A9X)</span></div>
@@ -3608,7 +3677,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:4.189062080085999%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad a10 ipad 2018 ipad">
       <div class="lb-rank">104</div>
       <div class="lb-info">
         <div class="lb-name">iPad <span style="color:var(--muted); font-weight:600;">(A10)</span></div>
@@ -3621,7 +3690,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:3.806100510615426%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad pro 9.7&quot; a9x ipad 2016 ipad pro">
       <div class="lb-rank">105</div>
       <div class="lb-info">
         <div class="lb-name">iPad Pro 9.7" <span style="color:var(--muted); font-weight:600;">(A9X)</span></div>
@@ -3634,7 +3703,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:3.691883902176834%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="mac mini intel core i5 desktop 2012 mac mini">
       <div class="lb-rank">106</div>
       <div class="lb-info">
         <div class="lb-name">Mac mini <span style="color:var(--muted); font-weight:600;">(Intel Core i5)</span></div>
@@ -3647,7 +3716,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:3.6381349099704385%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad a9 ipad 2017 ipad">
       <div class="lb-rank">107</div>
       <div class="lb-info">
         <div class="lb-name">iPad <span style="color:var(--muted); font-weight:600;">(A9)</span></div>
@@ -3660,7 +3729,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:3.275329212577264%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad air a8x ipad 2014 ipad air">
       <div class="lb-rank">108</div>
       <div class="lb-info">
         <div class="lb-name">iPad Air <span style="color:var(--muted); font-weight:600;">(A8X)</span></div>
@@ -3673,7 +3742,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:3.18798710024187%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
-    <div class="lb-row">
+    <div class="lb-row" data-search="ipad mini a8 ipad 2015 ipad mini">
       <div class="lb-rank">109</div>
       <div class="lb-info">
         <div class="lb-name">iPad mini <span style="color:var(--muted); font-weight:600;">(A8)</span></div>
@@ -3686,6 +3755,7 @@
         <div class="lb-bar-wrap"><div class="lb-bar" style="width:2.025665143778554%; background:rgba(16,185,129,0.6);"></div></div>
       </div>
     </div>
+    <div class="lb-no-results" id="lb-no-results">No devices match "<span id="lb-no-results-term"></span>". Try a different model, chip or type.</div>
   </div>
 </section>
 <div class="bottom-divider" style="margin-top:40px;"></div>
@@ -3747,5 +3817,45 @@
   <p>Geekbench 6 scores sourced from <a href="https://browser.geekbench.com" target="_blank" rel="noopener noreferrer">Geekbench Browser</a>. Battery life figures are <a href="https://www.apple.com/uk/batteries/" target="_blank" rel="noopener noreferrer">Apple estimates</a>.</p>
   <p><a href="https://geekmac.cc/">geekmac.cc</a> · Free Apple Silicon comparison tool</p>
 </footer>
+<script>
+(function () {
+  var input = document.getElementById('lb-filter');
+  var clearBtn = document.getElementById('lb-filter-clear');
+  var rows = Array.prototype.slice.call(document.querySelectorAll('#lb-list .lb-row'));
+  var countEl = document.getElementById('lb-filter-count');
+  var noResults = document.getElementById('lb-no-results');
+  var noResultsTerm = document.getElementById('lb-no-results-term');
+  var total = rows.length;
+
+  function applyFilter() {
+    var term = input.value.trim().toLowerCase();
+    var visible = 0;
+    for (var i = 0; i < rows.length; i++) {
+      var match = !term || rows[i].getAttribute('data-search').indexOf(term) !== -1;
+      rows[i].classList.toggle('lb-hidden', !match);
+      if (match) visible++;
+    }
+    if (!term) {
+      countEl.textContent = 'Showing all ' + total + ' devices';
+    } else {
+      countEl.textContent = 'Showing ' + visible + ' of ' + total + ' devices';
+    }
+    if (visible === 0) {
+      noResultsTerm.textContent = input.value.trim();
+      noResults.classList.add('lb-show');
+    } else {
+      noResults.classList.remove('lb-show');
+    }
+    clearBtn.classList.toggle('lb-show', term.length > 0);
+  }
+
+  input.addEventListener('input', applyFilter);
+  clearBtn.addEventListener('click', function () {
+    input.value = '';
+    applyFilter();
+    input.focus();
+  });
+})();
+</script>
 </body>
 </html>
