@@ -9,7 +9,7 @@
 
   <!-- Primary SEO -->
   <title>Apple Silicon Geekbench 6 Comparison – MacBook, Mac mini, iMac &amp; iPad Scores</title>
-  <meta name="description" content="Compare Geekbench 6 single-core, multi-core and Metal GPU scores for every Apple Silicon Mac and iPad. Side-by-side M1–M5, A-series chips, battery life and launch prices. Updated September 2026." />
+  <meta name="description" content="Compare Geekbench 6 single-core, multi-core and Metal GPU scores for every Apple Silicon Mac and iPad. Side-by-side M1–M6, A-series chips, battery life and launch prices. Updated September 2026." />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href="https://geekmac.cc/" />
 
@@ -33,7 +33,7 @@
   <!-- Additional -->
   <meta name="theme-color" content="#000000" />
   <meta name="author" content="GeekMac" />
-  <meta name="keywords" content="Geekbench 6, Apple Silicon, MacBook comparison, M4 vs M5, Mac mini scores, iPad Pro Geekbench, Metal GPU benchmark" />
+  <meta name="keywords" content="Geekbench 6, Apple Silicon, MacBook comparison, M5 vs M6, Mac mini scores, iPad Pro Geekbench, Metal GPU benchmark" />
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -52,7 +52,7 @@
       "price": "0",
       "priceCurrency": "GBP"
     },
-    "dateModified": "2026-09-04",
+    "dateModified": "2026-09-24",
     "creator": {
       "@type": "Organization",
       "name": "GeekMac",
@@ -481,6 +481,7 @@
     .chip-M3  { background: rgba(14,165,233,.2);  color: #7dd3fc; border: 1px solid rgba(14,165,233,.3); }
     .chip-M4  { background: rgba(16,185,129,.2);  color: #6ee7b7; border: 1px solid rgba(16,185,129,.3); }
     .chip-M5  { background: rgba(245,158,11,.2);  color: #fde68a; border: 1px solid rgba(245,158,11,.3); }
+    .chip-M6  { background: rgba(239,68,68,.2);   color: #fca5a5; border: 1px solid rgba(239,68,68,.3); }
     .chip-A18 { background: rgba(236,72,153,.2);  color: #f9a8d4; border: 1px solid rgba(236,72,153,.3); }
     .chip-i5  { background: rgba(59,130,246,.2);  color: #93c5fd; border: 1px solid rgba(59,130,246,.35); }
     .chip-i7  { background: rgba(168,85,247,.2);  color: #d8b4fe; border: 1px solid rgba(168,85,247,.35); }
@@ -974,6 +975,9 @@ const MACS = [
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4', gen: 'M4', year: 2024, sc: 3788, mc: 14706, metal: 57201, battery: null, cpu: 10, gpu: 10, price: 599 },
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4 Pro 12-core', gen: 'M4', year: 2024, sc: 3829, mc: 20302, metal: 96899, battery: null, cpu: 12, gpu: 16, price: 1399 },
   { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M4 Pro', gen: 'M4', year: 2024, sc: 3821, mc: 22416, metal: 110273, battery: null, cpu: 14, gpu: 20, price: 1599 },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M6', gen: 'M6', year: 2026, sc: 4676, mc: 21106, metal: 99560, battery: null, cpu: 12, gpu: 12, price: 899, isNew: true },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M5 Pro 16-core', gen: 'M5', year: 2026, sc: 4299, mc: 26165, metal: 123550, battery: null, cpu: 15, gpu: 16, price: 1699, isNew: true },
+  { category: 'Mac mini', model: 'Mac mini', type: 'Desktop', chip: 'M5 Pro 18-core', gen: 'M5', year: 2026, sc: 4329, mc: 29224, metal: 140272, battery: null, cpu: 18, gpu: 20, price: 1899, isNew: true },
 
   // iMac 24"
   { category: 'iMac', model: 'iMac 24"', type: 'Desktop', chip: 'M1', gen: 'M1', year: 2021, sc: 2349, mc: 8367, metal: 32691, battery: null, cpu: 8, gpu: 8, price: 1249 },
@@ -1003,6 +1007,10 @@ const MACS = [
   { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M3 Ultra', gen: 'M3', year: 2025, sc: 3201, mc: 27745, metal: 245298, battery: null, cpu: 32, gpu: 80, price: 3999 },
   { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M4 Max', gen: 'M4', year: 2025, sc: 4016, mc: 23587, metal: 161392, battery: null, cpu: 14, gpu: 32, price: 1999 },
   { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M4 Max', gen: 'M4', year: 2025, sc: 4030, mc: 26188, metal: 191781, battery: null, cpu: 16, gpu: 40, price: null },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M5 Max', gen: 'M5', year: 2026, sc: 4341, mc: 30129, metal: 192830, battery: null, cpu: 18, gpu: 32, price: 2499, isNew: true },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M5 Max', gen: 'M5', year: 2026, sc: 4330, mc: 30055, metal: 228123, battery: null, cpu: 18, gpu: 40, price: 3099, isNew: true },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M5 Ultra 30-core', gen: 'M5', year: 2026, sc: 4320, mc: 36595, metal: 316095, battery: null, cpu: 30, gpu: 64, price: 5499, isNew: true },
+  { category: 'Mac Studio', model: 'Mac Studio', type: 'Desktop', chip: 'M5 Ultra 36-core', gen: 'M5', year: 2026, sc: 4319, mc: 38206, metal: 342233, battery: null, cpu: 36, gpu: 80, price: 6799, isNew: true },
 
   // Mac Pro
   { category: 'Mac Pro', model: 'Mac Pro', type: 'Desktop', chip: 'M2 Ultra 60-core', gen: 'M2', year: 2023, sc: 2778, mc: 21395, metal: 205010, battery: null, cpu: 24, gpu: 60, price: 7199 },
